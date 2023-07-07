@@ -1,5 +1,4 @@
 import 'package:rive/rive.dart';
-import 'package:frontend/constant.dart'; 
 
 class RiveAsset {
   final String artboard,stateMachineName, title, src;
@@ -21,24 +20,24 @@ List<RiveAsset> sideMenus = [
     "assets/RiveAssets/menubar.riv", 
     artboard: "House", 
     stateMachineName:"House_interactivity", 
-    title: "House",
+    title: "Pet Profile",
     ),
   RiveAsset(
     "assets/RiveAssets/menubar.riv", 
     artboard: "Paper", 
     stateMachineName:"Paper_interactivity", 
-    title: "Paper",
+    title: "Chart",
     ),
   RiveAsset(
     "assets/RiveAssets/menubar.riv", 
     artboard: "Health", 
     stateMachineName:"Health_interactivity", 
-    title: "Health",
+    title: "Feed",
     ), 
   RiveAsset(
     "assets/RiveAssets/menubar.riv", 
     artboard: "Heart", 
     stateMachineName:"Heart_interactivity", 
-    title: "Heart",
+    title: "LogOut",
     ),   
 ];

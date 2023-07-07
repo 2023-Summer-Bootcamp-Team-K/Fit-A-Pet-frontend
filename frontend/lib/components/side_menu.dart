@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/utils/rive_utils.dart';
 import 'package:rive/rive.dart';
 import 'package:frontend/components/info_card.dart';
 import 'package:frontend/components/side_menu_tile.dart';
 import 'package:frontend/models/rive_asset.dart';
-import 'package:frontend/constant.dart';
 
 
 void main() {
@@ -22,11 +22,16 @@ class SideMenu extends StatefulWidget {
     Widget build(BuildContext context) {
       return Scaffold(
         body : Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.only(
+                bottomRight: Radius.circular(30.0 * 2)
+              ),
+              color: Colors.white,
+            ),
             width : 300,
             height: double.infinity,
-            color: Colors.deepPurple,
             child: SafeArea(
-              child: Column(
+              child: Column(               
                 children: [
                   const InfoCard(name: "Duck UI", 
                   email: "DuckUI@demo.com",
@@ -44,21 +49,27 @@ class SideMenu extends StatefulWidget {
                    Container(
                     decoration: BoxDecoration(
                           borderRadius: BorderRadius.only(
-                            bottomRight: Radius.circular(1000.0 * 2),
-                          ),
+                            bottomRight: Radius.circular(50.0),
+                          ), 
                         ),
                      ),
                   ...sideMenus.map(
                     (menu) => SideMenuTile(
                       menu: menu,
                       riveonInit: (artboard) {
-                      // StateMachineController controller =
-                      //   RiveUtils.getRiveController(artboard);
+                      StateMachineController controller =
+                      RiveUtils.getRiveController(artboard,
+                        stateMachineName: menu.stateMachineName);
+                      menu.input = controller.findSMI("active") as SMIBool;
                       },
-                      press: () {},
-                      isActive: false,
-                    ),
+                      press: () {
+                          menu.input!.change(true);
+                            Future.delayed(Duration(seconds: 1), () {
+                        menu.input!.change(false);
+                        });
+                    }, isActive: false,
                   ),
+                 ),
                 ],
               ),
             ),
@@ -66,4 +77,6 @@ class SideMenu extends StatefulWidget {
         );
       }
     }
+    
+  
   
