@@ -5,7 +5,6 @@ import 'package:frontend/components/info_card.dart';
 import 'package:frontend/components/side_menu_tile.dart';
 import 'package:frontend/models/rive_asset.dart';
 
-
 void main() {
   runApp(const SideMenu());
 }
@@ -18,6 +17,7 @@ class SideMenu extends StatefulWidget {
 }
 
   class _SideMenuState extends State<SideMenu> {
+    RiveAsset selectedMenu = sideMenus.first;
     @override
     Widget build(BuildContext context) {
       return Scaffold(
@@ -31,13 +31,14 @@ class SideMenu extends StatefulWidget {
             width : 300,
             height: double.infinity,
             child: SafeArea(
-              child: Column(               
+              child: Column(     
+                crossAxisAlignment: CrossAxisAlignment.start,          
                 children: [
                   const InfoCard(name: "Duck UI", 
                   email: "DuckUI@demo.com",
                   ),
                   Padding(
-                        padding: const EdgeInsets.only(left: 0, top: 32, bottom: 16),
+                        padding: const EdgeInsets.only(left: 20, top: 32, bottom: 10),
                       child : Text(
                         "Menu  ".toUpperCase(),
                         style: Theme.of(context)
@@ -45,13 +46,6 @@ class SideMenu extends StatefulWidget {
                         .titleLarge
                         ?.copyWith(color: Colors.black38),                        
                       ),
-                     ),
-                   Container(
-                    decoration: BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                            bottomRight: Radius.circular(50.0),
-                          ), 
-                        ),
                      ),
                   ...sideMenus.map(
                     (menu) => SideMenuTile(
@@ -64,10 +58,13 @@ class SideMenu extends StatefulWidget {
                       },
                       press: () {
                           menu.input!.change(true);
-                            Future.delayed(Duration(seconds: 1), () {
+                            Future.delayed(const Duration(seconds: 1), () {
                         menu.input!.change(false);
                         });
-                    }, isActive: false,
+                        setState(() {
+                          selectedMenu = menu;
+                        });
+                    }, isActive: selectedMenu == menu,
                   ),
                  ),
                 ],

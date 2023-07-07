@@ -1,17 +1,18 @@
 import 'package:rive/rive.dart';
 
 class RiveAsset {
-  final String artboard,stateMachineName, title, src;
+  final String artboard;
+  final String stateMachineName;
+  final String title;
+  final String src;
   late SMIBool? input;
 
-  RiveAsset(this.src,
-  {required this.artboard,
-  required this.stateMachineName,
-  required this.title,
-  this.input});
-
-  set setInput(SMIBool status){
-    input = status;
+  RiveAsset(this.src,{
+    required this.artboard,
+    required this.stateMachineName,
+    required this.title,
+  }) {
+    input = null;
   }
 }
 
