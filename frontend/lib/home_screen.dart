@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/constants.dart';
-
-
+import 'package:rive/rive.dart';
 class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -10,6 +9,26 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: kPrimaryColor,
+        leading: Expanded(
+          child: Container(
+            margin: EdgeInsets.only(left:6),
+            height: 60,
+            width: 60,
+            decoration: BoxDecoration(
+              color: Color(0xFFF86A1FF),
+              shape: BoxShape.circle,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black12,
+                ),
+              ],
+            ),
+            child: RiveAnimation.asset(
+              'assets/menubutton.riv',
+              fit: BoxFit.cover,
+             ), 
+          ),
+        ),
       ),
       body: Stack(
         children: [
