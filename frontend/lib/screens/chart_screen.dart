@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/constant.dart';
+import 'package:frontend/screens/home_screen.dart';
 import 'package:frontend/widgets/daily_chart.dart' as DailyChartWidget;
 import 'package:frontend/widgets/weekly_chart.dart' as WeeklyChartWidget;
 import 'package:frontend/widgets/monthly_chart.dart' as MonthlyChartWidget;
@@ -11,6 +12,15 @@ class ChartScreen extends StatefulWidget {
 
 class _ChartScreenState extends State<ChartScreen> {
   int _selectedIndex = 0;
+  List<DateTime> dates = [
+    DateTime.now(),
+    DateTime.now().add(Duration(days: 1)),
+    DateTime.now().add(Duration(days: 2)),
+    DateTime.now().add(Duration(days: 3)),
+    DateTime.now().add(Duration(days: 4)),
+    DateTime.now().add(Duration(days: 5)),
+    DateTime.now().add(Duration(days: 6)),
+  ];
 
   List<Widget> _chartWidgets = [
     DailyChartWidget.DailyChart(),
@@ -21,6 +31,11 @@ class _ChartScreenState extends State<ChartScreen> {
   void _onTogglePressed(int index) {
     setState(() {
       _selectedIndex = index;
+
+      // Increment dates by 1 starting from the selected index
+      for (int i = index + 1; i < dates.length; i++) {
+        dates[i] = dates[i - 1].add(Duration(days: 1));
+      }
     });
   }
 
@@ -95,6 +110,7 @@ class _ChartScreenState extends State<ChartScreen> {
               padding: EdgeInsets.all(10),
               itemCount: 7,
               itemBuilder: (context, index) {
+                DateTime currentDate = dates[index];
                 return Container(
                   margin: EdgeInsets.only(bottom: 20),
                   padding: EdgeInsets.all(20),
@@ -112,13 +128,32 @@ class _ChartScreenState extends State<ChartScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text(
-                        "${1 + index}월 ${7 + index}일",
-                        style: TextStyle(
-                          fontSize: 15,
+                      ElevatedButton(
+                          onPressed: () async {
+                            final selectedDate = await showDatePicker(
+                              context: context,
+                              initialDate: currentDate,
+                              firstDate: DateTime(2022), 
+                              lastDate: DateTime.now().subtract(Duration(days: 1)),
+                              initialEntryMode: DatePickerEntryMode.calendarOnly,
+                            );
+                            if (selectedDate != null) {
+                              setState(() {
+                                dates[index] = selectedDate;
+                                for (int i = index + 1; i < dates.length; i++) {
+                                  dates[i] = dates[i - 1].add(Duration(days: 1));
+                                }
+                              });
+                            }
+                          },
+                          child: Text(
+                            "${currentDate.month}월 ${currentDate.day}일",
+                            style: TextStyle(
+                              fontSize: 15,
+                            ),
+                          ),
                         ),
-                      ),
-                      SizedBox(height: 80),
+                      SizedBox(height: 70),
                       _chartWidgets[_selectedIndex],
                       // Your content here
                     ],
@@ -143,7 +178,14 @@ class _ChartScreenState extends State<ChartScreen> {
           color: Colors.white,
         ),
         onPressed: () {
-          Navigator.pop(context);
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) {
+                return HomeScreen();
+              },
+            ),
+          );
         },
       ),
     );
