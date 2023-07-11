@@ -41,6 +41,19 @@ class _ChartScreenState extends State<ChartScreen> {
 
   @override
   Widget build(BuildContext context) {
+    int itemCount = 0;
+    switch (_selectedIndex) {
+      case 0:
+        itemCount = 7;
+        break;
+      case 1:
+        itemCount = 4;
+        break;
+      case 2:
+        itemCount = 1;
+        break;
+    }
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: buildDetailsAppBar(context),
@@ -108,7 +121,7 @@ class _ChartScreenState extends State<ChartScreen> {
           Expanded(
             child: ListView.builder(
               padding: EdgeInsets.all(10),
-              itemCount: 7,
+              itemCount: itemCount,
               itemBuilder: (context, index) {
                 DateTime currentDate = dates[index];
                 return Container(
@@ -129,33 +142,32 @@ class _ChartScreenState extends State<ChartScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       ElevatedButton(
-                          onPressed: () async {
-                            final selectedDate = await showDatePicker(
-                              context: context,
-                              initialDate: currentDate,
-                              firstDate: DateTime(2022), 
-                              lastDate: DateTime.now().subtract(Duration(days: 1)),
-                              initialEntryMode: DatePickerEntryMode.calendarOnly,
-                            );
-                            if (selectedDate != null) {
-                              setState(() {
-                                dates[index] = selectedDate;
-                                for (int i = index + 1; i < dates.length; i++) {
-                                  dates[i] = dates[i - 1].add(Duration(days: 1));
-                                }
-                              });
-                            }
-                          },
-                          child: Text(
-                            "${currentDate.month}월 ${currentDate.day}일",
-                            style: TextStyle(
-                              fontSize: 15,
-                            ),
+                        onPressed: () async {
+                          final selectedDate = await showDatePicker(
+                            context: context,
+                            initialDate: currentDate,
+                            firstDate: DateTime(2022),
+                            lastDate: DateTime.now().subtract(Duration(days: 1)),
+                            initialEntryMode: DatePickerEntryMode.calendarOnly,
+                          );
+                          if (selectedDate != null) {
+                            setState(() {
+                              dates[index] = selectedDate;
+                              for (int i = index + 1; i < dates.length; i++) {
+                                dates[i] = dates[i - 1].add(Duration(days: 1));
+                              }
+                            });
+                          }
+                        },
+                        child: Text(
+                          "${currentDate.month}월 ${currentDate.day}일",
+                          style: TextStyle(
+                            fontSize: 15,
                           ),
                         ),
+                      ),
                       SizedBox(height: 70),
                       _chartWidgets[_selectedIndex],
-                      // Your content here
                     ],
                   ),
                 );
