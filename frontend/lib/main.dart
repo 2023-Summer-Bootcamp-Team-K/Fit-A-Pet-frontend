@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/constant.dart';
-import 'package:frontend/screens/home_screen.dart';
+import 'package:frontend/entry_point.dart';
 
 void main() {
   runApp(MyApp());
@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
             .textTheme
             .apply(displayColor: kTextColor), //뒷배경 컬러
       ),
-      home: HomeScreen(),
+      home: EntryPoint(),
     );
   }
 }

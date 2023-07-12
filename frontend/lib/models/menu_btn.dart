@@ -5,10 +5,10 @@ class menuBtn extends StatelessWidget {
   const menuBtn({
     super.key, 
     required this.press, 
-    required this.riveOnit,
+    required this.riveOnInit,
   });
   final VoidCallback press;
-  final ValueChanged<Artboard> riveOnit;
+  final ValueChanged<Artboard> riveOnInit;
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +32,7 @@ class menuBtn extends StatelessWidget {
         ),
         child: RiveAnimation.asset(
           'assets/RiveAssets/menu.riv',
-          onInit: riveOnit,
+          onInit: riveOnInit,
           fit: BoxFit.cover,
         ),
           ),
