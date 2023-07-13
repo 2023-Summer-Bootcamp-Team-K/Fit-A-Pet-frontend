@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/constants.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Feed_Page extends StatelessWidget {
   @override
@@ -303,8 +304,28 @@ class Feed_Page extends StatelessWidget {
               ),
             ),
           ),
+          Positioned(
+            bottom: 30,
+            right: 30,
+            child: FloatingActionButton(
+              backgroundColor: Colors.white,
+              onPressed: _launchURL,
+              child: Image.asset(
+                'assets/kakao_icon.png',
+                fit: BoxFit.contain,
+              ),
+            ),
+          ),
         ],
       ),
     );
+  }
+  _launchURL() async {
+    const url = 'https://open.kakao.com/o/sOmd7Zuf';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 }
