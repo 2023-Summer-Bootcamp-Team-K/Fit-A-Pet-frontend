@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/constants.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:rive/rive.dart';
+import 'package:frontend/constants.dart';
+import 'package:frontend/feed.dart';
+
 class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -9,9 +12,10 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: kPrimaryColor,
+        elevation: 0,
         leading: Expanded(
           child: Container(
-            margin: EdgeInsets.only(left:6),
+            margin: EdgeInsets.only(left: 6),
             height: 60,
             width: 60,
             decoration: BoxDecoration(
@@ -26,7 +30,7 @@ class HomeScreen extends StatelessWidget {
             child: RiveAnimation.asset(
               'assets/menubutton.riv',
               fit: BoxFit.cover,
-             ), 
+            ),
           ),
         ),
       ),
@@ -72,7 +76,7 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
           Positioned(
-            top: screenWidth * 0.25,
+            top: screenWidth * 0.21,
             left: screenWidth * 0.05,
             right: screenWidth * 0.05,
             child: Container(
@@ -121,7 +125,7 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
           Positioned(
-            top: screenWidth * 0.6,
+            top: screenWidth * 0.55,
             left: screenWidth * 0.05,
             child: Container(
               width: screenWidth * 0.4,
@@ -163,7 +167,7 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
           Positioned(
-            top: screenWidth * 0.6,
+            top: screenWidth * 0.55,
             right: screenWidth * 0.05,
             child: Container(
               width: screenWidth * 0.4,
@@ -205,9 +209,74 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
           Positioned(
-            top: screenWidth * 1.05,
+            top: screenWidth * 0.99,
             left: screenWidth * 0.05,
             right: screenWidth * 0.05,
+              child: Container(
+                width: screenWidth * 0.9,
+                height: screenWidth * 0.3,
+                decoration: BoxDecoration(
+                  color: Color(0xFFF86A1FF),
+                  borderRadius: BorderRadius.circular(screenWidth * 0.05),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 2,
+                      blurRadius: 5,
+                      offset: Offset(0, 3),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  children: [
+                    SizedBox(width: screenWidth * 0.1),
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '혈당차트',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: screenWidth * 0.06,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(width: screenWidth * 0.05),
+                    Image.asset(
+                      'assets/bloodchart.png',
+                      width: screenWidth * 0.15,
+                      height: screenWidth * 0.15,
+                    ),
+                    SizedBox(width: screenWidth * 0.05),
+                  ],
+                ),
+              ),
+            ),
+          Positioned(
+            top: screenWidth * 1.33,
+            left: screenWidth * 0.05,
+            right: screenWidth * 0.05,
+            child: GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  PageRouteBuilder(
+                    transitionDuration: Duration(milliseconds: 500),
+                    pageBuilder: (_, __, ___) => Feed_Page(),
+                    transitionsBuilder: (_, animation, __, child) {
+                      return FadeTransition(
+                        opacity: animation,
+                        child: child,
+                      );
+                    },
+                  ),
+                );
+              },
             child: Container(
               width: screenWidth * 0.9,
               height: screenWidth * 0.3,
@@ -220,55 +289,6 @@ class HomeScreen extends StatelessWidget {
                     spreadRadius: 2,
                     blurRadius: 5,
                     offset: Offset(0, 3),
-                  ),
-                ],
-              ),
-              child: Row(
-                children: [
-                  SizedBox(width: screenWidth * 0.1),
-                  Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          '혈당차트',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: screenWidth * 0.06,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(width: screenWidth * 0.05),
-                  Image.asset(
-                    'assets/bloodchart.png',
-                    width: screenWidth * 0.15,
-                    height: screenWidth * 0.15,
-                  ),
-                  SizedBox(width: screenWidth * 0.05),
-                ],
-              ),
-            ),
-          ),
-          Positioned(
-            top: screenWidth * 1.40,
-            left: screenWidth * 0.05,
-            right: screenWidth * 0.05,
-            child: Container(
-              width: screenWidth * 0.9,
-              height: screenWidth * 0.3,
-              decoration: BoxDecoration(
-                color: Color(0xFFF86A1FF),
-                borderRadius: BorderRadius.circular(screenWidth * 0.05),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.5),
-                    spreadRadius: 2,
-                    blurRadius: 5,
-                    offset:Offset(0, 3),
                   ),
                 ],
               ),
@@ -302,8 +322,30 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
           ),
+          ),
+          Positioned(
+            bottom: 30,
+            right: 30,
+            child: FloatingActionButton(
+              backgroundColor: Colors.white,
+              onPressed: _launchURL,
+              child: Image.asset(
+                'assets/kakao_icon.png',
+                fit: BoxFit.contain,
+              ),
+            ),
+          ),
         ],
       ),
     );
+  }
+
+  _launchURL() async {
+    const url = 'https://open.kakao.com/o/sOmd7Zuf';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 }
