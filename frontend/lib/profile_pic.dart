@@ -1,26 +1,50 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart'; //svg 임포트 필수
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:frontend/model/user.dart';
-import 'package:frontend/page/home_page.dart';
 
-class ProfilePic extends StatelessWidget {
-  const ProfilePic({
-    super.key,
-  });
+class ProfilePic extends StatefulWidget {
+  const ProfilePic({Key? key}) : super(key: key);
+
+  @override
+  _ProfilePicState createState() => _ProfilePicState();
+}
+
+class _ProfilePicState extends State<ProfilePic> {
+  late File _image;
+
+  Future<void> getImage() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      setState(() {
+        _image = File(pickedFile.path);
+        Provider.of<User>(context, listen: false).userImage = pickedFile.path;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    User user = Provider.of<User>(context);
+
+    ImageProvider imageProvider = user.userImage.isNotEmpty
+        ? FileImage(File(user.userImage))
+        : AssetImage("images/pet_basic.png") as ImageProvider;
+
     return SizedBox(
-      //Sizedbox
       height: 115,
       width: 115,
       child: Stack(
         fit: StackFit.expand,
-        clipBehavior: Clip.none, //같은 기능 // overflow: Overflow.visible
+        clipBehavior: Clip.none,
         children: [
           CircleAvatar(
-            backgroundImage: AssetImage("images/pet_basic.png"),
+            backgroundImage: imageProvider,
           ),
           Positioned(
             right: -12,
@@ -28,20 +52,8 @@ class ProfilePic extends StatelessWidget {
             child: SizedBox(
               height: 46,
               width: 46,
-              // child: FlatButton(
-              //     Padding: EdgeInsets.zero,
-              //     shape: RoundedRectangleBorder(
-              //       borderRadius: BorderRadius.circular(50),
-              //       side: BorderSide(color: Colors.white),
-              //     ),
-              //     color: Color(0xFFF5F6F9),
-              //     onPressed: () {}
-              //     child: SvgPicture.asset("assets/icons/ic_camera.svg"),
-              //     ),
               child: ElevatedButton(
-                onPressed: () {
-                  // 버튼이 클릭되었을 때 수행할 동작
-                },
+                onPressed: getImage,
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(50),
@@ -59,70 +71,3 @@ class ProfilePic extends StatelessWidget {
     );
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-// class ProfilePic extends StatelessWidget {
-//   const ProfilePic({
-//     super.key,
-//   });
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return SizedBox(
-//       //Sizedbox
-//       height: 115,
-//       width: 115,
-//       child: Stack(
-//         fit: StackFit.expand,
-//         clipBehavior: Clip.none, //같은 기능 // overflow: Overflow.visible
-//         children: [
-//           CircleAvatar(
-//             backgroundImage: AssetImage("images/pet_basic.png"),
-//           ),
-//           Positioned(
-//             right: -12,
-//             bottom: 0,
-//             child: SizedBox(
-//               height: 46,
-//               width: 46,
-//               // child: FlatButton(
-//               //     Padding: EdgeInsets.zero,
-//               //     shape: RoundedRectangleBorder(
-//               //       borderRadius: BorderRadius.circular(50),
-//               //       side: BorderSide(color: Colors.white),
-//               //     ),
-//               //     color: Color(0xFFF5F6F9),
-//               //     onPressed: () {}
-//               //     child: SvgPicture.asset("assets/icons/ic_camera.svg"),
-//               //     ),
-//               child: ElevatedButton(
-//                 onPressed: () {
-//                   // 버튼이 클릭되었을 때 수행할 동작
-//                 },
-//                 style: ElevatedButton.styleFrom(
-//                   shape: RoundedRectangleBorder(
-//                     borderRadius: BorderRadius.circular(50),
-//                     side: BorderSide(color: Colors.white),
-//                   ),
-//                   backgroundColor: Color(0xFFF5F6F9),
-//                   padding: EdgeInsets.zero,
-//                 ),
-//                 child: SvgPicture.asset("assets/icons/ic_camera.svg"),
-//               ),
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }

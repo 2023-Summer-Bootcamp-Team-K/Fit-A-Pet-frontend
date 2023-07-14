@@ -9,6 +9,7 @@ class User with ChangeNotifier {
   late String _userspecie = '';
   late String _usersupplement = '';
   late String _usersensorwear = '';
+  late String _userImage = '';
 
   String get username => _username;
   String get userage => _userage;
@@ -18,6 +19,7 @@ class User with ChangeNotifier {
   String get userspecie => _userspecie;
   String get usersupplement => _usersupplement;
   String get usersensorwear => _usersensorwear;
+  String get userImage => _userImage;
 
   set username(String username) {
     _username = username;
@@ -56,6 +58,11 @@ class User with ChangeNotifier {
 
   set usersensorwear(String usersensorwear) {
     _usersensorwear = usersensorwear;
+    notifyListeners();
+  }
+
+  set userImage(String userImage) {
+    _userImage = userImage;
     notifyListeners();
   }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:frontend/model/user.dart';
 import 'package:frontend/profile_pic.dart';
+import 'package:frontend/model/user.dart';
 
 class EditPage extends StatefulWidget {
   @override
@@ -138,8 +138,8 @@ class _EditPageState extends State<EditPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                ProfilePic(),
-                SizedBox(height: 20),
+                ProfilePic(key: UniqueKey()),
+                SizedBox(height: 25),
                 buildUsernameTextField(),
                 const SizedBox(height: 20),
                 buildUserageTextField(),
@@ -210,10 +210,11 @@ class _EditPageState extends State<EditPage> {
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
           ),
-          labelText: '이름',
+          // labelText: '이름',
           hintText: '이름을 입력하시오',
           fillColor: Colors.white,
           filled: true,
+          contentPadding: const EdgeInsets.all(10),
         ),
       );
 
@@ -223,10 +224,11 @@ class _EditPageState extends State<EditPage> {
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
           ),
-          labelText: '나이',
+          // labelText: '나이',
           hintText: '나이를 입력하시오',
           fillColor: Colors.white,
           filled: true,
+          contentPadding: const EdgeInsets.all(10),
         ),
       );
 
@@ -238,9 +240,10 @@ class _EditPageState extends State<EditPage> {
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
         ),
-        labelText: '사료',
+        // labelText: '사료',
         filled: true,
         fillColor: Colors.white,
+        contentPadding: const EdgeInsets.all(10),
       ),
       value: foodValue.isEmpty ? null : foodValue,
       items: [
@@ -274,9 +277,10 @@ class _EditPageState extends State<EditPage> {
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
         ),
-        labelText: '인슐린 주사 일일 투여 횟수',
+        // labelText: '인슐린 주사 일일 투여 횟수',
         filled: true,
         fillColor: Colors.white,
+        contentPadding: const EdgeInsets.all(10),
       ),
       value: countValue.isEmpty ? null : countValue,
       items: [
@@ -311,9 +315,10 @@ class _EditPageState extends State<EditPage> {
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
         ),
-        labelText: '성별',
+        // labelText: '성별',
         filled: true,
         fillColor: Colors.white,
+        contentPadding: const EdgeInsets.all(10),
       ),
       value: genderValue.isEmpty ? null : genderValue,
       items: [
@@ -348,9 +353,10 @@ class _EditPageState extends State<EditPage> {
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
         ),
-        labelText: '종',
+        // labelText: '종',
         filled: true,
         fillColor: Colors.white,
+        contentPadding: const EdgeInsets.all(10),
       ),
       value: specieValue.isEmpty ? null : specieValue,
       items: [
@@ -385,9 +391,10 @@ class _EditPageState extends State<EditPage> {
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
         ),
-        labelText: '영양제',
+        // labelText: '영양제',
         filled: true,
         fillColor: Colors.white,
+        contentPadding: const EdgeInsets.all(10),
       ),
       value: supplementValue.isEmpty ? null : supplementValue,
       items: [
@@ -419,10 +426,11 @@ class _EditPageState extends State<EditPage> {
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
           ),
-          labelText: '센서 착용 날짜',
+          //labelText: '센서 착용 날짜',
           hintText: '센서 착용 날짜를 입력하시오',
           fillColor: Colors.white,
           filled: true,
+          contentPadding: const EdgeInsets.all(10),
         ),
       );
 
@@ -529,3 +537,4 @@ class _EditPageState extends State<EditPage> {
     }
   }
 }
+//성능 개선X
