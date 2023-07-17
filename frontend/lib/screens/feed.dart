@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/constant.dart';
+import 'package:frontend/screens/home_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Feed_Page extends StatelessWidget {
@@ -11,16 +12,32 @@ class Feed_Page extends StatelessWidget {
     return Scaffold(
       backgroundColor: kPrimaryColor,
       appBar: AppBar(
-        backgroundColor: kPrimaryColor,
-        title: Text(
-          '사료 추천',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 25,
-            fontWeight: FontWeight.bold,
+            elevation: 0,
+            centerTitle: true,
+            title: Text("Feed Recommendations"),
+            backgroundColor: Color(0xFFC1CCFF),
+            leading: GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  PageRouteBuilder(
+                    transitionDuration: Duration(milliseconds: 500),
+                    pageBuilder: (_, __, ___) => HomeScreen(),
+                    transitionsBuilder: (_, animation, __, child) {
+                      return FadeTransition(
+                        opacity: animation,
+                        child: child,
+                      );
+                    },
+                  ),
+                );
+              },
+              child: Icon(
+                Icons.arrow_back_ios,
+                color: Colors.white,
+              ),
+            ),
           ),
-        ),
-      ),
       body: Stack(
         children: [
           Positioned(

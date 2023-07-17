@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/screens/home_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:frontend/model/user.dart';
 import 'package:frontend/page/create_page.dart';
@@ -6,55 +7,76 @@ import 'package:frontend/page/edit_page.dart';
 
 class PetInfoPage extends StatefulWidget {
   @override
-  _HomePageState createState() => _HomePageState();
+  _PetInfoPageState createState() => _PetInfoPageState();
 }
 
-class _HomePageState extends State<PetInfoPage> {
+class _PetInfoPageState extends State<PetInfoPage> {
   List<Container> containers = [];
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<User>(context);
-
-    return Scaffold(
-      backgroundColor: Color(0xFFC1CCFF),
-      appBar: AppBar(
-        elevation: 0, //밑에 그림자 줄 없애기
-        centerTitle: true,
-        title: Text("Fit-A-Pet"),
-        backgroundColor: Color(0xFFC1CCFF),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Stack(
-                alignment: Alignment.topRight,
-                children: [
-                  Container(
-                      // User 정보를 표시할 부분
-                      ),
-                  Positioned(
-                    top: 10,
-                    right: 30,
-                    child: CircleAvatar(
-                      backgroundColor: Colors.white,
-                      radius: 20,
-                      child: IconButton(
-                        icon: Icon(Icons.edit, color: Colors.black),
-                        onPressed: () {
-                          navigateToEditPage(context);
-                        },
-                      ),
-                    ),
+    return Consumer<User>(
+      builder: (context, user, _) {
+        return Scaffold(
+          backgroundColor: Color(0xFFC1CCFF),
+          appBar: AppBar(
+            elevation: 0,
+            centerTitle: true,
+            title: Text("Pet Profile"),
+            backgroundColor: Color(0xFFC1CCFF),
+            leading: GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  PageRouteBuilder(
+                    transitionDuration: Duration(milliseconds: 500),
+                    pageBuilder: (_, __, ___) => HomeScreen(),
+                    transitionsBuilder: (_, animation, __, child) {
+                      return FadeTransition(
+                        opacity: animation,
+                        child: child,
+                      );
+                    },
                   ),
-                ],
+                );
+              },
+              child: Icon(
+                Icons.arrow_back_ios,
+                color: Colors.white,
               ),
             ),
-            SizedBox(height: 20),
-            // 컨테이너와 간격을 표시
-            ...containers.asMap().entries.map(
+          ),
+          body: SingleChildScrollView(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Stack(
+                    alignment: Alignment.topRight,
+                    children: [
+                      Container(
+                        // User 정보를 표시할 부분
+                      ),
+                      Positioned(
+                        top: 10,
+                        right: 30,
+                        child: CircleAvatar(
+                          backgroundColor: Colors.white,
+                          radius: 20,
+                          child: IconButton(
+                            icon: Icon(Icons.edit, color: Colors.black),
+                            onPressed: () {
+                              navigateToEditPage(context);
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 20),
+                // 컨테이너와 간격을 표시
+                ...containers.asMap().entries.map(
                   (entry) => Column(
                     children: [
                       SizedBox(
@@ -84,17 +106,19 @@ class _HomePageState extends State<PetInfoPage> {
                     ],
                   ),
                 ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          navigateToCreatePage(context);
-        },
-        child: Icon(Icons.add),
-        backgroundColor: Color(0xFFECB5FF),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+              ],
+            ),
+          ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              navigateToCreatePage(context);
+            },
+            child: Icon(Icons.add),
+            backgroundColor: Color(0xFFECB5FF),
+          ),
+          floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+        );
+      },
     );
   }
 
@@ -124,6 +148,4 @@ class _HomePageState extends State<PetInfoPage> {
       });
     }
   }
-
-  // …
 }
