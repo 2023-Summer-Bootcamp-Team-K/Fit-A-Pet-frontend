@@ -15,12 +15,12 @@ class NotificationPage extends StatefulWidget {
 
 class _NotificationPageState extends State<NotificationPage> {
   int _selectedButtonIndex = -1;
-  TimeOfDay? _selectedTime; 
+  TimeOfDay? _selectedTime;
 
   @override
   void initState() {
     super.initState();
-    tz.initializeTimeZones(); 
+    tz.initializeTimeZones();
   }
 
   @override
@@ -62,9 +62,9 @@ class _NotificationPageState extends State<NotificationPage> {
               SizedBox(height: 70),
               Container(
                 child: Text(
-                  '기기를 태그하고 싶은 시간을 설정해주세요',
+                  '알림 받고 싶은 시간을 설정해주세요',
                   style: TextStyle(
-                    fontSize: 18,
+                    fontSize: 19,
                     fontWeight: FontWeight.bold,
                   ),
                   textAlign: TextAlign.center,
@@ -79,12 +79,18 @@ class _NotificationPageState extends State<NotificationPage> {
                     mainAxisSpacing: 10,
                     crossAxisSpacing: 10,
                     children: [
-                      buildButton(0, '09:00', AndroidNotificationDetails('alarm 1', '1번 푸시'), DarwinNotificationDetails()),
-                      buildButton(1, '11:00', AndroidNotificationDetails('alarm 2', '2번 푸시'), DarwinNotificationDetails()),
-                      buildButton(2, '13:00', AndroidNotificationDetails('alarm 3', '3번 푸시'), DarwinNotificationDetails()),
-                      buildButton(3, '15:00', AndroidNotificationDetails('alarm 4', '4번 푸시'), DarwinNotificationDetails()),
-                      buildButton(4, '18:00', AndroidNotificationDetails('alarm 5', '5번 푸시'), DarwinNotificationDetails()),
-                      buildButton(5, '20:00', AndroidNotificationDetails('alarm 6', '6번 푸시'), DarwinNotificationDetails()),
+                      buildButton(0, '09:00', AndroidNotificationDetails('alarm 1', '1번 푸시'),
+                          DarwinNotificationDetails()),
+                      buildButton(1, '11:00', AndroidNotificationDetails('alarm 2', '2번 푸시'),
+                          DarwinNotificationDetails()),
+                      buildButton(2, '13:00', AndroidNotificationDetails('alarm 3', '3번 푸시'),
+                          DarwinNotificationDetails()),
+                      buildButton(3, '15:00', AndroidNotificationDetails('alarm 4', '4번 푸시'),
+                          DarwinNotificationDetails()),
+                      buildButton(4, '18:00', AndroidNotificationDetails('alarm 5', '5번 푸시'),
+                          DarwinNotificationDetails()),
+                      buildButton(5, '20:00', AndroidNotificationDetails('alarm 6', '6번 푸시'),
+                          DarwinNotificationDetails()),
                     ],
                   ),
                 ),
@@ -118,10 +124,10 @@ class _NotificationPageState extends State<NotificationPage> {
                           normalTextStyle: const TextStyle(
                             fontSize: 20,
                           ),
-                          highlightedTextStyle: const TextStyle(fontSize: 23, color: Colors.redAccent),
+                          highlightedTextStyle:
+                              const TextStyle(fontSize: 23, color: Colors.redAccent),
                           onTimeChange: (time) {
                             setState(() {
-                              _selectedButtonIndex = -1;
                               _selectedTime = TimeOfDay.fromDateTime(time);
                             });
                           },
@@ -137,7 +143,13 @@ class _NotificationPageState extends State<NotificationPage> {
                 width: 80,
                 child: ElevatedButton(
                   onPressed: () {
-                    _scheduleNotification(AndroidNotificationDetails('channelId', 'channelName', importance: Importance.max, priority: Priority.high), DarwinNotificationDetails());
+                    if (_selectedButtonIndex != -1) {
+                      AndroidNotificationDetails androidDetails =
+                          AndroidNotificationDetails('channelId', 'channelName',
+                              importance: Importance.max, priority: Priority.high);
+                      DarwinNotificationDetails iosDetails = DarwinNotificationDetails();
+                      _scheduleNotification(androidDetails, iosDetails);
+                    }
                   },
                   style: ElevatedButton.styleFrom(
                     primary: kPrimaryColor,
@@ -163,17 +175,22 @@ class _NotificationPageState extends State<NotificationPage> {
     );
   }
 
-  Widget buildButton(int index, String label, AndroidNotificationDetails androidDetails, DarwinNotificationDetails iosDetails) {
+  Widget buildButton(
+      int index, String label, AndroidNotificationDetails androidDetails, DarwinNotificationDetails iosDetails) {
     final isSelected = index == _selectedButtonIndex;
+    final timeComponents = label.split(':');
+    final hour = int.parse(timeComponents[0]);
+    final minute = int.parse(timeComponents[1]);
+    final time = TimeOfDay(hour: hour, minute: minute);
+
     return Padding(
       padding: EdgeInsets.all(8.0),
       child: ElevatedButton(
         onPressed: () {
           setState(() {
             _selectedButtonIndex = index;
-            _selectedTime = null;
+            _selectedTime = time;
           });
-          _scheduleNotification(androidDetails, iosDetails);
         },
         style: ElevatedButton.styleFrom(
           primary: isSelected ? kPrimaryColor : Colors.white,
@@ -193,7 +210,8 @@ class _NotificationPageState extends State<NotificationPage> {
     );
   }
 
-  void _scheduleNotification(AndroidNotificationDetails androidDetails, DarwinNotificationDetails iosDetails) async {
+  void _scheduleNotification(
+      AndroidNotificationDetails androidDetails, DarwinNotificationDetails iosDetails) async {
     if (_selectedTime != null) {
       final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
       final initSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_launcher');
@@ -232,7 +250,7 @@ class _NotificationPageState extends State<NotificationPage> {
       await flutterLocalNotificationsPlugin.zonedSchedule(
         0,
         '기기 태깅 알림',
-        '기기에 스마트폰을 태그할 시간 입니다.',
+        '기기에 스마트폰을 태그할 시간입니다.',
         scheduledDateTime,
         notificationDetails,
         uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
