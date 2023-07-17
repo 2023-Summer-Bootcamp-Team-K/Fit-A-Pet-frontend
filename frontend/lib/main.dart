@@ -1,31 +1,20 @@
+import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:frontend/constants.dart';
-import 'package:frontend/home_screen.dart';
+import 'package:frontend/screens/splash_screen.dart';
+import 'package:provider/provider.dart';
 
-void main() {
-  runApp(MyApp());
-}
+
+void main() => runApp(MyApp());
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Fit-A-Pet',
-      theme: ThemeData(
-        primaryColor: kPrimaryColor, //상단바 컬러
-        scaffoldBackgroundColor: kBackgroundColor,
-        appBarTheme: AppBarTheme( //AppBar 테마 줄 없애기
-          color: kPrimaryColor,
-          elevation: 0,
-        ),
-        textTheme: Theme.of(context)
-            .textTheme
-            .apply(displayColor: kTextColor), //뒷배경 컬러
-      ),
-      home: HomeScreen(),
+      home: SplashScreen(),
     );
   }
 }
