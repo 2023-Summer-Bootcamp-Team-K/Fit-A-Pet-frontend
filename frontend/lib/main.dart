@@ -1,4 +1,6 @@
+import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:frontend/screens/splash_screen.dart';
 import 'package:frontend/constant.dart';
 import 'package:frontend/screens/home_screen.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -55,45 +57,15 @@ void _initNotiSetting() async {
   }
 }
 
-
 class MyApp extends StatelessWidget {
   static final String title = '팻';
   final user = User();
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Splash(),
-    );
-  }
-} 
-
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
-
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        //앱바
-        backgroundColor: kPrimaryColor, //연보라색
-        title: Text("Fit-A-Pet"),
-      ),
-      body: Container(
-        //컨테이너 //homepage
-        child: Center(
-          child: Text("HomePage"),
-        ),
-        textTheme: Theme.of(context)
-            .textTheme
-            .apply(displayColor: kTextColor),
-      ),
+      home: SplashScreen(),
     );
   }
 }
