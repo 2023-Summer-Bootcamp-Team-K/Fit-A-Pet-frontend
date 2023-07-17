@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/components/info_card.dart';
+import 'package:frontend/page/pet_info.dart';
 import 'package:frontend/screens/chart_screen.dart';
 import 'package:frontend/screens/feed.dart';
 
@@ -49,7 +50,7 @@ class _SideMenuState extends State<SideMenu> {
                         if (isActive) {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => ChartScreen()),
+                            MaterialPageRoute(builder: (context) => PetInfoPage()),
                           );
                           AnimatedPositioned(
                           duration: const Duration(milliseconds: 300),

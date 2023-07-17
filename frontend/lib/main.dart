@@ -1,6 +1,5 @@
-import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:frontend/screens/splash_screen.dart';
+import 'package:frontend/page/pet_info.dart';
 import 'package:frontend/constant.dart';
 import 'package:frontend/screens/home_screen.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -9,13 +8,14 @@ import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:provider/provider.dart';
 import 'package:frontend/model/user.dart';
-import 'package:frontend/page/home_page.dart';
 import 'package:frontend/screens/splash_screen.dart';
-
 void main() {
-
-  _initNotiSetting();
-  runApp(MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => User(),
+      child: MyApp(),
+    ),
+  );
 }
 
 void _initNotiSetting() async {
@@ -33,7 +33,6 @@ void _initNotiSetting() async {
   await flutterLocalNotificationsPlugin.initialize(
     initSettings,
   );
-
   NotificationDetails _details = const NotificationDetails(
       android: AndroidNotificationDetails('alarm 1', '1번 푸시'),
       iOS: DarwinNotificationDetails(
@@ -42,7 +41,6 @@ void _initNotiSetting() async {
         presentSound: true,
       ),
     );
-    
      tz.TZDateTime _timeZoneSetting({
     required int hour,
     required int minute,
@@ -52,18 +50,15 @@ void _initNotiSetting() async {
     tz.TZDateTime _now = tz.TZDateTime.now(tz.local);
     tz.TZDateTime scheduledDate =
         tz.TZDateTime(tz.local, _now.year, _now.month, _now.day, hour, minute);
-
     return scheduledDate;
   }
 }
 
 class MyApp extends StatelessWidget {
   static final String title = '팻';
-  final user = User();
-
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: SplashScreen(),
     );

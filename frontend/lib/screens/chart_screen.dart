@@ -60,6 +60,7 @@ class _ChartScreenState extends State<ChartScreen> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
+          SizedBox(height: 10),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 20),
             child: Row(
@@ -181,24 +182,30 @@ class _ChartScreenState extends State<ChartScreen> {
 
   AppBar buildDetailsAppBar(BuildContext context) {
     return AppBar(
-      title: Text("Chart"),
-      backgroundColor: kBackgroundColor,
       elevation: 0,
-      leading: IconButton(
-        icon: Icon(
-          Icons.arrow_back_ios,
-          color: Colors.white,
-        ),
-        onPressed: () {
+      centerTitle: true,
+      title: Text("Chart"),
+      backgroundColor: Color(0xFFC1CCFF),
+      leading: GestureDetector(
+        onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute(
-              builder: (context) {
-                return HomeScreen();
+            PageRouteBuilder(
+              transitionDuration: Duration(milliseconds: 500),
+              pageBuilder: (_, __, ___) => HomeScreen(),
+              transitionsBuilder: (_, animation, __, child) {
+                return FadeTransition(
+                  opacity: animation,
+                  child: child,
+                );
               },
             ),
           );
         },
+        child: Icon(
+          Icons.arrow_back_ios,
+          color: Colors.white,
+        ),
       ),
     );
   }
