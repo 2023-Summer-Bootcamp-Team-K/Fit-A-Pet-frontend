@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/components/info_card.dart';
 import 'package:frontend/screens/chart_screen.dart';
+import 'package:frontend/screens/feed.dart';
 
 void main() {
   runApp(const SideMenu());
@@ -67,7 +68,7 @@ class _SideMenuState extends State<SideMenu> {
                       },
                       child: NewRow(
                         text: 'Pet Profile',
-                        image: AssetImage('assets/paw.png'),
+                        image: AssetImage('assets/icons/paw.png'),
                       ),
                     ),
                     SizedBox(height: 50),
@@ -98,7 +99,7 @@ class _SideMenuState extends State<SideMenu> {
                       },
                       child: NewRow(
                         text: 'Chart',
-                        image: AssetImage('assets/chart.png'),
+                        image: AssetImage('assets/icons/chart.png'),
                       ),
                     ),
                     SizedBox(height: 50), 
@@ -110,7 +111,7 @@ class _SideMenuState extends State<SideMenu> {
                         if (isActive) {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => ChartScreen()),
+                            MaterialPageRoute(builder: (context) => Feed_Page()),
                           );
                           AnimatedPositioned(
                           duration: const Duration(milliseconds: 300),
@@ -129,7 +130,7 @@ class _SideMenuState extends State<SideMenu> {
                       },
                       child: NewRow(
                         text: 'Feed Recommendations',
-                        image: AssetImage('assets/feed_rcmd.png'),
+                        image: AssetImage('assets/icons/feed_rcmd.png'),
                       ),
                     ),
                   ],
@@ -140,7 +141,7 @@ class _SideMenuState extends State<SideMenu> {
                 child: Row(
                   children: <Widget>[
                     Image.asset(
-                      'assets/log_out.png',
+                      'assets/icons/log_out.png',
                       width: 24,
                       height: 24,
                     ),
@@ -187,8 +188,8 @@ class NewRow extends StatelessWidget {
         Text(
           text,
           style: TextStyle(color: Colors.black,
-          fontSize: 18),
-        
+          fontSize: 18
+          ),
         ),
       ],
     );
