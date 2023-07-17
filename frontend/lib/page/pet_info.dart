@@ -1,12 +1,17 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:frontend/model/user.dart';
+import 'package:frontend/page/create_page.dart';
 import 'package:frontend/page/edit_page.dart';
-import 'package:frontend/profile_pic.dart';
 
-class PetInfoPage extends StatelessWidget {
+class PetInfoPage extends StatefulWidget {
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<PetInfoPage> {
+  List<Container> containers = [];
+
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
@@ -14,105 +19,82 @@ class PetInfoPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Color(0xFFC1CCFF),
       appBar: AppBar(
+        elevation: 0, //밑에 그림자 줄 없애기
         centerTitle: true,
         title: Text("Fit-A-Pet"),
         backgroundColor: Color(0xFFC1CCFF),
       ),
-      body: Column(
-        children: [
-          SizedBox(height: 35),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Stack(
-              alignment: Alignment.topRight,
-              children: [
-                Expanded(
-                  child: Container(
-                    margin: EdgeInsets.symmetric(horizontal: 16),
-                    padding: EdgeInsets.fromLTRB(15, 15, 15, 15),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(20),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Stack(
+                alignment: Alignment.topRight,
+                children: [
+                  Container(
+                      // User 정보를 표시할 부분
+                      ),
+                  Positioned(
+                    top: 10,
+                    right: 30,
+                    child: CircleAvatar(
+                      backgroundColor: Colors.white,
+                      radius: 20,
+                      child: IconButton(
+                        icon: Icon(Icons.edit, color: Colors.black),
+                        onPressed: () {
+                          navigateToEditPage(context);
+                        },
+                      ),
                     ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Row(
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 20),
+            // 컨테이너와 간격을 표시
+            ...containers.asMap().entries.map(
+                  (entry) => Column(
+                    children: [
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width *
+                            0.95, // 컨테이너 너비를 전체 너비의 90%로 설정
+                        child: Stack(
                           children: [
-                            SizedBox(
-                              width: 102,
-                              height: 102,
+                            entry.value,
+                            Positioned(
+                              top: 10,
+                              right: 30,
                               child: CircleAvatar(
-                                backgroundImage: user.userImage.isNotEmpty
-                                    ? FileImage(File(user.userImage))
-                                    : AssetImage("images/pet_basic.png")
-                                        as ImageProvider<Object>?,
-                              ),
-                            ),
-                            SizedBox(width: 20),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  SizedBox(height: 20),
-                                  Text(
-                                    user.username,
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 25,
-                                    ),
-                                  ),
-                                  SizedBox(height: 13),
-                                  buildUserField('나이:', user.userage,
-                                      fontSize: 13),
-                                  SizedBox(height: 13),
-                                  buildUserField('사료:', user.userfood,
-                                      fontSize: 13),
-                                  SizedBox(height: 13),
-                                  buildUserField(
-                                      '인슐린 주사 일일 투여 횟수:', user.usercount,
-                                      fontSize: 13),
-                                  SizedBox(height: 13),
-                                  buildUserField('성별:', user.usergender,
-                                      fontSize: 13),
-                                  SizedBox(height: 13),
-                                  buildUserField('종:', user.userspecie,
-                                      fontSize: 13),
-                                  SizedBox(height: 13),
-                                  buildUserField('필요 영양제:', user.usersupplement,
-                                      fontSize: 13),
-                                  SizedBox(height: 13),
-                                  buildUserField('센서착용날짜:', user.usersensorwear,
-                                      fontSize: 13),
-                                  SizedBox(height: 13),
-                                ],
+                                backgroundColor: Colors.white,
+                                radius: 20,
+                                child: IconButton(
+                                  icon: Icon(Icons.edit, color: Colors.black),
+                                  onPressed: () {
+                                    navigateToEditPage(context);
+                                  },
+                                ),
                               ),
                             ),
                           ],
                         ),
-                      ],
-                    ),
+                      ),
+                      SizedBox(height: 20),
+                    ],
                   ),
                 ),
-                Positioned(
-                  top: 10,
-                  right: 30,
-                  child: CircleAvatar(
-                    backgroundColor: Colors.white,
-                    radius: 20,
-                    child: IconButton(
-                      icon: Icon(Icons.edit, color: Colors.black),
-                      onPressed: () {
-                        navigateToEditPage(context);
-                      },
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          navigateToCreatePage(context);
+        },
+        child: Icon(Icons.add),
+        backgroundColor: Color(0xFFECB5FF),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 
@@ -129,19 +111,19 @@ class PetInfoPage extends StatelessWidget {
     }
   }
 
-  Widget buildUserField(String label, String value, {double fontSize = 20}) {
-    return Row(
-      children: <Widget>[
-        Text(
-          label,
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: fontSize),
-        ),
-        SizedBox(width: 8),
-        Text(
-          value ?? '',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: fontSize),
-        ),
-      ],
+  void navigateToCreatePage(BuildContext context) async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => CreatePage()),
     );
+
+    if (result != null) {
+      setState(() {
+        final container = result as Container;
+        containers.add(container);
+      });
+    }
   }
+
+  // …
 }
