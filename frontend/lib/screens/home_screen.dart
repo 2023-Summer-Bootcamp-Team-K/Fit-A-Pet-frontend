@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/components/notification.dart';
 import 'package:frontend/components/side_menu.dart';
 import 'package:frontend/constant.dart';
+import 'package:frontend/screens/chart_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:frontend/screens/feed.dart';
 
@@ -37,7 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Column(
                 children: <Widget>[
                   SizedBox(height: 70),
-                  Container( 
+                  Container(
                     margin: EdgeInsets.symmetric(horizontal: 20),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -63,7 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   });
                                 },
                               ),
-                              GestureDetector(
+                        GestureDetector(
                           onTap: () {
                             Navigator.push(
                               context,
@@ -71,7 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             );
                           },
                           child: Icon(CupertinoIcons.bell_fill),
-                              ),
+                        ),
                       ],
                     ),
                   ),
@@ -154,7 +155,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                               SizedBox(width: screenWidth * 0.05),
                               Image.asset(
-                                'assets/main_doctor.png',
+                                'images/main_doctor.png',
                                 width: screenWidth * 0.2,
                                 height: screenWidth * 0.2,
                               ),
@@ -188,7 +189,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 top: screenWidth * 0.025,
                                 left: screenWidth * 0.025,
                                 child: Image.asset(
-                                  'assets/spoid.png',
+                                  'images/spoid.png',
                                   width: screenWidth * 0.08,
                                   height: screenWidth * 0.08,
                                 ),
@@ -230,7 +231,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 top: screenWidth * 0.025,
                                 left: screenWidth * 0.025,
                                 child: Image.asset(
-                                  'assets/blood.png',
+                                  'images/blood.png',
                                   width: screenWidth * 0.08,
                                   height: screenWidth * 0.08,
                                 ),
@@ -252,48 +253,65 @@ class _HomeScreenState extends State<HomeScreen> {
                         top: screenWidth * 1.05,
                         left: screenWidth * 0.05,
                         right: screenWidth * 0.05,
-                        child: Container(
-                          width: screenWidth * 0.9,
-                          height: screenWidth * 0.3,
-                          decoration: BoxDecoration(
-                            color: Color(0xFFF86A1FF),
-                            borderRadius: BorderRadius.circular(screenWidth * 0.05),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.5),
-                                spreadRadius: 2,
-                                blurRadius: 5,
-                                offset: Offset(0, 3),
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              PageRouteBuilder(
+                                transitionDuration: Duration(milliseconds: 500),
+                                pageBuilder: (_, __, ___) => ChartScreen(),
+                                transitionsBuilder: (_, animation, __, child) {
+                                  return FadeTransition(
+                                    opacity: animation,
+                                    child: child,
+                                  );
+                                },
                               ),
-                            ],
-                          ),
-                          child: Row(
-                            children: [
-                              SizedBox(width: screenWidth * 0.1),
-                              Expanded(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      '혈당차트',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: screenWidth * 0.06,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ],
+                            );
+                          },
+                          child: Container(
+                            width: screenWidth * 0.9,
+                            height: screenWidth * 0.3,
+                            decoration: BoxDecoration(
+                              color: Color(0xFFF86A1FF),
+                              borderRadius: BorderRadius.circular(screenWidth * 0.05),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.5),
+                                  spreadRadius: 2,
+                                  blurRadius: 5,
+                                  offset: Offset(0, 3),
                                 ),
-                              ),
-                              SizedBox(width: screenWidth * 0.05),
-                              Image.asset(
-                                'assets/bloodchart.png',
-                                width: screenWidth * 0.15,
-                                height: screenWidth * 0.15,
-                              ),
-                              SizedBox(width: screenWidth * 0.05),
-                            ],
+                              ],
+                            ),
+                            child: Row(
+                              children: [
+                                SizedBox(width: screenWidth * 0.1),
+                                Expanded(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        '혈당차트',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: screenWidth * 0.06,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(width: screenWidth * 0.05),
+                                Image.asset(
+                                  'images/bloodchart.png',
+                                  width: screenWidth * 0.15,
+                                  height: screenWidth * 0.15,
+                                ),
+                                SizedBox(width: screenWidth * 0.05),
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -353,7 +371,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                                 SizedBox(width: screenWidth * 0.05),
                                 Image.asset(
-                                  'assets/feed.png',
+                                  'images/feed.png',
                                   width: screenWidth * 0.15,
                                   height: screenWidth * 0.15,
                                 ),
@@ -362,29 +380,30 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                         ),
-                      ), 
-                      Positioned(
-                      bottom: screenWidth * 0.25,
-                      right: 30,
-                      child: FloatingActionButton(
-                        backgroundColor: Colors.white,
-                        onPressed: _launchURL,
-                        child: Image.asset(
-                          'assets/kakao_icon.png',
-                          fit: BoxFit.contain, 
-                       ),
                       ),
-                      ),                    
+                      Positioned(
+                        bottom: screenWidth * 0.25,
+                        right: 30,
+                        child: FloatingActionButton(
+                          backgroundColor: Colors.white,
+                          onPressed: _launchURL,
+                          child: Image.asset(
+                            'assets/icons/kakao_icon.png',
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ],
               ),
             ),
           ),
-        ],        
+        ],
       ),
-    );   
-  }  
+    );
+  }
+
   _launchURL() async {
     const url = 'https://open.kakao.com/o/sOmd7Zuf';
     if (await canLaunch(url)) {
@@ -392,5 +411,5 @@ class _HomeScreenState extends State<HomeScreen> {
     } else {
       throw 'Could not launch $url';
     }
-  }     
+  }
 }
