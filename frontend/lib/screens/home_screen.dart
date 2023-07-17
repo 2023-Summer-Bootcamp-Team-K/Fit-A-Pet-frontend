@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:frontend/components/notification.dart';
 import 'package:frontend/components/side_menu.dart';
 import 'package:frontend/constant.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -34,7 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: SingleChildScrollView(
               child: Column(
                 children: <Widget>[
-                  SizedBox(height: 50),
+                  SizedBox(height: 70),
                   Container( 
                     margin: EdgeInsets.symmetric(horizontal: 20),
                     child: Row(
@@ -60,6 +62,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                     isDrawerOpen = true;
                                   });
                                 },
+                              ),
+                              GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => NotificationPage()),
+                            );
+                          },
+                          child: Icon(CupertinoIcons.bell_fill),
                               ),
                       ],
                     ),
