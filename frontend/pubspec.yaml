@@ -35,10 +35,23 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
+  flutter_svg: ^2.0.7
+  fl_chart: ^0.63.0
+  syncfusion_flutter_datepicker: ^22.1.37
+  url_launcher: ^6.0.12
+  flutter_local_notifications: ^15.1.0+1
+  timezone: ^0.9.0
+  time_picker_spinner: ^0.0.1
+  animated_splash_screen: ^1.3.0
+  provider: ^6.0.5
+  foundation_flutter: ^0.2.0
+  image_picker: ^1.0.1
+
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+    
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -59,9 +72,17 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
-  #   - images/a_dot_ham.jpeg
+  assets:
+    - images/main_doctor.png
+    - images/bloodchart.png
+    - images/feed.png
+    - images/spoid.png
+    - images/blood.png 
+    - assets/icons/paw.png
+    - assets/icons/chart.png
+    - assets/icons/feed_rcmd.png
+    - assets/icons/log_out.png
+    - assets/icons/kakao_icon.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
