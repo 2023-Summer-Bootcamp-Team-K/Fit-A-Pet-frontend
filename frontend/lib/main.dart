@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/constant.dart';
 import 'package:provider/provider.dart';
 import 'package:frontend/model/user.dart';
 import 'package:frontend/page/home_page.dart';
@@ -13,14 +14,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      // theme: ThemeData(
-      //   colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-      //   useMaterial3: true,
-      // ),
-      home: HomePage(),
+      home: Splash(),
     );
   }
-}
+} 
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -35,7 +32,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         //앱바
-        backgroundColor: Colors.purple, //연보라색
+        backgroundColor: kPrimaryColor, //연보라색
         title: Text("Fit-A-Pet"),
       ),
       body: Container(
@@ -43,9 +40,10 @@ class _HomePageState extends State<HomePage> {
         child: Center(
           child: Text("HomePage"),
         ),
+        textTheme: Theme.of(context)
+            .textTheme
+            .apply(displayColor: kTextColor), //뒷배경 컬러
       ),
     );
   }
 }
-
-
