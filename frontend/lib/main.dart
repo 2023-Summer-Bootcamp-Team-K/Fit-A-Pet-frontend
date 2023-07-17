@@ -5,6 +5,10 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:frontend/components/notification.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
+import 'package:provider/provider.dart';
+import 'package:frontend/model/user.dart';
+import 'package:frontend/page/home_page.dart';
+import 'package:frontend/screens/splash_screen.dart';
 
 void main() {
 
@@ -53,25 +57,43 @@ void _initNotiSetting() async {
 
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  static final String title = '팻';
+  final user = User();
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Fit-A-Pet',
-      theme: ThemeData(
-        primaryColor: kPrimaryColor, 
-        scaffoldBackgroundColor: kBackgroundColor,
-        appBarTheme: AppBarTheme( 
-          color: kPrimaryColor,
-          elevation: 0,
+      home: Splash(),
+    );
+  }
+} 
+
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        //앱바
+        backgroundColor: kPrimaryColor, //연보라색
+        title: Text("Fit-A-Pet"),
+      ),
+      body: Container(
+        //컨테이너 //homepage
+        child: Center(
+          child: Text("HomePage"),
         ),
         textTheme: Theme.of(context)
             .textTheme
             .apply(displayColor: kTextColor),
       ),
-      home: HomeScreen(),
     );
   }
 }
