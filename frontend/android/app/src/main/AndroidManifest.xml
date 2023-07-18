@@ -1,4 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
+
     <application
         android:label="frontend"
         android:name="${applicationName}"
@@ -10,7 +15,6 @@
             android:theme="@style/LaunchTheme"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:hardwareAccelerated="true"
-            android:windowSoftInputMode="adjustResize"
             android:windowSoftInputMode="adjustResize"
             android:showWhenLocked="true"
             android:turnScreenOn="true">
@@ -28,10 +32,6 @@
             </intent-filter>
         </activity>
 
-        <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-        <uses-permission android:name="android.permission.VIBRATE" />
-        <uses-permission android:name="android.permission.WAKE_LOCK" />
-        <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
         <receiver android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationReceiver" />
         <receiver android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationBootReceiver">
             <intent-filter>
