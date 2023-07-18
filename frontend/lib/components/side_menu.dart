@@ -3,22 +3,16 @@ import 'package:frontend/components/info_card.dart';
 import 'package:frontend/page/pet_info.dart';
 import 'package:frontend/screens/chart_screen.dart';
 import 'package:frontend/screens/feed.dart';
-
 void main() {
   runApp(const SideMenu());
 }
-
 class SideMenu extends StatefulWidget {
   const SideMenu({Key? key}) : super(key: key);
-
   @override
   State<SideMenu> createState() => _SideMenuState();
 }
-
 class _SideMenuState extends State<SideMenu> {
   bool isActive = false;
-  late final VoidCallback press;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,9 +24,9 @@ class _SideMenuState extends State<SideMenu> {
           color: Colors.white,
         ),
         width: 300,
-        height: double.infinity,
         child: SafeArea(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const InfoCard(
                 name: "Duck UI",
@@ -41,6 +35,7 @@ class _SideMenuState extends State<SideMenu> {
               Padding(
                 padding: EdgeInsets.only(top: 40, left: 30, bottom: 70),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     InkWell(
                       onTap: () {
@@ -50,21 +45,9 @@ class _SideMenuState extends State<SideMenu> {
                         if (isActive) {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => PetInfoPage()),
+                            MaterialPageRoute(
+                                builder: (context) => PetInfoPage()),
                           );
-                          AnimatedPositioned(
-                          duration: const Duration(milliseconds: 300),
-                          curve: Curves.fastOutSlowIn,
-                          height: 40,
-                          width: isActive ? 300 : 0,
-                          left: 0,
-                          child: Container(
-                            decoration: const BoxDecoration(
-                              color: Color(0xFF6792FF),
-                              borderRadius: BorderRadius.all(Radius.circular(10)),
-                            ),
-                          ),
-                        );
                         }
                       },
                       child: NewRow(
@@ -72,7 +55,7 @@ class _SideMenuState extends State<SideMenu> {
                         image: AssetImage('assets/icons/paw.png'),
                       ),
                     ),
-                    SizedBox(height: 50),
+                    SizedBox(height: 20),
                     InkWell(
                       onTap: () {
                         setState(() {
@@ -81,21 +64,9 @@ class _SideMenuState extends State<SideMenu> {
                         if (isActive) {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => ChartScreen()),
+                            MaterialPageRoute(
+                                builder: (context) => ChartScreen()),
                           );
-                          AnimatedPositioned(
-                          duration: const Duration(milliseconds: 300),
-                          curve: Curves.fastOutSlowIn,
-                          height: 40,
-                          width: isActive ? 300 : 0,
-                          left: 0,
-                          child: Container(
-                            decoration: const BoxDecoration(
-                              color: Color(0xFF6792FF),
-                              borderRadius: BorderRadius.all(Radius.circular(10)),
-                            ),
-                          ),
-                        );
                         }
                       },
                       child: NewRow(
@@ -103,7 +74,7 @@ class _SideMenuState extends State<SideMenu> {
                         image: AssetImage('assets/icons/chart.png'),
                       ),
                     ),
-                    SizedBox(height: 50), 
+                    SizedBox(height: 20),
                     InkWell(
                       onTap: () {
                         setState(() {
@@ -112,21 +83,9 @@ class _SideMenuState extends State<SideMenu> {
                         if (isActive) {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => Feed_Page()),
+                            MaterialPageRoute(
+                                builder: (context) => Feed_Page()),
                           );
-                          AnimatedPositioned(
-                          duration: const Duration(milliseconds: 300),
-                          curve: Curves.fastOutSlowIn,
-                          height: 40,
-                          width: isActive ? 300 : 0,
-                          left: 0,
-                          child: Container(
-                            decoration: const BoxDecoration(
-                              color: Color(0xFF6792FF),
-                              borderRadius: BorderRadius.all(Radius.circular(10)),
-                            ),
-                          ),
-                        );
                         }
                       },
                       child: NewRow(
@@ -137,23 +96,30 @@ class _SideMenuState extends State<SideMenu> {
                   ],
                 ),
               ),
+              Spacer(),
               Padding(
-                padding: EdgeInsets.only(top: 400, left: 30, bottom: 40),
-                child: Row(
-                  children: <Widget>[
-                    Image.asset(
-                      'assets/icons/log_out.png',
-                      width: 24,
-                      height: 24,
-                    ),
-                    SizedBox(
-                      width: 30,
-                    ),
-                    Text(
-                      'Logout',
-                      style: TextStyle(color: Colors.black.withOpacity(0.5)),
-                    ),
-                  ],
+                padding: EdgeInsets.only(left: 30, bottom: 40),
+                child: InkWell(
+                  onTap: () {
+                    // Handle logout
+                  },
+                  child: Row(
+                    children: <Widget>[
+                      Image.asset(
+                        'assets/icons/log_out.png',
+                        width: 24,
+                        height: 24,
+                      ),
+                      SizedBox(
+                        width: 30,
+                      ),
+                      Text(
+                        'Logout',
+                        style: TextStyle(
+                            color: Colors.black.withOpacity(0.5)),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],
@@ -163,17 +129,14 @@ class _SideMenuState extends State<SideMenu> {
     );
   }
 }
-
 class NewRow extends StatelessWidget {
   final String text;
   final AssetImage image;
-
   const NewRow({
     Key? key,
     required this.text,
     required this.image,
   }) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -188,9 +151,7 @@ class NewRow extends StatelessWidget {
         ),
         Text(
           text,
-          style: TextStyle(color: Colors.black,
-          fontSize: 18
-          ),
+          style: TextStyle(color: Colors.black, fontSize: 18),
         ),
       ],
     );
