@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/constant.dart';
 import 'package:frontend/screens/home_screen.dart';
-import 'package:frontend/widgets/daily_chart.dart' as DailyChartWidget;
-import 'package:frontend/widgets/weekly_chart.dart' as WeeklyChartWidget;
-import 'package:frontend/widgets/monthly_chart.dart' as MonthlyChartWidget;
+import 'package:frontend/widgets/daily_chart.dart';
+import 'package:frontend/widgets/monthly_chart.dart';
+import 'package:frontend/widgets/weekly_chart.dart';
 
 class ChartScreen extends StatefulWidget {
   @override
@@ -12,66 +12,71 @@ class ChartScreen extends StatefulWidget {
 
 class _ChartScreenState extends State<ChartScreen> {
   int _selectedIndex = 0;
-  List<DateTime> dates = [
-    DateTime.now(),
-    DateTime.now().add(Duration(days: 1)),
-    DateTime.now().add(Duration(days: 2)),
-    DateTime.now().add(Duration(days: 3)),
-    DateTime.now().add(Duration(days: 4)),
-    DateTime.now().add(Duration(days: 5)),
-    DateTime.now().add(Duration(days: 6)),
-  ];
+  List<DateTime> dates = [];
+  int petId = 105;
+  List<Widget> _chartWidgets = [];
 
-  List<Widget> _chartWidgets = [
-    DailyChartWidget.DailyChart(),
-    WeeklyChartWidget.WeeklyChart(),
-    MonthlyChartWidget.MonthlyChart(),
-  ];
+  @override
+  void initState() {
+    super.initState();
+    _setDates(DateTime.now());
+    _chartWidgets = [
+      DailyChart(petId),
+      WeeklyChart(),
+      MonthlyChart(),
+    ];
+  }
+
+  void _setDates(DateTime selectedDate) {
+    dates.clear();
+    for (int i = 6; i >= 0; i--) {
+      dates.add(selectedDate.subtract(Duration(days: i)));
+    }
+  }
 
   void _onTogglePressed(int index) {
     setState(() {
       _selectedIndex = index;
-
-      // Increment dates by 1 starting from the selected index
-      for (int i = index + 1; i < dates.length; i++) {
-        dates[i] = dates[i - 1].add(Duration(days: 1));
-      }
     });
+  }
+
+  Future<void> _showDatePicker(BuildContext context) async {
+    final initialDate = dates[0];
+    final DateTime? selectedDate = await showDatePicker(
+      context: context,
+      initialDate: initialDate,
+      firstDate: DateTime(2022),
+      lastDate: DateTime.now(),
+      initialEntryMode: DatePickerEntryMode.calendarOnly,
+    );
+
+    if (selectedDate != null) {
+      _setDates(selectedDate);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    int itemCount = 0;
-    switch (_selectedIndex) {
-      case 0:
-        itemCount = 7;
-        break;
-      case 1:
-        itemCount = 4;
-        break;
-      case 2:
-        itemCount = 1;
-        break;
-    }
-
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: buildDetailsAppBar(context),
       body: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           SizedBox(height: 10),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 20),
             child: Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 GestureDetector(
-                  onTap: () => _onTogglePressed(0),
+                  onTap: () {
+                    _onTogglePressed(0);
+                  },
                   child: Container(
                     padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: _selectedIndex == 0 ? kShadowColor : Colors.white,
+                      color: _selectedIndex == 0 ? kPrimaryColor : Colors.white,
                     ),
                     child: Text(
                       "일",
@@ -83,12 +88,14 @@ class _ChartScreenState extends State<ChartScreen> {
                 ),
                 SizedBox(width: 10),
                 GestureDetector(
-                  onTap: () => _onTogglePressed(1),
+                  onTap: () {
+                    _onTogglePressed(1);
+                  },
                   child: Container(
                     padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: _selectedIndex == 1 ? kShadowColor : Colors.white,
+                      color: _selectedIndex == 1 ? kPrimaryColor : Colors.white,
                     ),
                     child: Text(
                       "주",
@@ -100,12 +107,14 @@ class _ChartScreenState extends State<ChartScreen> {
                 ),
                 SizedBox(width: 10),
                 GestureDetector(
-                  onTap: () => _onTogglePressed(2),
+                  onTap: () {
+                    _onTogglePressed(2);
+                  },
                   child: Container(
                     padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: _selectedIndex == 2 ? kShadowColor : Colors.white,
+                      color: _selectedIndex == 2 ? kPrimaryColor : Colors.white,
                     ),
                     child: Text(
                       "월",
@@ -122,7 +131,7 @@ class _ChartScreenState extends State<ChartScreen> {
           Expanded(
             child: ListView.builder(
               padding: EdgeInsets.all(10),
-              itemCount: itemCount,
+              itemCount: dates.length,
               itemBuilder: (context, index) {
                 DateTime currentDate = dates[index];
                 return Container(
@@ -144,21 +153,7 @@ class _ChartScreenState extends State<ChartScreen> {
                     children: <Widget>[
                       ElevatedButton(
                         onPressed: () async {
-                          final selectedDate = await showDatePicker(
-                            context: context,
-                            initialDate: currentDate,
-                            firstDate: DateTime(2022),
-                            lastDate: DateTime.now().subtract(Duration(days: 1)),
-                            initialEntryMode: DatePickerEntryMode.calendarOnly,
-                          );
-                          if (selectedDate != null) {
-                            setState(() {
-                              dates[index] = selectedDate;
-                              for (int i = index + 1; i < dates.length; i++) {
-                                dates[i] = dates[i - 1].add(Duration(days: 1));
-                              }
-                            });
-                          }
+                          await _showDatePicker(context);
                         },
                         child: Text(
                           "${currentDate.month}월 ${currentDate.day}일",
