@@ -1,5 +1,3 @@
-//하 여기부터 건들지ㅏ마ㅏ마
-//제발
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
@@ -93,52 +91,61 @@ class _PetRegistrationPageState extends State<PetRegistrationPage> {
   String? _selectedSoreSpot; // Nullable 타입으로 변경
 
   @override
-  void initState() {
-    super.initState();
-    _selectedSpecies = null;
-    _selectedGender = null;
-    _selectedFeed = null;
-    _selectedSoreSpot = null;
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_pickedImage != null && !mounted) {
+      setState(() {
+        _pickedImage = null;
+      });
+    }
   }
 
   Future<void> _pickImage() async {
     final ImagePicker _imagePicker = ImagePicker();
-    final pickedImage = await showModalBottomSheet<PickedFile>(
+    final pickedImage = await showModalBottomSheet<XFile>(
       context: context,
       builder: (BuildContext context) {
-        return SafeArea(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              ListTile(
-                leading: Icon(Icons.camera_alt),
-                title: Text('Camera'),
-                onTap: () async {
-                  Navigator.pop(
-                    context,
-                    await _imagePicker.pickImage(source: ImageSource.camera),
-                  );
-                },
+        return Builder(
+          builder: (BuildContext context) {
+            return SafeArea(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  ListTile(
+                    leading: Icon(Icons.camera_alt),
+                    title: Text('Camera'),
+                    onTap: () async {
+                      await Future.delayed(
+                          Duration(milliseconds: 500)); // 약간의 지연
+                      final image = await _imagePicker.pickImage(
+                          source: ImageSource.camera);
+                      Navigator.pop(context, image); // 이미지 반환
+                    },
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.photo_library),
+                    title: Text('Gallery'),
+                    onTap: () async {
+                      await Future.delayed(
+                          Duration(milliseconds: 500)); // 약간의 지연
+                      final image = await _imagePicker.pickImage(
+                          source: ImageSource.gallery);
+                      Navigator.pop(context, image); // 이미지 반환
+                    },
+                  ),
+                ],
               ),
-              ListTile(
-                leading: Icon(Icons.photo_library),
-                title: Text('Gallery'),
-                onTap: () async {
-                  Navigator.pop(
-                    context,
-                    await _imagePicker.pickImage(source: ImageSource.gallery),
-                  );
-                },
-              ),
-            ],
-          ),
+            );
+          },
         );
       },
     );
 
-    setState(() {
-      _pickedImage = pickedImage != null ? File(pickedImage.path) : null;
-    });
+    if (pickedImage != null && mounted) {
+      setState(() {
+        _pickedImage = File(pickedImage.path);
+      });
+    }
   }
 
   void _registerPet() async {
