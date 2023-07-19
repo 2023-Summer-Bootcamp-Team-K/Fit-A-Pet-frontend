@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/screens/home_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:frontend/model/user.dart';
 import 'package:frontend/page/create_page.dart';
@@ -26,19 +25,19 @@ class _PetInfoPageState extends State<PetInfoPage> {
             backgroundColor: Color(0xFFC1CCFF),
             leading: GestureDetector(
               onTap: () {
-                Navigator.push(
-                  context,
-                  PageRouteBuilder(
-                    transitionDuration: Duration(milliseconds: 500),
-                    pageBuilder: (_, __, ___) => HomeScreen(),
-                    transitionsBuilder: (_, animation, __, child) {
-                      return FadeTransition(
-                        opacity: animation,
-                        child: child,
-                      );
-                    },
-                  ),
-                );
+                // Navigator.push(
+                //   context,
+                //   PageRouteBuilder(
+                //     transitionDuration: Duration(milliseconds: 500),
+                //     pageBuilder: (_, __, ___) => HomeScreen(),
+                //     transitionsBuilder: (_, animation, __, child) {
+                //       return FadeTransition(
+                //         opacity: animation,
+                //         child: child,
+                //       );
+                //     },
+                //   ),
+                // );
               },
               child: Icon(
                 Icons.arrow_back_ios,
@@ -55,8 +54,8 @@ class _PetInfoPageState extends State<PetInfoPage> {
                     alignment: Alignment.topRight,
                     children: [
                       Container(
-                        // User 정보를 표시할 부분
-                      ),
+                          // User 정보를 표시할 부분
+                          ),
                       Positioned(
                         top: 10,
                         right: 30,
@@ -77,35 +76,36 @@ class _PetInfoPageState extends State<PetInfoPage> {
                 SizedBox(height: 20),
                 // 컨테이너와 간격을 표시
                 ...containers.asMap().entries.map(
-                  (entry) => Column(
-                    children: [
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width *
-                            0.95, // 컨테이너 너비를 전체 너비의 90%로 설정
-                        child: Stack(
-                          children: [
-                            entry.value,
-                            Positioned(
-                              top: 10,
-                              right: 30,
-                              child: CircleAvatar(
-                                backgroundColor: Colors.white,
-                                radius: 20,
-                                child: IconButton(
-                                  icon: Icon(Icons.edit, color: Colors.black),
-                                  onPressed: () {
-                                    navigateToEditPage(context);
-                                  },
+                      (entry) => Column(
+                        children: [
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width *
+                                0.95, // 컨테이너 너비를 전체 너비의 90%로 설정
+                            child: Stack(
+                              children: [
+                                entry.value,
+                                Positioned(
+                                  top: 10,
+                                  right: 30,
+                                  child: CircleAvatar(
+                                    backgroundColor: Colors.white,
+                                    radius: 20,
+                                    child: IconButton(
+                                      icon:
+                                          Icon(Icons.edit, color: Colors.black),
+                                      onPressed: () {
+                                        navigateToEditPage(context);
+                                      },
+                                    ),
+                                  ),
                                 ),
-                              ),
+                              ],
                             ),
-                          ],
-                        ),
+                          ),
+                          SizedBox(height: 20),
+                        ],
                       ),
-                      SizedBox(height: 20),
-                    ],
-                  ),
-                ),
+                    ),
               ],
             ),
           ),
@@ -138,7 +138,7 @@ class _PetInfoPageState extends State<PetInfoPage> {
   void navigateToCreatePage(BuildContext context) async {
     final result = await Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => CreatePage()),
+      MaterialPageRoute(builder: (context) => PetRegistrationPage()),
     );
 
     if (result != null) {
