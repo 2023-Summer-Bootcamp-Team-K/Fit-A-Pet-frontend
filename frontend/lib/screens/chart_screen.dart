@@ -4,6 +4,8 @@ import 'package:frontend/screens/home_screen.dart';
 import 'package:frontend/widgets/daily_chart.dart';
 import 'package:frontend/widgets/monthly_chart.dart';
 import 'package:frontend/widgets/weekly_chart.dart';
+import 'package:intl/intl.dart';
+import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 class ChartScreen extends StatefulWidget {
   @override
@@ -26,29 +28,92 @@ class _ChartScreenState extends State<ChartScreen> {
     ];
   }
 
+  String getFormattedDateRange(PickerDateRange range) {
+    String formattedStartDate =
+        DateFormat("M월 d일").format(range.startDate!);
+    String formattedEndDate = DateFormat("M월 d일").format(range.endDate!);
+    return "$formattedStartDate - $formattedEndDate";
+  }
+
   void _onTogglePressed(int index) {
     setState(() {
       _selectedIndex = index;
     });
   }
 
-  Future<void> _showDatePicker(BuildContext context) async {
-    final DateTime? pickedDate = await showDatePicker(
-      context: context,
-      initialDate: selectedDate,
-      firstDate: DateTime(2022),
-      lastDate: DateTime.now(),
-      initialEntryMode: DatePickerEntryMode.calendarOnly,
-    );
+ Future<void> _showDatePicker(BuildContext context) async {
+  DateRangePickerSelectionMode selectionMode;
 
-    if (pickedDate != null && pickedDate != selectedDate) {
-      setState(() {
-        selectedDate = pickedDate;
-      });
-      String formattedDate = "${selectedDate.month}월 ${selectedDate.day}일";
-      print('Formatted Date: $formattedDate');
-    }
+  if (_selectedIndex == 0) {
+    // When '일' (day) is selected, set the selection mode to single.
+    selectionMode = DateRangePickerSelectionMode.single;
+  } else {
+    // When '주' (week) or '월' (month) is selected, set the selection mode to range.
+    selectionMode = DateRangePickerSelectionMode.range;
   }
+
+  final SfDateRangePicker picker = SfDateRangePicker(
+    initialSelectedRange: selectionMode == DateRangePickerSelectionMode.single
+        ? PickerDateRange(selectedDate, selectedDate)
+        : null,
+    startRangeSelectionColor: kPrimaryColor,
+    endRangeSelectionColor: kPrimaryColor,
+    rangeSelectionColor: kPrimaryColor,
+    selectionTextStyle: const TextStyle(color: Colors.white),
+    todayHighlightColor: kPrimaryColor,
+    selectionColor: kPrimaryColor,
+    minDate: DateTime(2022),
+    maxDate: DateTime.now(),
+    selectionMode: selectionMode,
+    headerStyle: const DateRangePickerHeaderStyle(
+      textStyle: TextStyle(
+        fontWeight: FontWeight.bold,
+        color: Color.fromARGB(255, 135, 153, 239),
+        fontSize: 20,
+      ),
+    ),
+    onSelectionChanged: (DateRangePickerSelectionChangedArgs args) {
+      if (_selectedIndex != 0 && args.value is PickerDateRange) {
+        setState(() {
+          selectedDate = args.value.startDate!;
+        });
+        String formattedDate = getFormattedDateRange(args.value);
+        print('Formatted Date: $formattedDate');
+      } else if (_selectedIndex == 0 && args.value is DateTime) {
+        setState(() {
+          selectedDate = args.value;
+        });
+        String formattedDate = "${selectedDate.month}월 ${selectedDate.day}일";
+        print('Formatted Date: $formattedDate');
+      }
+    },
+  );
+
+  await showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      content: SizedBox(
+        width: MediaQuery.of(context).size.width * 0.8,
+        height: MediaQuery.of(context).size.height * 0.6,
+        child: picker,
+      ),
+      actions: [
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Color.fromARGB(255, 135, 153, 239),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            elevation: 3,
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: Text("확인"),
+        ),
+      ],
+    ),
+  );
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -148,7 +213,7 @@ class _ChartScreenState extends State<ChartScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       SizedBox(
-                        width: 120, 
+                        width: 190, 
                         child: ElevatedButton(
                           onPressed: () async {
                             await _showDatePicker(context);
@@ -168,7 +233,7 @@ class _ChartScreenState extends State<ChartScreen> {
                               ), 
                               SizedBox(width: 8), 
                              Text(
-                                "${selectedDate.month}월 ${selectedDate.day}일",
+                                getFormattedDateRange(PickerDateRange(selectedDate, selectedDate)),
                                 style: TextStyle(
                                   fontSize: 15,
                                   color: Colors.white,
