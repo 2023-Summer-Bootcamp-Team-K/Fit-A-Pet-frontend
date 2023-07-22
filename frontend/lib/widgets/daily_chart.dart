@@ -29,30 +29,37 @@ class _DailyChartPageState extends State<DailyChart> {
       try {
         dynamic jsonData = json.decode(response.body);
         print('jsonData: $jsonData');
-        
-        if (jsonData['time_range_data_list'] is List<dynamic>) {
-          List<dynamic> dataList = jsonData['time_range_data_list'];
 
-          List<Map<String, dynamic>> validDataList = dataList.where((item) {
-            final timestamp = item['timestamp'] as String?;
-            final bloodsugar = item['bloodsugar'] as int?;
+        if (jsonData['data_list'] is List<dynamic>) {
+          List<dynamic> dataList = jsonData['data_list'];
 
-            return timestamp != null && bloodsugar != null;
-          }).map((item) {
-            final timestamp = item['timestamp'] as String;
-            final bloodsugar = item['bloodsugar'] as int;
+          List validDataList = dataList.expand((item) {
+            final date = item['date'] as String?;
+            final data = item['data'] as List<dynamic>?;
+            
+            if (date != null && data != null && data.isNotEmpty) {
+              return data.map((innerItem) {
+                final timestamp = innerItem['timestamp'] as String;
+                final bloodsugar = innerItem['bloodsugar'] as int?;
 
-            return {
-              'timestamp': DateTime.parse(timestamp),
-              'bloodsugar': bloodsugar,
-            };
+                if (bloodsugar != null) {
+                  return {
+                    'timestamp': DateTime.parse(timestamp),
+                    'bloodsugar': bloodsugar,
+                  };
+                }
+                return null;
+              }).whereType<Map<String, dynamic>>().toList();
+            }
+
+            return [];
           }).toList();
 
           setState(() {
-            chartData = validDataList;
+            chartData = validDataList.cast<Map<String, dynamic>>(); // 타입 캐스팅 추가
           });
         } else {
-          print('Invalid response format: "time_range_data_list" is not a List');
+          print('Invalid response format: "data_list" is not a List');
         }
       } catch (e) {
         print('Error parsing response data: $e');
@@ -62,6 +69,8 @@ class _DailyChartPageState extends State<DailyChart> {
     }
   }
 
+  final double lowerValue = 80.0;
+  final double upperValue = 120.0;
   @override
   Widget build(BuildContext context) {
     return AspectRatio(
@@ -82,12 +91,17 @@ class _DailyChartPageState extends State<DailyChart> {
               isCurved: true,
               dotData: FlDotData(show: false),
               belowBarData: BarAreaData(show: false),
-              color: kPrimaryColor,
+              color: Color.fromARGB(255, 135, 153, 239),
               barWidth: 4,
             ),
           ],
-        ),
-      ),
+          lineTouchData: LineTouchData(
+            touchTooltipData: LineTouchTooltipData(
+              tooltipBgColor: Colors.blueAccent,
+              ),   
+           ),
+         ),
+       ),
     );
   }
 }
