@@ -22,7 +22,7 @@ class _ChartScreenState extends State<ChartScreen> {
   void initState() {
     super.initState();
     _chartWidgets = [
-      DailyChart(petId),
+      DailyChart(petId, selectedDate.month, selectedDate.day, onDateSelected),
       WeeklyChart(),
       MonthlyChart(),
     ];
@@ -41,60 +41,74 @@ class _ChartScreenState extends State<ChartScreen> {
     });
   }
 
- Future<void> _showDatePicker(BuildContext context) async {
-  DateRangePickerSelectionMode selectionMode;
+  Future<void> _updateSelectedDate() async {
+    DateTime? newDate = await showDatePicker(
+      context: context,
+      initialDate: selectedDate,
+      firstDate: DateTime(2022),
+      lastDate: DateTime.now(),
+    );
 
-  if (_selectedIndex == 0) {
-    // When '일' (day) is selected, set the selection mode to single.
-    selectionMode = DateRangePickerSelectionMode.single;
-  } else {
-    // When '주' (week) or '월' (month) is selected, set the selection mode to range.
-    selectionMode = DateRangePickerSelectionMode.range;
+    if (newDate != null) {
+      setState(() {
+        selectedDate = newDate;
+      });
+    }
   }
 
-  final SfDateRangePicker picker = SfDateRangePicker(
-    initialSelectedRange: selectionMode == DateRangePickerSelectionMode.single
-        ? PickerDateRange(selectedDate, selectedDate)
-        : null,
-    startRangeSelectionColor: kPrimaryColor,
-    endRangeSelectionColor: kPrimaryColor,
-    rangeSelectionColor: kPrimaryColor,
-    selectionTextStyle: const TextStyle(color: Colors.white),
-    todayHighlightColor: kPrimaryColor,
-    selectionColor: kPrimaryColor,
-    minDate: DateTime(2022),
-    maxDate: DateTime.now(),
-    selectionMode: selectionMode,
-    headerStyle: const DateRangePickerHeaderStyle(
-      textStyle: TextStyle(
-        fontWeight: FontWeight.bold,
-        color: Color.fromARGB(255, 135, 153, 239),
-        fontSize: 20,
+  void onDateSelected(DateTime newDate) {
+    setState(() {
+      selectedDate = newDate;
+      _chartWidgets[0] = DailyChart(petId, selectedDate.month, selectedDate.day, onDateSelected);
+    });
+  }
+
+ Future<void> _showDatePicker(BuildContext context) async {
+    DateRangePickerSelectionMode selectionMode;
+    DateTime? StartDate;
+    DateTime? EndDate;
+
+    if (_selectedIndex == 0) {
+      selectionMode = DateRangePickerSelectionMode.single;
+    } else {
+      selectionMode = DateRangePickerSelectionMode.range;
+    }
+
+    final SfDateRangePicker picker = SfDateRangePicker(
+      onSelectionChanged: (DateRangePickerSelectionChangedArgs args) {
+        if (_selectedIndex != 0 && args.value is PickerDateRange) {
+          StartDate = args.value.startDate!;
+          EndDate = args.value.endDate!;
+        } else if (_selectedIndex == 0 && args.value is DateTime) {
+          StartDate = args.value;
+          EndDate = args.value;
+        }
+      },
+
+      startRangeSelectionColor: kPrimaryColor,
+      endRangeSelectionColor: kPrimaryColor,
+      rangeSelectionColor: kPrimaryColor,
+      selectionTextStyle: const TextStyle(color: Colors.white),
+      todayHighlightColor: kPrimaryColor,
+      selectionColor: kPrimaryColor,
+      minDate: DateTime(2022),
+      maxDate: DateTime.now(),
+      selectionMode: selectionMode,
+      headerStyle: const DateRangePickerHeaderStyle(
+        textStyle: TextStyle(
+          fontWeight: FontWeight.bold,
+          color: Color.fromARGB(255, 135, 153, 239),
+          fontSize: 18,
+        ),
       ),
-    ),
-    onSelectionChanged: (DateRangePickerSelectionChangedArgs args) {
-      if (_selectedIndex != 0 && args.value is PickerDateRange) {
-        setState(() {
-          selectedDate = args.value.startDate!;
-        });
-        String formattedDate = getFormattedDateRange(args.value);
-        print('Formatted Date: $formattedDate');
-      } else if (_selectedIndex == 0 && args.value is DateTime) {
-        setState(() {
-          selectedDate = args.value;
-        });
-        String formattedDate = "${selectedDate.month}월 ${selectedDate.day}일";
-        print('Formatted Date: $formattedDate');
-      }
-    },
-  );
+    );
 
   await showDialog(
     context: context,
     builder: (context) => AlertDialog(
       content: SizedBox(
-        width: MediaQuery.of(context).size.width * 0.8,
-        height: MediaQuery.of(context).size.height * 0.6,
+        width: MediaQuery.of(context).size.width * 0.7,
+        height: MediaQuery.of(context).size.height * 0.5,
         child: picker,
       ),
       actions: [
@@ -105,6 +119,10 @@ class _ChartScreenState extends State<ChartScreen> {
             elevation: 3,
           ),
           onPressed: () {
+            setState(() {
+                selectedDate = StartDate!;
+                _chartWidgets[0] = DailyChart(petId, selectedDate.month, selectedDate.day, onDateSelected);
+              });
             Navigator.pop(context);
           },
           child: Text("확인"),
@@ -113,7 +131,6 @@ class _ChartScreenState extends State<ChartScreen> {
     ),
   );
 }
-
 
   @override
   Widget build(BuildContext context) {
@@ -125,7 +142,7 @@ class _ChartScreenState extends State<ChartScreen> {
         children: [
           SizedBox(height: 10),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20),
+            padding: EdgeInsets.symmetric(horizontal: 22),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
@@ -137,7 +154,9 @@ class _ChartScreenState extends State<ChartScreen> {
                     padding: EdgeInsets.symmetric(vertical: 10, horizontal: 18),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: _selectedIndex == 0 ? Color.fromARGB(255, 135, 153, 239) : Colors.white,
+                      color: _selectedIndex == 0
+                          ? Color.fromARGB(255, 135, 153, 239)
+                          : Colors.white,
                     ),
                     child: Text(
                       "일",
@@ -156,7 +175,9 @@ class _ChartScreenState extends State<ChartScreen> {
                     padding: EdgeInsets.symmetric(vertical: 10, horizontal: 18),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: _selectedIndex == 1 ? Color.fromARGB(255, 135, 153, 239) : Colors.white,
+                      color: _selectedIndex == 1
+                          ? Color.fromARGB(255, 135, 153, 239)
+                          : Colors.white,
                     ),
                     child: Text(
                       "주",
@@ -175,7 +196,9 @@ class _ChartScreenState extends State<ChartScreen> {
                     padding: EdgeInsets.symmetric(vertical: 10, horizontal: 18),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: _selectedIndex == 2 ? Color.fromARGB(255, 135, 153, 239) : Colors.white,
+                      color: _selectedIndex == 2
+                          ? Color.fromARGB(255, 135, 153, 239)
+                          : Colors.white,
                     ),
                     child: Text(
                       "월",
@@ -188,7 +211,6 @@ class _ChartScreenState extends State<ChartScreen> {
               ],
             ),
           ),
-          SizedBox(height: 10),
           Expanded(
             child: ListView.builder(
               padding: EdgeInsets.all(22),
@@ -196,11 +218,11 @@ class _ChartScreenState extends State<ChartScreen> {
               itemBuilder: (context, index) {
                 String formattedDate = "${selectedDate.month}월 ${selectedDate.day}일";
                 return Container(
-                  margin: EdgeInsets.only(bottom: 20),
-                  padding: EdgeInsets.all(20),
+                  margin: EdgeInsets.only(bottom: 5), 
+                  padding: EdgeInsets.fromLTRB(15, 15, 20, 30),
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(30),
                     boxShadow: [
                       BoxShadow(
                         offset: Offset(0, 21),
@@ -213,7 +235,7 @@ class _ChartScreenState extends State<ChartScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       SizedBox(
-                        width: 190, 
+                        width: 200,
                         child: ElevatedButton(
                           onPressed: () async {
                             await _showDatePicker(context);
@@ -228,23 +250,23 @@ class _ChartScreenState extends State<ChartScreen> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Icon(
-                                  Icons.calendar_today,
-                                  color: Colors.white,
-                              ), 
-                              SizedBox(width: 8), 
-                             Text(
+                                Icons.calendar_today,
+                                color: Colors.white,
+                              ),
+                              SizedBox(width: 8),
+                              Text(
                                 getFormattedDateRange(PickerDateRange(selectedDate, selectedDate)),
                                 style: TextStyle(
                                   fontSize: 15,
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
                                 ),
-                              ), 
+                              ),
                             ],
                           ),
                         ),
-                      ),             
-                      SizedBox(height: 50),
+                      ),
+                      SizedBox(height: 65), // Adjust the spacing here
                       _chartWidgets[_selectedIndex],
                     ],
                   ),
@@ -261,7 +283,8 @@ class _ChartScreenState extends State<ChartScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Container(
-                      height: 370, 
+                      alignment: Alignment.topCenter,
+                      height: 360,
                       width: MediaQuery.of(context).size.width * 0.43,
                       padding: EdgeInsets.all(20),
                       decoration: BoxDecoration(
@@ -271,30 +294,34 @@ class _ChartScreenState extends State<ChartScreen> {
                       child: Text(
                         'Spike가 위로 솟을 때',
                         style: TextStyle(
-                        color: Colors.black, 
-                        fontSize: 12,
+                          color: Colors.black,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
                     SizedBox(width: 10),
                     Container(
-                      height: 370, 
+                      alignment: Alignment.topCenter,
+                      height: 360,
                       width: MediaQuery.of(context).size.width * 0.43,
                       padding: EdgeInsets.all(20),
                       decoration: BoxDecoration(
-                        color: Color.fromARGB(255, 255, 253, 243), 
+                        color: Color.fromARGB(255, 255, 253, 243),
                         borderRadius: BorderRadius.circular(30),
                       ),
                       child: Text(
-                        'Spike가 아래로 들어갔을 때', 
+                        'Spike가 아래로 들어갔을 때',
                         style: TextStyle(
-                          color: Colors.black, 
-                          fontSize: 11),
+                          color: Colors.black,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ],
                 ),
-                SizedBox(height: 10), 
+                SizedBox(height: 20),
               ],
             ),
           ),
