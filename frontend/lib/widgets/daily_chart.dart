@@ -40,7 +40,6 @@ class _DailyChartPageState extends State<DailyChart> {
     });
 
     var response = await http.get(Uri.parse('http://54.180.70.169/api/data/${widget.month}-${widget.day}/${widget.petId}'));
-    print('http://54.180.70.169/api/data/${widget.month}-${widget.day}/${widget.petId}');
     if (response.statusCode == 200) {
       try {
         dynamic jsonData = json.decode(response.body);
@@ -76,17 +75,17 @@ class _DailyChartPageState extends State<DailyChart> {
     }
 }
 
- Widget bottomTitleWidgets(double value, TitleMeta meta) {
-  final timestamp = DateTime.fromMillisecondsSinceEpoch(value.toInt());
-  final String formattedTime = '${timestamp.hour.toString().padLeft(2, '0')}:${timestamp.minute.toString().padLeft(2, '0')}';
-  return Text(
-    formattedTime,
-    style: TextStyle(
-      fontSize: 8,
-      color: Colors.black,
-    ),
-  );
-}
+  Widget bottomTitleWidgets(double value, TitleMeta meta) {
+    final timestamp = DateTime.fromMillisecondsSinceEpoch(value.toInt());
+    final String formattedTime = '${timestamp.hour.toString().padLeft(2, '0')}:${timestamp.minute.toString().padLeft(2, '0')}';
+    return Text(
+      formattedTime,
+      style: TextStyle(
+        fontSize: 13,
+        color: Colors.black,
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -99,8 +98,8 @@ class _DailyChartPageState extends State<DailyChart> {
     aspectRatio: 2.5,
     child: LineChart(
       LineChartData(
-        minY: 60,
-        maxY: 120,
+        minY: 40,
+        maxY: 170,
         gridData: FlGridData(show: true,
         drawHorizontalLine: true,
         drawVerticalLine: true,
@@ -112,17 +111,16 @@ class _DailyChartPageState extends State<DailyChart> {
         bottomTitles: AxisTitles(
           sideTitles: SideTitles(
             showTitles: true,
-            reservedSize: 0,
-            interval: 1 * 60 * 60 * 1000, 
+            reservedSize: 15,
+            interval: 1 * 60 * 60 * 240000, 
             getTitlesWidget: bottomTitleWidgets, 
           ),
         ),
         leftTitles: AxisTitles(
           sideTitles: SideTitles(
             showTitles: true,
-            //getTitlesWidget: leftTitleWidgets,
-            reservedSize: 33,
-            interval: 20,
+            reservedSize: 35,
+            interval: 30,
           ),
           ),
           topTitles: const AxisTitles(
@@ -153,7 +151,10 @@ class _DailyChartPageState extends State<DailyChart> {
                 return touchedSpots.map((spot) {
                   final DateTime timestamp = DateTime.fromMillisecondsSinceEpoch(spot.x.toInt());
                   final String timeStr = '${timestamp.hour}시 ${timestamp.minute}분';
-                  return LineTooltipItem('혈당: ${spot.y}\n시간: $timeStr', const TextStyle(color: Colors.white));
+                  return LineTooltipItem('혈당: ${spot.y}\n시간: $timeStr', 
+                  const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold));
                 }).toList();
               },
             ),
