@@ -16,6 +16,7 @@ class _HomeScreenState extends State<HomeScreen> {
   double xOffset = 0;
   double yOffset = 0;
   bool isDrawerOpen = false;
+  String petID = '99';
 
   @override
   Widget build(BuildContext context) {
@@ -321,19 +322,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         right: screenWidth * 0.05,
                         child: GestureDetector(
                           onTap: () {
-                            Navigator.push(
-                              context,
-                              PageRouteBuilder(
-                                transitionDuration: Duration(milliseconds: 500),
-                                pageBuilder: (_, __, ___) => Feed_Page(),
-                                transitionsBuilder: (_, animation, __, child) {
-                                  return FadeTransition(
-                                    opacity: animation,
-                                    child: child,
-                                  );
-                                },
-                              ),
-                            );
+                            _onRecommendationButtonPressed(context);
                           },
                           child: Container(
                             width: screenWidth * 0.6,
@@ -400,6 +389,22 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  void _onRecommendationButtonPressed(BuildContext context) {
+    Navigator.push(
+      context,
+      PageRouteBuilder(
+        transitionDuration: Duration(milliseconds: 500),
+        pageBuilder: (_, __, ___) => Feed_Page(petID: petID), // Feed_Page로 petID를 넘겨줍니다.
+        transitionsBuilder: (_, animation, __, child) {
+          return FadeTransition(
+            opacity: animation,
+            child: child,
+          );
+        },
       ),
     );
   }

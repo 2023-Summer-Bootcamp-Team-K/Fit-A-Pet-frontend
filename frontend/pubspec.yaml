@@ -88,6 +88,7 @@ flutter:
     - images/mickey.png
     - images/pet_basic.png
     - assets/icons/ic_camera.svg
+    - images/feedpage.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
