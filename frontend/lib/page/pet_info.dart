@@ -5,8 +5,6 @@ import 'package:provider/provider.dart';
 import 'package:frontend/model/user.dart';
 import 'package:frontend/page/create_page.dart';
 import 'package:frontend/page/edit_page.dart';
-import 'package:timezone/data/latest.dart' as tz;
-import 'package:timezone/timezone.dart' as tz;
 
 class Pet {
   final int id;
@@ -19,6 +17,7 @@ class Pet {
   final String? feed;
   final String? soreSpot;
   final String? profileImageUrl;
+  bool isChecked; // 체크박스 상태를 저장하는 변수
 
   Pet({
     required this.id,
@@ -31,7 +30,9 @@ class Pet {
     this.feed,
     this.soreSpot,
     this.profileImageUrl,
+    this.isChecked = false, // 체크박스 상태를 기본적으로 선택되지 않은 상태로 초기화
   });
+
   factory Pet.fromJson(Map<String, dynamic> json) {
     return Pet(
       id: json['id'],
@@ -44,6 +45,7 @@ class Pet {
       feed: json['feed'],
       soreSpot: json['sore_spot'],
       profileImageUrl: json['profile_url'],
+      isChecked: false, // 체크박스 상태를 기본적으로 선택되지 않은 상태로 초기화
     );
   }
 }
@@ -54,10 +56,10 @@ class PetInfoPage extends StatefulWidget {
 }
 
 class _PetInfoPageState extends State<PetInfoPage> {
+  bool isChecked = false; // 체크 상태를 관리하는 변수
   List<Pet> pets = [];
   @override
   void initState() {
-    tz.initializeTimeZones();
     super.initState();
     fetchPets();
   }
@@ -77,6 +79,19 @@ class _PetInfoPageState extends State<PetInfoPage> {
     } catch (e) {
       print('An error occurred while fetching pets: $e');
     }
+  }
+
+  void onPetCheckboxChanged(Pet selectedPet) {
+    setState(() {
+      // 선택된 펫 이외의 모든 펫의 체크박스를 해제합니다.
+      pets.forEach((pet) {
+        if (pet != selectedPet) {
+          pet.isChecked = false;
+        }
+      });
+      // 선택된 펫의 체크박스를 토글합니다.
+      selectedPet.isChecked = !selectedPet.isChecked;
+    });
   }
 
   Widget createPetContainer(Pet pet, User user) {
@@ -121,10 +136,10 @@ class _PetInfoPageState extends State<PetInfoPage> {
                   '${pet.name}',
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
-                Text('나이: ${pet.age}'),
+                Text('나이: ${pet.age} 세'),
                 Text('종: ${pet.species ?? 'Unknown'}'),
                 Text('성별: ${pet.gender ?? 'Unknown'}'),
-                Text('몸무게: ${pet.weight}'),
+                Text('몸무게: ${pet.weight} kg'),
                 Text(
                     '센서착용날짜: ${pet.startedDate.toLocal().year}-${pet.startedDate.toLocal().month.toString().padLeft(2, '0')}-${pet.startedDate.toLocal().day.toString().padLeft(2, '0')}'),
                 Text('사료: ${pet.feed ?? 'Unknown'}'),
@@ -132,6 +147,24 @@ class _PetInfoPageState extends State<PetInfoPage> {
               ],
             ),
           ),
+
+          // Checkbox(
+          //   value: pet.isChecked,
+          //   onChanged: (bool? value) {
+          //     if (value == true && !pet.isChecked) {
+          //       // 새로 선택된 경우에만 동작하도록 변경
+          //       setState(() {
+          //         onPetCheckboxChanged(pet); // 라디오 버튼처럼 선택 동작 처리
+          //       });
+          //     }
+          //   },
+          //   shape: RoundedRectangleBorder(
+          //     borderRadius: BorderRadius.circular(10),
+          //   ),
+          //   checkColor: Colors.white,
+          //   activeColor: Color(0xFFC1CCFF),
+          //   materialTapTargetSize: MaterialTapTargetSize.padded,
+          // ),
         ],
       ),
     );
@@ -146,7 +179,7 @@ class _PetInfoPageState extends State<PetInfoPage> {
         appBar: AppBar(
           elevation: 0,
           centerTitle: true,
-          title: Text("펫 정보"),
+          title: Text("반려동물 정보"),
           backgroundColor: Color(0xFFC1CCFF),
           actions: [
             IconButton(
@@ -172,10 +205,40 @@ class _PetInfoPageState extends State<PetInfoPage> {
                           child: Center(
                             child: Stack(
                               children: [
+                                // Pet Container
                                 createPetContainer(pet, user),
+                                // White Checkbox Container
                                 Positioned(
                                   top: 10,
-                                  right: 30,
+                                  left:
+                                      10, // Adjust the left value to move it to the left
+                                  child: Container(
+                                    width: 34,
+                                    height: 34,
+                                    child: Checkbox(
+                                      value: pet.isChecked,
+                                      onChanged: (bool? value) {
+                                        if (value == true && !pet.isChecked) {
+                                          // 새로 선택된 경우에만 동작하도록 변경
+                                          setState(() {
+                                            onPetCheckboxChanged(
+                                                pet); // 라디오 버튼처럼 선택 동작 처리
+                                          });
+                                        }
+                                      },
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      checkColor: Colors.white,
+                                      activeColor: Color(0xFFC1CCFF),
+                                      materialTapTargetSize:
+                                          MaterialTapTargetSize.padded,
+                                    ),
+                                  ),
+                                ),
+                                Positioned(
+                                  top: 10,
+                                  right: 15,
                                   child: CircleAvatar(
                                     backgroundColor: Colors.white,
                                     radius: 20,
@@ -197,7 +260,6 @@ class _PetInfoPageState extends State<PetInfoPage> {
                   }).toList(),
                 ),
               ),
-              SizedBox(height: 35),
             ],
           ),
         ),
@@ -213,36 +275,31 @@ class _PetInfoPageState extends State<PetInfoPage> {
     );
   }
 
+  int checkedCount = 0; // 선택된 체크박스 개수를 저장하는 변수
+
   void navigateToEditPage(BuildContext context, Pet pet) async {
-    try {
-      // 이전 코드: await Navigator.push(context, MaterialPageRoute(builder: (context) => EditPage(petId: pet.id)));
+    // 이전 코드: await Navigator.push(context, MaterialPageRoute(builder: (context) => EditPage(petId: pet.id)));
 
-      // 서버에서 pet 정보를 가져오기 위한 API 호출
-      final apiUrl = 'http://54.180.70.169/api/pets/detail/${pet.id}';
-      final response = await http.get(Uri.parse(apiUrl));
+    // 서버에서 pet 정보를 가져오기 위한 API 호출
+    final apiUrl = 'http://54.180.70.169/api/pets/detail/${pet.id}';
+    final response = await http.get(Uri.parse(apiUrl));
 
-      if (response.statusCode == 200) {
-        // API 호출이 성공하면 가져온 데이터를 사용하여 EditPage로 이동
-        final Map<String, dynamic> petData =
-            json.decode(utf8.decode(response.bodyBytes));
+    if (response.statusCode == 200) {
+      // API 호출이 성공하면 가져온 데이터를 사용하여 EditPage로 이동
+      final Map<String, dynamic> petData =
+          json.decode(utf8.decode(response.bodyBytes));
 
-        await Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => EditPage(
-              petId: pet.id,
-              petData: petData,
-            ),
+      await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => EditPage(
+            petId: pet.id,
+            petData: petData,
           ),
-        );
-      } else {
-        print(
-            'Failed to fetch pet details. Status code: ${response.statusCode}');
-      }
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('An error occurred: $e')),
+        ),
       );
+    } else {
+      print('Failed to fetch pet details. Status code: ${response.statusCode}');
     }
   }
 
