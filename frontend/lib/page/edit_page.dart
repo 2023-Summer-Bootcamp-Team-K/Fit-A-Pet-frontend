@@ -4,9 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:frontend/page/pet_info.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
-import 'package:date_format/date_format.dart'; //패키지 추가
-import 'package:timezone/data/latest.dart' as tz; //패키지 추가
-import 'package:timezone/timezone.dart' as tz; //패키지 추가
 
 class PetInfo {
   final String name;
@@ -98,14 +95,10 @@ class _EditPageState extends State<EditPage> {
   @override
   void initState() {
     super.initState();
-    tz.initializeTimeZones();
     _nameController.text = widget.petData['name'] ?? '';
     _ageController.text = widget.petData['age'].toString() ?? '';
     _weightController.text = widget.petData['weight'].toString() ?? '';
-    DateTime parsedDate =
-        DateTime.parse(widget.petData['started_date']).toLocal();
-    _startedDateController.text =
-        formatDate(parsedDate, [yyyy, '-', mm, '-', dd]);
+    _startedDateController.text = widget.petData['startedDate'] ?? '';
 
     _selectedSpecies = widget.petData['species'] ?? speciesOptions[0];
     _selectedGender = widget.petData['gender'] ?? genderOptions[0];
@@ -114,37 +107,6 @@ class _EditPageState extends State<EditPage> {
 
     // 프로필 이미지 URL을 가져옵니다.
     _profileImageUrl = widget.petData['profile_url'];
-  }
-
-  Future<void> _deletePetConfirmation(BuildContext context) async {
-    return showDialog<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('펫 정보 삭제'),
-          content: Text('정말 삭제하시겠습니까?'),
-          actions: <Widget>[
-            TextButton(
-              child: Text('예'),
-              onPressed: () {
-                _deletePet();
-                Navigator.of(context).pop(); // 경고창 닫기
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => PetInfoPage()),
-                );
-              },
-            ),
-            TextButton(
-              child: Text('아니요'),
-              onPressed: () {
-                Navigator.of(context).pop(); // 경고창 닫기
-              },
-            ),
-          ],
-        );
-      },
-    );
   }
 
   Future<void> _pickImage() async {
@@ -276,7 +238,7 @@ class _EditPageState extends State<EditPage> {
               Icons.delete,
               color: Colors.white,
             ),
-            onPressed: () => _deletePetConfirmation(context), // 경고창 보여주기
+            onPressed: _deletePet,
           ),
         ],
       ),
@@ -522,7 +484,7 @@ class _EditPageState extends State<EditPage> {
                   padding: EdgeInsets.all(10),
                 ),
                 child: Text(
-                  "수정하기",
+                  "수정완료",
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 20,
