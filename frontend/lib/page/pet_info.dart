@@ -8,6 +8,7 @@ import 'package:frontend/page/create_page.dart';
 import 'package:frontend/page/edit_page.dart';
 
 class Pet {
+  final int id; // Adding id field
   final String name;
   final int age;
   final String? species;
@@ -19,6 +20,7 @@ class Pet {
   final String? profileImageUrl;
 
   Pet({
+    required this.id,
     required this.name,
     required this.age,
     this.species,
@@ -32,6 +34,7 @@ class Pet {
 
   factory Pet.fromJson(Map<String, dynamic> json) {
     return Pet(
+      id: json['id'],
       name: json['name'],
       age: json['age'],
       species: json['species'],
@@ -180,7 +183,7 @@ class _PetInfoPageState extends State<PetInfoPage> {
                                 child: IconButton(
                                   icon: Icon(Icons.edit, color: Colors.black),
                                   onPressed: () {
-                                    navigateToEditPage(context);
+                                    navigateToEditPage(context, pet.id);
                                   },
                                 ),
                               ),
@@ -208,12 +211,14 @@ class _PetInfoPageState extends State<PetInfoPage> {
     );
   }
 
-  void navigateToEditPage(BuildContext context) async {
+  void navigateToEditPage(BuildContext context, int petID) async {
     try {
       await Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => EditPage()),
+        MaterialPageRoute(builder: (context) => EditPage(petID: petID)),
       );
+      // TODO: 수정이 완료된 후 pets 정보를 갱신해야 할 수도 있습니다.
+      // 이 부분은 해당 페이지의 전체 상황에 따라서 구현해야 합니다.
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('An error occurred: $e')),
