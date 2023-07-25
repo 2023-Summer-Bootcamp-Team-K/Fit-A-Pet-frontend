@@ -121,7 +121,7 @@ class WeeklyChart extends StatefulWidget {
           sideTitles: SideTitles(
             showTitles: true,
             reservedSize: 15,
-            interval: 1 * 60 * 60 * 3000, 
+            interval: 1 * 60 * 60 * 24000, 
             getTitlesWidget: bottomTitleWidgets, 
           ),
         ),

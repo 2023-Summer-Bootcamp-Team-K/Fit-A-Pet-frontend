@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:frontend/constant.dart';
 import 'package:frontend/screens/home_screen.dart';
 import 'package:frontend/widgets/daily_chart.dart';
 import 'package:frontend/widgets/monthly_chart.dart';
 import 'package:frontend/widgets/weekly_chart.dart';
-import 'package:intl/intl.dart';
-import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 class ChartScreen extends StatefulWidget {
   @override
@@ -17,36 +17,59 @@ class _ChartScreenState extends State<ChartScreen> {
   DateTime selectedDate = DateTime.now();
   int petId = 105;
   List<Widget> _chartWidgets = [];
-  DateTime startDate = DateTime.now().subtract(Duration(days: 7)); // Default start date (7 days ago)
-  DateTime endDate = DateTime.now(); // Default end date (today)
+  DateTime startDate = DateTime.now().subtract(Duration(days: 7));
+  DateTime endDate = DateTime.now();
+  int selectedMonth = DateTime.now().month;
+  int selectedYear = DateTime.now().year;
 
   @override
   void initState() {
     super.initState();
     _chartWidgets = [
       DailyChart(petId, selectedDate.month, selectedDate.day, onDateSelected),
-      WeeklyChart(petId: petId,
+      WeeklyChart(
+        petId: petId,
         startMonth: startDate.month,
         startDay: startDate.day,
         endMonth: endDate.month,
-        endDay: endDate.day,),
-      //MonthlyChart(petId, selectedDate.month),
+        endDay: endDate.day,
+      ),
+      MonthlyChart(petId, selectedYear, selectedMonth),
     ];
   }
 
-  String getFormattedDateRange(PickerDateRange range) {
-    if (range.startDate != null && range.endDate != null) {
+  void _initSelectedMonth() {
+    selectedMonth = DateTime.now().month;
+  }
+
+  String getFormattedDateRange(PickerDateRange? range) {
+    if (range != null && range.startDate != null && range.endDate != null) {
       String formattedStartDate = DateFormat("M월 d일").format(range.startDate!);
       String formattedEndDate = DateFormat("M월 d일").format(range.endDate!);
       return "$formattedStartDate - $formattedEndDate";
     } else {
-      return ""; // Return empty string if no range is selected
+      return "";
     }
+  }
+
+  DateTime getCurrentMonthDateTime() {
+    final now = DateTime.now();
+    return DateTime(now.year, now.month);
+  }
+
+  void _initSelectedYear() {
+    setState(() {
+      selectedYear = DateTime.now().year;
+    });
   }
 
   void _onTogglePressed(int index) {
     setState(() {
       _selectedIndex = index;
+      if (_selectedIndex == 2) {
+        _initSelectedMonth();
+        _initSelectedYear();
+      }
     });
   }
 
@@ -72,21 +95,23 @@ class _ChartScreenState extends State<ChartScreen> {
     });
   }
 
- Future<void> _showDatePicker(BuildContext context) async {
+  Future<void> _showDatePicker(BuildContext context) async {
     DateRangePickerSelectionMode selectionMode;
 
     if (_selectedIndex == 0) {
       selectionMode = DateRangePickerSelectionMode.single;
-    } else {
+    } else if (_selectedIndex == 1) {
       selectionMode = DateRangePickerSelectionMode.range;
+    } else {
+      selectionMode = DateRangePickerSelectionMode.single;
     }
 
     final SfDateRangePicker picker = SfDateRangePicker(
       onSelectionChanged: (DateRangePickerSelectionChangedArgs args) {
         if (_selectedIndex != 0 && args.value is PickerDateRange) {
           setState(() {
-            startDate = args.value.startDate;
-            endDate = args.value.endDate;
+            startDate = args.value.startDate!;
+            endDate = args.value.endDate!;
           });
           String formattedDate = getFormattedDateRange(args.value);
           print('Formatted Date: $formattedDate');
@@ -96,9 +121,14 @@ class _ChartScreenState extends State<ChartScreen> {
           });
           String formattedDate = "${selectedDate.month}월 ${selectedDate.day}일";
           print('Formatted Date: $formattedDate');
+        } else if (_selectedIndex == 2 && args.value is DateTime) {
+          setState(() {
+            selectedMonth = args.value.month;
+          });
+          String formattedMonth = "${selectedMonth}월";
+          print('Selected Month: $formattedMonth');
         }
       },
-
       startRangeSelectionColor: kPrimaryColor,
       endRangeSelectionColor: kPrimaryColor,
       rangeSelectionColor: Color.fromARGB(100, 135, 153, 239),
@@ -106,7 +136,7 @@ class _ChartScreenState extends State<ChartScreen> {
         color: Colors.black,
         fontWeight: FontWeight.bold,
         fontSize: 14,
-        ),
+      ),
       todayHighlightColor: kPrimaryColor,
       selectionColor: kPrimaryColor,
       minDate: DateTime(2022),
@@ -120,6 +150,82 @@ class _ChartScreenState extends State<ChartScreen> {
         ),
       ),
     );
+
+    await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        content: SizedBox(
+          width: MediaQuery.of(context).size.width * 0.7,
+          height: MediaQuery.of(context).size.height * 0.45,
+          child: picker,
+        ),
+        actions: [
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Color.fromARGB(255, 135, 153, 239),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              elevation: 3,
+            ),
+            onPressed: () {
+              setState(() {
+                if (startDate != null && endDate != null) {
+                  _chartWidgets[1] = WeeklyChart(
+                    petId: petId,
+                    startMonth: startDate.month,
+                    startDay: startDate.day,
+                    endMonth: endDate.month,
+                    endDay: endDate.day,
+                  );
+                }
+                if (selectedDate != null) {
+                  _chartWidgets[0] = DailyChart(petId, selectedDate.month, selectedDate.day, onDateSelected);
+                }
+                if (selectedMonth != null) {
+                  _chartWidgets[2] = MonthlyChart(petId, selectedYear, selectedMonth);
+                }
+              });
+              Navigator.pop(context);
+            },
+            child: Text("확인"),
+          ),
+        ],
+      ),
+    );
+  }
+
+ Future<void> _showMonthPicker(BuildContext context) async {
+  final SfDateRangePicker picker = SfDateRangePicker(
+    view: DateRangePickerView.year,
+    selectionMode: DateRangePickerSelectionMode.range, 
+    onSelectionChanged: (DateRangePickerSelectionChangedArgs args) {
+      if (args.value is PickerDateRange) { 
+        setState(() {
+          selectedMonth = args.value.startDate!.month;
+          selectedYear = args.value.startDate!.year;
+          _chartWidgets[2] = MonthlyChart(petId, selectedYear, selectedMonth);
+        });
+      }
+    },
+    startRangeSelectionColor: kPrimaryColor,
+    endRangeSelectionColor: kPrimaryColor,
+    rangeSelectionColor: Color.fromARGB(100, 135, 153, 239),
+    selectionTextStyle: const TextStyle(
+      color: Colors.black,
+      fontWeight: FontWeight.bold,
+      fontSize: 14,
+    ),
+    todayHighlightColor: kPrimaryColor,
+    selectionColor: kPrimaryColor,
+    minDate: DateTime(2022),
+    maxDate: DateTime.now(),
+    headerStyle: const DateRangePickerHeaderStyle(
+      textStyle: TextStyle(
+        fontWeight: FontWeight.bold,
+        color: Color.fromARGB(255, 135, 153, 239),
+        fontSize: 24,
+      ),
+    ),
+  );
 
   await showDialog(
     context: context,
@@ -138,21 +244,7 @@ class _ChartScreenState extends State<ChartScreen> {
           ),
           onPressed: () {
             setState(() {
-              if (startDate != null && endDate != null) {
-                // If range selected, use range dates
-                _chartWidgets[1] = WeeklyChart(
-                  petId: petId,
-                  startMonth: startDate.month,
-                  startDay: startDate.day,
-                  endMonth: endDate.month,
-                  endDay: endDate.day,
-                );
-              } 
-              if (selectedDate != null) {
-                // If single date selected, use selected date
-                _chartWidgets[0] = DailyChart(petId, selectedDate.month, selectedDate.day, onDateSelected);
-                
-              }
+              _chartWidgets[2] = MonthlyChart(petId, selectedYear, selectedMonth);
             });
             Navigator.pop(context);
           },
@@ -163,11 +255,32 @@ class _ChartScreenState extends State<ChartScreen> {
   );
 }
 
+  AppBar buildDetailsAppBar(BuildContext context) {
+    return AppBar(
+      backgroundColor: kPrimaryColor,
+      elevation: 0,
+      centerTitle: true,
+      title: Text("차트 분석"),
+      titleTextStyle: TextStyle(
+        fontWeight: FontWeight.bold,
+        fontSize: 23,
+      ),
+      leading: GestureDetector(
+        onTap: () {
+          Navigator.pop(context);
+        },
+        child: Icon(
+          Icons.arrow_back_ios,
+          color: Colors.white,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: kPrimaryColor,
-      resizeToAvoidBottomInset: false,
       appBar: buildDetailsAppBar(context),
       body: Column(
         children: [
@@ -239,6 +352,7 @@ class _ChartScreenState extends State<ChartScreen> {
                     ),
                   ),
                 ),
+                SizedBox(width: 10),
               ],
             ),
           ),
@@ -249,7 +363,7 @@ class _ChartScreenState extends State<ChartScreen> {
               itemBuilder: (context, index) {
                 String formattedDate = "${selectedDate.month}월 ${selectedDate.day}일";
                 return Container(
-                  margin: EdgeInsets.only(bottom: 5), 
+                  margin: EdgeInsets.only(bottom: 5),
                   padding: EdgeInsets.fromLTRB(15, 15, 20, 30),
                   decoration: BoxDecoration(
                     color: Colors.white,
@@ -266,10 +380,14 @@ class _ChartScreenState extends State<ChartScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       SizedBox(
-                        width: 200,
+                        width: _selectedIndex == 0 ? 130 : _selectedIndex == 1 ? 200 : 100, 
                         child: ElevatedButton(
                           onPressed: () async {
-                            await _showDatePicker(context);
+                            if (_selectedIndex == 2) {
+                              await _showMonthPicker(context);
+                            } else {
+                              await _showDatePicker(context);
+                            }
                           },
                           style: ElevatedButton.styleFrom(
                             primary: kPrimaryColor,
@@ -287,8 +405,10 @@ class _ChartScreenState extends State<ChartScreen> {
                               SizedBox(width: 8),
                               Text(
                                 _selectedIndex == 0
-                                  ? DateFormat("M월 d일").format(selectedDate) // For '일' (daily) chart
-                                  : getFormattedDateRange(PickerDateRange(startDate, endDate)), // For '주' and '월' charts
+                                    ? DateFormat("M월 d일").format(selectedDate)
+                                    : _selectedIndex == 1
+                                        ? getFormattedDateRange(PickerDateRange(startDate, endDate))
+                                        : "${selectedMonth}월", 
                                 style: TextStyle(
                                   fontSize: 15,
                                   color: Colors.white,
@@ -299,7 +419,7 @@ class _ChartScreenState extends State<ChartScreen> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 65), // Adjust the spacing here
+                      SizedBox(height: 65),
                       _chartWidgets[_selectedIndex],
                     ],
                   ),
@@ -317,7 +437,7 @@ class _ChartScreenState extends State<ChartScreen> {
                   children: [
                     Container(
                       alignment: Alignment.topCenter,
-                      height: 360,
+                      height: 380,
                       width: MediaQuery.of(context).size.width * 0.43,
                       padding: EdgeInsets.all(20),
                       decoration: BoxDecoration(
@@ -336,7 +456,7 @@ class _ChartScreenState extends State<ChartScreen> {
                     SizedBox(width: 10),
                     Container(
                       alignment: Alignment.topCenter,
-                      height: 360,
+                      height: 380,
                       width: MediaQuery.of(context).size.width * 0.43,
                       padding: EdgeInsets.all(20),
                       decoration: BoxDecoration(
@@ -359,40 +479,6 @@ class _ChartScreenState extends State<ChartScreen> {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  AppBar buildDetailsAppBar(BuildContext context) {
-    return AppBar(
-      elevation: 0,
-      centerTitle: true,
-      title: Text("차트 분석"),
-      titleTextStyle: TextStyle(
-        fontWeight: FontWeight.bold,
-        fontSize: 23,
-      ),
-      backgroundColor: kPrimaryColor,
-      leading: GestureDetector(
-        onTap: () {
-          Navigator.push(
-            context,
-            PageRouteBuilder(
-              transitionDuration: Duration(milliseconds: 500),
-              pageBuilder: (_, __, ___) => HomeScreen(),
-              transitionsBuilder: (_, animation, __, child) {
-                return FadeTransition(
-                  opacity: animation,
-                  child: child,
-                );
-              },
-            ),
-          );
-        },
-        child: Icon(
-          Icons.arrow_back_ios,
-          color: Colors.white,
-        ),
       ),
     );
   }

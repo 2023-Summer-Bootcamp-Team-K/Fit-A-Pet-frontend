@@ -8,10 +8,9 @@ class DailyChart extends StatefulWidget {
   final int petId;
   final int month;
   final int day;
-  final Function(DateTime) onDateSelected; // Add the callback function
+  final Function(DateTime) onDateSelected; 
 
-  DailyChart(this.petId, this.month, this.day, this.onDateSelected); // Receive the callback function
-
+  DailyChart(this.petId, this.month, this.day, this.onDateSelected); 
   @override
   _DailyChartPageState createState() => _DailyChartPageState();
 }
@@ -81,8 +80,8 @@ class _DailyChartPageState extends State<DailyChart> {
     return Text(
       formattedTime,
       style: TextStyle(
-        fontSize: 13,
-        color: Colors.black,
+        fontSize: 11,
+        color: const Color.fromARGB(255, 21, 20, 20),
       ),
     );
   }
@@ -111,8 +110,8 @@ class _DailyChartPageState extends State<DailyChart> {
         bottomTitles: AxisTitles(
           sideTitles: SideTitles(
             showTitles: true,
-            reservedSize: 15,
-            interval: 1 * 60 * 60 * 240000, 
+            reservedSize: 10,
+            interval: 1 * 60 * 60 * 6000, 
             getTitlesWidget: bottomTitleWidgets, 
           ),
         ),
@@ -146,7 +145,7 @@ class _DailyChartPageState extends State<DailyChart> {
           ],
           lineTouchData: LineTouchData(
             touchTooltipData: LineTouchTooltipData(
-              tooltipBgColor: Colors.blueAccent,
+              tooltipBgColor: Color.fromARGB(150, 135, 153, 239),
               getTooltipItems: (List<LineBarSpot> touchedSpots) {
                 return touchedSpots.map((spot) {
                   final DateTime timestamp = DateTime.fromMillisecondsSinceEpoch(spot.x.toInt());
@@ -154,7 +153,9 @@ class _DailyChartPageState extends State<DailyChart> {
                   return LineTooltipItem('혈당: ${spot.y}\n시간: $timeStr', 
                   const TextStyle(
                     color: Colors.white,
-                    fontWeight: FontWeight.bold));
+                    fontWeight: FontWeight.bold
+                    ),
+                  );
                 }).toList();
               },
             ),
