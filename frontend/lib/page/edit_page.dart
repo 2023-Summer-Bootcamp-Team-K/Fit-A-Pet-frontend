@@ -109,6 +109,37 @@ class _EditPageState extends State<EditPage> {
     _profileImageUrl = widget.petData['profile_url'];
   }
 
+  Future<void> _deletePetConfirmation(BuildContext context) async {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('펫 정보 삭제'),
+          content: Text('정말 삭제하시겠습니까?'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('예'),
+              onPressed: () {
+                _deletePet();
+                Navigator.of(context).pop(); // 경고창 닫기
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => PetInfoPage()),
+                );
+              },
+            ),
+            TextButton(
+              child: Text('아니요'),
+              onPressed: () {
+                Navigator.of(context).pop(); // 경고창 닫기
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   Future<void> _pickImage() async {
     final ImagePicker _imagePicker = ImagePicker();
     final pickedImage = await showModalBottomSheet<XFile>(
@@ -159,7 +190,7 @@ class _EditPageState extends State<EditPage> {
 
   void _registerPet() async {
     final String apiUrl =
-        'http://54.180.70.169/api/pets/modify/${widget.petId}/'; //modify/120/(petid=> 2번pet) //create/2/(userid=> 2번user) //list/3/(조회=userid) //delete/4/(삭제=petid)
+        'http://localhost:8000/api/pets/modify/${widget.petId}/'; //modify/120/(petid=> 2번pet) //create/2/(userid=> 2번user) //list/3/(조회=userid) //delete/4/(삭제=petid)
 
     final PetInfo petInfo = PetInfo(
       name: _nameController.text,
@@ -209,7 +240,7 @@ class _EditPageState extends State<EditPage> {
 
   void _deletePet() async {
     final String apiUrl = //404 실패 , 204 성공
-        'http://54.180.70.169/api/pets/delete/${widget.petId}/'; //modify/120/(petid=> 2번pet) //create/2/(userid=> 2번user) //list/3/(조회=userid) //delete/4/(삭제=petid)
+        'http://localhost:8000/api/pets/delete/${widget.petId}/'; //modify/120/(petid=> 2번pet) //create/2/(userid=> 2번user) //list/3/(조회=userid) //delete/4/(삭제=petid)
 
     var uri = Uri.parse(apiUrl);
     var request = http.MultipartRequest('DELETE', uri);
@@ -238,7 +269,7 @@ class _EditPageState extends State<EditPage> {
               Icons.delete,
               color: Colors.white,
             ),
-            onPressed: _deletePet,
+            onPressed: () => _deletePetConfirmation(context), // 경고창 보여주기
           ),
         ],
       ),
