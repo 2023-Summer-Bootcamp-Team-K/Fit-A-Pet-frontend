@@ -75,15 +75,24 @@ class _PetRegistrationPageState extends State<PetRegistrationPage> {
 
   File? _pickedImage;
 
-  final List<String> speciesOptions = ["Dog", "Cat", "Bird"];
+  final List<String> speciesOptions = [
+    "말티즈",
+    "푸들",
+    "포메라니안",
+    "믹스견",
+    "치와와",
+    "시츄",
+    "골든리트리버",
+    "진돗개"
+  ];
   final List<String> genderOptions = [
     "unspayed female",
     "spayed female",
     "neutered male",
     "unneutered male"
   ];
-  final List<String> feedOptions = ["돼지고기사료", "소고기사료", "닭고기사료", "오리고기사료"];
-  final List<String> soreSpotOptions = ["Back", "Legs", "Stomach"];
+  final List<String> feedOptions = ["돼지고기 사료", "소고기 사료", "닭고기 사료", "오리고기 사료"];
+  final List<String> soreSpotOptions = ["관절", "피부", "눈", "기관지", "소화"];
 
   String? _selectedSpecies; // Nullable 타입으로 변경
   String? _selectedGender; // Nullable 타입으로 변경
@@ -149,7 +158,8 @@ class _PetRegistrationPageState extends State<PetRegistrationPage> {
   }
 
   void _registerPet() async {
-    final String apiUrl = 'http://54.180.70.169/api/pets/create/2/';
+    final String apiUrl =
+        'http://54.180.70.169/api/pets/create/2/'; //54.180.70.169
 
     final PetInfo petInfo = PetInfo(
       name: _nameController.text,
@@ -215,7 +225,7 @@ class _PetRegistrationPageState extends State<PetRegistrationPage> {
       appBar: AppBar(
         centerTitle: true,
         elevation: 0,
-        title: Text('Pet Create'),
+        title: Text('펫 추가'),
         backgroundColor: Color(0xFFC1CCFF),
       ),
       body: Container(
@@ -231,7 +241,7 @@ class _PetRegistrationPageState extends State<PetRegistrationPage> {
                   height: 140,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Colors.grey[300],
+                    color: Colors.white, //Colors.grey[300]
                     image: _pickedImage != null
                         ? DecorationImage(
                             image: FileImage(_pickedImage!),
@@ -241,11 +251,14 @@ class _PetRegistrationPageState extends State<PetRegistrationPage> {
                   ),
                   child: _pickedImage != null
                       ? null
-                      : Icon(Icons.camera_alt,
-                          size: 60, color: Colors.grey[600]),
+                      : Icon(
+                          Icons.camera_alt,
+                          size: 60,
+                          color: Color(0xFF878CEF),
+                        ), //color: Color(0xFF878CEF), //Colors.grey[600]
                 ),
               ),
-              SizedBox(height: 20),
+              SizedBox(height: 35),
               TextField(
                 controller: _nameController,
                 decoration: InputDecoration(
@@ -426,7 +439,7 @@ class _PetRegistrationPageState extends State<PetRegistrationPage> {
                   DropdownMenuItem<String>(
                     value: null,
                     child: Text(
-                      '필요영양제',
+                      '불편한 부위',
                       style: TextStyle(
                         color: Color.fromARGB(255, 75, 75, 75),
                       ),
@@ -466,6 +479,7 @@ class _PetRegistrationPageState extends State<PetRegistrationPage> {
                   );
                 },
               ),
+              SizedBox(height: 50),
             ],
           ),
         ),

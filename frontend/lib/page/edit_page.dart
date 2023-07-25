@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:frontend/page/pet_info.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
+import 'package:date_format/date_format.dart'; //패키지 추가
+import 'package:timezone/data/latest.dart' as tz; //패키지 추가
+import 'package:timezone/timezone.dart' as tz; //패키지 추가
 
 class PetInfo {
   final String name;
@@ -66,15 +69,24 @@ class _EditPageState extends State<EditPage> {
 
   File? _pickedImage;
 
-  final List<String> speciesOptions = ["Dog", "Cat", "Bird"];
+  final List<String> speciesOptions = [
+    "말티즈",
+    "푸들",
+    "포메라니안",
+    "믹스견",
+    "치와와",
+    "시츄",
+    "골든리트리버",
+    "진돗개"
+  ];
   final List<String> genderOptions = [
     "unspayed female",
     "spayed female",
     "neutered male",
     "unneutered male"
   ];
-  final List<String> feedOptions = ["돼지고기사료", "소고기사료", "닭고기사료", "오리고기사료"];
-  final List<String> soreSpotOptions = ["Back", "Legs", "Stomach"];
+  final List<String> feedOptions = ["돼지고기 사료", "소고기 사료", "닭고기 사료", "오리고기 사료"];
+  final List<String> soreSpotOptions = ["관절", "피부", "눈", "기관지", "소화"];
 
   String _selectedSpecies = '';
   String _selectedGender = '';
@@ -86,10 +98,14 @@ class _EditPageState extends State<EditPage> {
   @override
   void initState() {
     super.initState();
+    tz.initializeTimeZones();
     _nameController.text = widget.petData['name'] ?? '';
     _ageController.text = widget.petData['age'].toString() ?? '';
     _weightController.text = widget.petData['weight'].toString() ?? '';
-    _startedDateController.text = widget.petData['startedDate'] ?? '';
+    DateTime parsedDate =
+        DateTime.parse(widget.petData['started_date']).toLocal();
+    _startedDateController.text =
+        formatDate(parsedDate, [yyyy, '-', mm, '-', dd]);
 
     _selectedSpecies = widget.petData['species'] ?? speciesOptions[0];
     _selectedGender = widget.petData['gender'] ?? genderOptions[0];
@@ -98,6 +114,37 @@ class _EditPageState extends State<EditPage> {
 
     // 프로필 이미지 URL을 가져옵니다.
     _profileImageUrl = widget.petData['profile_url'];
+  }
+
+  Future<void> _deletePetConfirmation(BuildContext context) async {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('펫 정보 삭제'),
+          content: Text('정말 삭제하시겠습니까?'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('예'),
+              onPressed: () {
+                _deletePet();
+                Navigator.of(context).pop(); // 경고창 닫기
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => PetInfoPage()),
+                );
+              },
+            ),
+            TextButton(
+              child: Text('아니요'),
+              onPressed: () {
+                Navigator.of(context).pop(); // 경고창 닫기
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   Future<void> _pickImage() async {
@@ -221,7 +268,7 @@ class _EditPageState extends State<EditPage> {
       appBar: AppBar(
         centerTitle: true,
         elevation: 0,
-        title: Text('Pet Modify'),
+        title: Text('펫 수정'),
         backgroundColor: Color(0xFFC1CCFF),
         actions: [
           IconButton(
@@ -229,7 +276,7 @@ class _EditPageState extends State<EditPage> {
               Icons.delete,
               color: Colors.white,
             ),
-            onPressed: _deletePet,
+            onPressed: () => _deletePetConfirmation(context), // 경고창 보여주기
           ),
         ],
       ),
@@ -247,7 +294,7 @@ class _EditPageState extends State<EditPage> {
                   height: 140,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Colors.grey[300],
+                    color: Colors.white, //Colors.grey[300]
                     image: _pickedImage != null
                         ? DecorationImage(
                             image: FileImage(_pickedImage!),
@@ -264,12 +311,15 @@ class _EditPageState extends State<EditPage> {
                       ? null
                       : (_profileImageUrl != null
                           ? null
-                          : Icon(Icons.camera_alt,
-                              size: 60, color: Colors.grey[600])),
+                          : Icon(
+                              Icons.camera_alt,
+                              size: 60,
+                              color: Color(0xFF878CEF),
+                            )), //카메라 아이콘 //Color(0xFF878CEF)
                 ),
               ),
               //////////////////////////////////////////////////////////////////
-              SizedBox(height: 20),
+              SizedBox(height: 35),
               TextField(
                 controller: _nameController,
                 decoration: InputDecoration(
@@ -447,7 +497,7 @@ class _EditPageState extends State<EditPage> {
                   DropdownMenuItem<String>(
                     value: null,
                     child: Text(
-                      '필요영양제',
+                      '불편한 부위',
                       style: TextStyle(
                         color: Color.fromARGB(255, 75, 75, 75),
                       ),
@@ -472,7 +522,7 @@ class _EditPageState extends State<EditPage> {
                   padding: EdgeInsets.all(10),
                 ),
                 child: Text(
-                  "수정완료",
+                  "수정하기",
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 20,
@@ -486,6 +536,7 @@ class _EditPageState extends State<EditPage> {
                   );
                 },
               ),
+              SizedBox(height: 50),
             ],
           ),
         ),
