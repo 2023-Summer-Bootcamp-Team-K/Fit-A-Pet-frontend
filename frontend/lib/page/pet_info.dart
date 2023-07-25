@@ -206,25 +206,28 @@ class _PetInfoPageState extends State<PetInfoPage> {
     );
   }
 
-//수정
   void navigateToEditPage(BuildContext context, Pet pet) async {
     try {
+      // 이전 코드: await Navigator.push(context, MaterialPageRoute(builder: (context) => EditPage(petId: pet.id)));
+
+      // 서버에서 pet 정보를 가져오기 위한 API 호출
       final apiUrl = 'http://54.180.70.169/api/pets/detail/${pet.id}';
       final response = await http.get(Uri.parse(apiUrl));
 
       if (response.statusCode == 200) {
+        // API 호출이 성공하면 가져온 데이터를 사용하여 EditPage로 이동
         final Map<String, dynamic> petData =
             json.decode(utf8.decode(response.bodyBytes));
 
-        // 수정된 정보를 반영하기 위해 pets 리스트에서 해당 펫의 인덱스를 찾습니다.
-        final int petIndex = pets.indexWhere((p) => p.id == pet.id);
-
-        if (petIndex != -1) {
-          // 수정된 정보로 해당 펫을 업데이트합니다.
-          setState(() {
-            pets[petIndex] = Pet.fromJson(petData);
-          });
-        }
+        await Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => EditPage(
+              petId: pet.id,
+              petData: petData,
+            ),
+          ),
+        );
       } else {
         print(
             'Failed to fetch pet details. Status code: ${response.statusCode}');

@@ -81,6 +81,8 @@ class _EditPageState extends State<EditPage> {
   String _selectedFeed = '';
   String _selectedSoreSpot = '';
 
+  String? _profileImageUrl; // 프로필 이미지 URL
+
   @override
   void initState() {
     super.initState();
@@ -93,6 +95,9 @@ class _EditPageState extends State<EditPage> {
     _selectedGender = widget.petData['gender'] ?? genderOptions[0];
     _selectedFeed = widget.petData['feed'] ?? feedOptions[0];
     _selectedSoreSpot = widget.petData['soreSpot'] ?? soreSpotOptions[0];
+
+    // 프로필 이미지 URL을 가져옵니다.
+    _profileImageUrl = widget.petData['profile_url'];
   }
 
   Future<void> _pickImage() async {
@@ -228,6 +233,7 @@ class _EditPageState extends State<EditPage> {
           ),
         ],
       ),
+      //////////////////////////////////////////////////////////////////
       body: Container(
         color: Color(0xFFC1CCFF),
         child: SingleChildScrollView(
@@ -247,14 +253,22 @@ class _EditPageState extends State<EditPage> {
                             image: FileImage(_pickedImage!),
                             fit: BoxFit.cover,
                           )
-                        : null,
+                        : (_profileImageUrl != null
+                            ? DecorationImage(
+                                image: NetworkImage(_profileImageUrl!),
+                                fit: BoxFit.cover,
+                              )
+                            : null),
                   ),
                   child: _pickedImage != null
                       ? null
-                      : Icon(Icons.camera_alt,
-                          size: 60, color: Colors.grey[600]),
+                      : (_profileImageUrl != null
+                          ? null
+                          : Icon(Icons.camera_alt,
+                              size: 60, color: Colors.grey[600])),
                 ),
               ),
+              //////////////////////////////////////////////////////////////////
               SizedBox(height: 20),
               TextField(
                 controller: _nameController,
