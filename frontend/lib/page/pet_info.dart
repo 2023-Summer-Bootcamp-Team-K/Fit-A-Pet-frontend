@@ -76,7 +76,7 @@ class _PetInfoPageState extends State<PetInfoPage> {
     }
   }
 
-  Container createPetContainer(Pet pet, User user) {
+  Widget createPetContainer(Pet pet, User user) {
     return Container(
       width: MediaQuery.of(context).size.width * 0.9,
       padding: EdgeInsets.all(16.0),
@@ -90,21 +90,23 @@ class _PetInfoPageState extends State<PetInfoPage> {
           SizedBox(
             width: 102,
             height: 102,
-            child: pet.profileImageUrl != null &&
-                    pet.profileImageUrl!.trim().isNotEmpty
-                ? Image.network(
-                    pet.profileImageUrl!,
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) {
-                      print("Error loading image: $error");
-                      return Image.asset("images/pet_basic.png",
-                          fit: BoxFit.cover);
-                    },
-                  )
-                : Image.asset(
-                    "images/pet_basic.png",
-                    fit: BoxFit.cover,
-                  ),
+            child: ClipOval(
+              child: pet.profileImageUrl != null &&
+                      pet.profileImageUrl!.trim().isNotEmpty
+                  ? Image.network(
+                      pet.profileImageUrl!,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        print("Error loading image: $error");
+                        return Image.asset("images/pet_basic.png",
+                            fit: BoxFit.cover);
+                      },
+                    )
+                  : Image.asset(
+                      "images/pet_basic.png",
+                      fit: BoxFit.cover,
+                    ),
+            ),
           ),
           SizedBox(width: 16),
           // Right side - Pet Information
