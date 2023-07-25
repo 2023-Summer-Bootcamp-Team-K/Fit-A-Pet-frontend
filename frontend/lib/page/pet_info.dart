@@ -1,14 +1,13 @@
 import 'dart:convert';
-import 'dart:io';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:http/http.dart' as http;
 import 'package:frontend/model/user.dart';
 import 'package:frontend/page/create_page.dart';
 import 'package:frontend/page/edit_page.dart';
 
 class Pet {
-  final int id; // Adding id field
+  final int id;
   final String name;
   final int age;
   final String? species;
@@ -31,7 +30,6 @@ class Pet {
     this.soreSpot,
     this.profileImageUrl,
   });
-
   factory Pet.fromJson(Map<String, dynamic> json) {
     return Pet(
       id: json['id'],
@@ -55,7 +53,6 @@ class PetInfoPage extends StatefulWidget {
 
 class _PetInfoPageState extends State<PetInfoPage> {
   List<Pet> pets = [];
-
   @override
   void initState() {
     super.initState();
@@ -64,10 +61,8 @@ class _PetInfoPageState extends State<PetInfoPage> {
 
   void fetchPets() async {
     final apiUrl = 'http://54.180.70.169/api/pets/list/2/';
-
     try {
       final response = await http.get(Uri.parse(apiUrl));
-
       if (response.statusCode == 200) {
         final List<dynamic> data = json.decode(utf8.decode(response.bodyBytes));
         setState(() {
@@ -111,9 +106,7 @@ class _PetInfoPageState extends State<PetInfoPage> {
                     fit: BoxFit.cover,
                   ),
           ),
-
           SizedBox(width: 16),
-
           // Right side - Pet Information
           Expanded(
             child: Column(
@@ -141,7 +134,6 @@ class _PetInfoPageState extends State<PetInfoPage> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
-
     return MaterialApp(
       home: Scaffold(
         backgroundColor: Color(0xFFC1CCFF),
@@ -163,39 +155,42 @@ class _PetInfoPageState extends State<PetInfoPage> {
           child: Column(
             children: [
               SizedBox(height: 10),
-              Center(),
-              // 컨테이너와 간격을 표시
-              ...pets.map((pet) {
-                return Column(
-                  children: [
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.9,
-                      child: Center(
-                        child: Stack(
-                          children: [
-                            createPetContainer(pet, user),
-                            Positioned(
-                              top: 10,
-                              right: 30,
-                              child: CircleAvatar(
-                                backgroundColor: Colors.white,
-                                radius: 20,
-                                child: IconButton(
-                                  icon: Icon(Icons.edit, color: Colors.black),
-                                  onPressed: () {
-                                    navigateToEditPage(context, pet.id);
-                                  },
+              Center(
+                child: Column(
+                  children: pets.map((pet) {
+                    return Column(
+                      children: [
+                        SizedBox(height: 20),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.9,
+                          child: Center(
+                            child: Stack(
+                              children: [
+                                createPetContainer(pet, user),
+                                Positioned(
+                                  top: 10,
+                                  right: 30,
+                                  child: CircleAvatar(
+                                    backgroundColor: Colors.white,
+                                    radius: 20,
+                                    child: IconButton(
+                                      icon:
+                                          Icon(Icons.edit, color: Colors.black),
+                                      onPressed: () {
+                                        navigateToEditPage(context, pet);
+                                      },
+                                    ),
+                                  ),
                                 ),
-                              ),
+                              ],
                             ),
-                          ],
+                          ),
                         ),
-                      ),
-                    ),
-                    SizedBox(height: 20),
-                  ],
-                );
-              }).toList(),
+                      ],
+                    );
+                  }).toList(),
+                ),
+              ),
             ],
           ),
         ),
@@ -211,14 +206,29 @@ class _PetInfoPageState extends State<PetInfoPage> {
     );
   }
 
-  void navigateToEditPage(BuildContext context, int petID) async {
+//수정
+  void navigateToEditPage(BuildContext context, Pet pet) async {
     try {
-      await Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => EditPage(petID: petID)),
-      );
-      // TODO: 수정이 완료된 후 pets 정보를 갱신해야 할 수도 있습니다.
-      // 이 부분은 해당 페이지의 전체 상황에 따라서 구현해야 합니다.
+      final apiUrl = 'http://54.180.70.169/api/pets/detail/${pet.id}';
+      final response = await http.get(Uri.parse(apiUrl));
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> petData =
+            json.decode(utf8.decode(response.bodyBytes));
+
+        // 수정된 정보를 반영하기 위해 pets 리스트에서 해당 펫의 인덱스를 찾습니다.
+        final int petIndex = pets.indexWhere((p) => p.id == pet.id);
+
+        if (petIndex != -1) {
+          // 수정된 정보로 해당 펫을 업데이트합니다.
+          setState(() {
+            pets[petIndex] = Pet.fromJson(petData);
+          });
+        }
+      } else {
+        print(
+            'Failed to fetch pet details. Status code: ${response.statusCode}');
+      }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('An error occurred: $e')),
@@ -231,7 +241,6 @@ class _PetInfoPageState extends State<PetInfoPage> {
       context,
       MaterialPageRoute(builder: (context) => PetRegistrationPage()),
     );
-
     if (result != null) {
       setState(() {
         final container = result as Container;
