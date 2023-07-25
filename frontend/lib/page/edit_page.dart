@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:frontend/page/pet_info.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
+import 'package:date_format/date_format.dart'; //패키지 추가
+import 'package:timezone/data/latest.dart' as tz; //패키지 추가
+import 'package:timezone/timezone.dart' as tz; //패키지 추가
 
 class PetInfo {
   final String name;
@@ -95,10 +98,14 @@ class _EditPageState extends State<EditPage> {
   @override
   void initState() {
     super.initState();
+    tz.initializeTimeZones();
     _nameController.text = widget.petData['name'] ?? '';
     _ageController.text = widget.petData['age'].toString() ?? '';
     _weightController.text = widget.petData['weight'].toString() ?? '';
-    _startedDateController.text = widget.petData['startedDate'] ?? '';
+    DateTime parsedDate =
+        DateTime.parse(widget.petData['started_date']).toLocal();
+    _startedDateController.text =
+        formatDate(parsedDate, [yyyy, '-', mm, '-', dd]);
 
     _selectedSpecies = widget.petData['species'] ?? speciesOptions[0];
     _selectedGender = widget.petData['gender'] ?? genderOptions[0];
@@ -118,7 +125,13 @@ class _EditPageState extends State<EditPage> {
           content: Text('정말 삭제하시겠습니까?'),
           actions: <Widget>[
             TextButton(
-              child: Text('예'),
+              child: Text(
+                '예',
+                style: TextStyle(
+                  color: Color(0xFF878CEF), // 바이올렛
+                  fontWeight: FontWeight.bold, // 굵게
+                ),
+              ),
               onPressed: () {
                 _deletePet();
                 Navigator.of(context).pop(); // 경고창 닫기
@@ -129,7 +142,13 @@ class _EditPageState extends State<EditPage> {
               },
             ),
             TextButton(
-              child: Text('아니요'),
+              child: Text(
+                '아니요',
+                style: TextStyle(
+                  color: Color(0xFF878CEF), // 바이올렛
+                  fontWeight: FontWeight.bold, // 굵게
+                ),
+              ),
               onPressed: () {
                 Navigator.of(context).pop(); // 경고창 닫기
               },
@@ -138,6 +157,36 @@ class _EditPageState extends State<EditPage> {
         );
       },
     );
+  }
+
+//여기까지
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now().toLocal(),
+      firstDate: DateTime(2022).toLocal(),
+      lastDate: DateTime.now().toLocal(),
+      // 테마를 연보라색으로 설정합니다.
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: ThemeData.light().copyWith(
+            primaryColor: Color(0xFFC1CCFF), // 타이틀 색상
+            hintColor: Color(0xFFC1CCFF), // 캘린더 아이콘 색상
+            colorScheme:
+                ColorScheme.light(primary: Color(0xFFC1CCFF)), // 일자 선택 색상
+            buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
+          ),
+          child: child!,
+        );
+      },
+    );
+
+    if (pickedDate != null && pickedDate != _startedDateController.text) {
+      setState(() {
+        _startedDateController.text =
+            formatDate(pickedDate, [yyyy, '-', mm, '-', dd]);
+      });
+    }
   }
 
   Future<void> _pickImage() async {
@@ -190,7 +239,7 @@ class _EditPageState extends State<EditPage> {
 
   void _registerPet() async {
     final String apiUrl =
-        'http://localhost:8000/api/pets/modify/${widget.petId}/'; //modify/120/(petid=> 2번pet) //create/2/(userid=> 2번user) //list/3/(조회=userid) //delete/4/(삭제=petid)
+        'http://54.180.70.169/api/pets/modify/${widget.petId}/'; //modify/120/(petid=> 2번pet) //create/2/(userid=> 2번user) //list/3/(조회=userid) //delete/4/(삭제=petid)
 
     final PetInfo petInfo = PetInfo(
       name: _nameController.text,
@@ -240,7 +289,7 @@ class _EditPageState extends State<EditPage> {
 
   void _deletePet() async {
     final String apiUrl = //404 실패 , 204 성공
-        'http://localhost:8000/api/pets/delete/${widget.petId}/'; //modify/120/(petid=> 2번pet) //create/2/(userid=> 2번user) //list/3/(조회=userid) //delete/4/(삭제=petid)
+        'http://54.180.70.169/api/pets/delete/${widget.petId}/'; //modify/120/(petid=> 2번pet) //create/2/(userid=> 2번user) //list/3/(조회=userid) //delete/4/(삭제=petid)
 
     var uri = Uri.parse(apiUrl);
     var request = http.MultipartRequest('DELETE', uri);
@@ -424,16 +473,23 @@ class _EditPageState extends State<EditPage> {
                 keyboardType: TextInputType.number,
               ),
               SizedBox(height: 16),
-              TextField(
-                controller: _startedDateController,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(16),
+              GestureDetector(
+                onTap: () =>
+                    _selectDate(context), // date picker를 호출하기 위해 onTap 이벤트 추가
+                child: AbsorbPointer(
+                  // date picker를 호출하는 부분을 탭으로 클릭하지 못하도록 AbsorbPointer로 감쌉니다.
+                  child: TextField(
+                    controller: _startedDateController,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      hintText: '센서착용날짜',
+                      fillColor: Colors.white,
+                      filled: true,
+                      contentPadding: const EdgeInsets.all(10),
+                    ),
                   ),
-                  hintText: '센서착용날짜',
-                  fillColor: Colors.white,
-                  filled: true,
-                  contentPadding: const EdgeInsets.all(10),
                 ),
               ),
               SizedBox(height: 16),
@@ -515,7 +571,7 @@ class _EditPageState extends State<EditPage> {
                   padding: EdgeInsets.all(10),
                 ),
                 child: Text(
-                  "수정완료",
+                  "수정하기",
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 20,

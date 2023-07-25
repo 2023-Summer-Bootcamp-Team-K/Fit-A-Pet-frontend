@@ -5,6 +5,8 @@ import 'package:provider/provider.dart';
 import 'package:frontend/model/user.dart';
 import 'package:frontend/page/create_page.dart';
 import 'package:frontend/page/edit_page.dart';
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 
 class Pet {
   final int id;
@@ -55,6 +57,7 @@ class _PetInfoPageState extends State<PetInfoPage> {
   List<Pet> pets = [];
   @override
   void initState() {
+    tz.initializeTimeZones();
     super.initState();
     fetchPets();
   }
@@ -122,7 +125,8 @@ class _PetInfoPageState extends State<PetInfoPage> {
                 Text('종: ${pet.species ?? 'Unknown'}'),
                 Text('성별: ${pet.gender ?? 'Unknown'}'),
                 Text('몸무게: ${pet.weight}'),
-                Text('센서착용날짜: ${pet.startedDate.toLocal()}'),
+                Text(
+                    '센서착용날짜: ${pet.startedDate.toLocal().year}-${pet.startedDate.toLocal().month.toString().padLeft(2, '0')}-${pet.startedDate.toLocal().day.toString().padLeft(2, '0')}'),
                 Text('사료: ${pet.feed ?? 'Unknown'}'),
                 Text('필요영양제: ${pet.soreSpot ?? 'Unknown'}'),
               ],
@@ -156,7 +160,7 @@ class _PetInfoPageState extends State<PetInfoPage> {
         body: SingleChildScrollView(
           child: Column(
             children: [
-              SizedBox(height: 10),
+              SizedBox(height: 0),
               Center(
                 child: Column(
                   children: pets.map((pet) {
@@ -171,7 +175,7 @@ class _PetInfoPageState extends State<PetInfoPage> {
                                 createPetContainer(pet, user),
                                 Positioned(
                                   top: 10,
-                                  right: 20,
+                                  right: 30,
                                   child: CircleAvatar(
                                     backgroundColor: Colors.white,
                                     radius: 20,
