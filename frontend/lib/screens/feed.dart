@@ -27,7 +27,7 @@ class _Feed_PageState extends State<Feed_Page> {
   String oilImageUrl = '';
 
   String supplementName = '';
-  String supplementDescription = '';
+  String supplementDescription = '';  
   String supplementImageUrl = '';
 
   String petName = '';
@@ -44,7 +44,7 @@ class _Feed_PageState extends State<Feed_Page> {
   }
 
   void fetchFeedData() async {
-    String apiUrl = 'http://54.180.70.169/api/feeds/99/';
+    String apiUrl = 'http://54.180.70.169/api/feeds/10/';
 
     try {
       final response = await http.get(
@@ -92,7 +92,7 @@ class _Feed_PageState extends State<Feed_Page> {
   }
 
   void fetchPetData(String petID) async {
-    String apiUrlForPet = 'http://54.180.70.169/api/pets/detail/99/';
+    String apiUrlForPet = 'http://54.180.70.169/api/pets/detail/10/';
 
     try {
       final response = await http.get(
@@ -171,12 +171,6 @@ class _Feed_PageState extends State<Feed_Page> {
               height: screenWidth * 0.4,
               decoration: BoxDecoration(
                 color: Color(0xFFF86A1FF),
-                // borderRadius: BorderRadius.only(
-                //   bottomRight: Radius.circular(screenWidth * 0.2),
-                //   bottomLeft: Radius.circular(screenWidth * 0.2),
-                //   // topRight: Radius.circular(screenWidth * 0.5),
-                //   // topLeft: Radius.circular(screenWidth * 0.5),
-                // ),
               ),
             ),
           ),
@@ -472,93 +466,6 @@ class _Feed_PageState extends State<Feed_Page> {
                     ),
             ),
           ),
-          // Positioned(
-          //   top: screenHeight * 0.488,
-          //   left: screenWidth * 0.06,
-          //   child: Container(
-          //     width: screenWidth * 0.27,
-          //     height: screenWidth * 0.06,
-          //     decoration: BoxDecoration(
-          //       color: Colors.white,
-          //       borderRadius: BorderRadius.circular(10),
-          //       boxShadow: [
-          //         BoxShadow(
-          //           color: Colors.black.withOpacity(0.1),
-          //           blurRadius: 3,
-          //           spreadRadius: 1,
-          //           offset: Offset(0, 2),
-          //         ),
-          //       ],
-          //     ),
-          //     child: Center(
-          //       child: Text(
-          //         meatName,
-          //         style: TextStyle(
-          //           fontSize: 13,
-          //           color: Color.fromRGBO(119, 131, 143, 1.0),
-          //         ),
-          //       ),
-          //     ),
-          //   ),
-          // ),
-          // Positioned(
-          //   top: screenHeight * 0.488,
-          //   left: screenWidth * 0.37,
-          //   child: Container(
-          //     width: screenWidth * 0.27,
-          //     height: screenWidth * 0.06,
-          //     decoration: BoxDecoration(
-          //       color: Colors.white,
-          //       borderRadius: BorderRadius.circular(10),
-          //       boxShadow: [
-          //         BoxShadow(
-          //           color: Colors.black.withOpacity(0.1),
-          //           blurRadius: 3,
-          //           spreadRadius: 1,
-          //           offset: Offset(0, 2),
-          //         ),
-          //       ],
-          //     ),
-          //     child: Center(
-          //       child: Text(
-          //         oilName,
-          //         style: TextStyle(
-          //           fontSize: 13,
-          //           color: Color.fromRGBO(119, 131, 143, 1.0),
-          //         ),
-          //       ),
-          //     ),
-          //   ),
-          // ),
-          // Positioned(
-          //   top: screenHeight * 0.488,
-          //   left: screenWidth * 0.68,
-          //   child: Container(
-          //     width: screenWidth * 0.27,
-          //     height: screenWidth * 0.06,
-          //     decoration: BoxDecoration(
-          //       color: Colors.white,
-          //       borderRadius: BorderRadius.circular(10),
-          //       boxShadow: [
-          //         BoxShadow(
-          //           color: Colors.black.withOpacity(0.1),
-          //           blurRadius: 3,
-          //           spreadRadius: 1,
-          //           offset: Offset(0, 2),
-          //         ),
-          //       ],
-          //     ),
-          //     child: Center(
-          //       child: Text(
-          //         supplementName,
-          //         style: TextStyle(
-          //           fontSize: 13,
-          //           color: Color.fromRGBO(119, 131, 143, 1.0),
-          //         ),
-          //       ),
-          //     ),
-          //   ),
-          // ),
           Positioned(
             top: screenHeight * 0.5,
             left: screenWidth * 0.05,
@@ -640,45 +547,50 @@ class _Feed_PageState extends State<Feed_Page> {
           Positioned(
             bottom: 50,
             left: 23,
-            child: Container(
-              width: screenWidth * 0.41,
-              height: screenWidth * 0.14,
-              decoration: BoxDecoration(
-                color: Color(0xFFF86A1FF),
-                borderRadius: BorderRadius.circular(20),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
-                    blurRadius: 3,
-                    spreadRadius: 1,
-                    offset: Offset(0, 2),
-                  ),
-                ],
-              ),
-              child: Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(left: 10),
-                      child: Icon(
-                        CupertinoIcons.paperplane,
-                        color: Colors.white,
-                      ),
+            child: InkWell(
+              onTap: () {
+                _showFeedbackDialog(context); // 클릭 시 피드백 다이얼로그를 띄웁니다.
+              },
+              child: Container(
+                width: screenWidth * 0.41,
+                height: screenWidth * 0.14,
+                decoration: BoxDecoration(
+                  color: Color(0xFFF86A1FF),
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      blurRadius: 3,
+                      spreadRadius: 1,
+                      offset: Offset(0, 2),
                     ),
-                    SizedBox(width: 1),
-                    Expanded(
-                      child: Center(
-                        child: Text(
-                          '피드백 보내기',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 14,
+                  ],
+                ),
+                child: Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(left: 16),
+                        child: Icon(
+                          CupertinoIcons.paperplane,
+                          color: Colors.white,
+                        ),
+                      ),
+                      SizedBox(width: 1),
+                      Expanded(
+                        child: Center(
+                          child: Text(
+                            '피드백 보내기',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -696,6 +608,153 @@ class _Feed_PageState extends State<Feed_Page> {
       throw 'Could not launch $url';
     }
   }
+}
+
+class FeedbackDialog extends StatefulWidget {
+  @override
+  _FeedbackDialogState createState() => _FeedbackDialogState();
+}
+
+class _FeedbackDialogState extends State<FeedbackDialog> {
+  TextEditingController _feedbackController = TextEditingController();
+
+  final BorderRadius _textFieldBorderRadius = BorderRadius.circular(8.0);
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20.0),
+      ),
+      backgroundColor: kPrimaryColor,
+      child: Container(
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                SizedBox(width: 5),
+                Icon(
+                  CupertinoIcons.paperplane,
+                  color: Colors.white,
+                ),
+                Text(
+                  ' 피드백 보내기',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 12.0),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 5.0),
+              child: TextField(
+                controller: _feedbackController,
+                maxLines: 5,
+                decoration: InputDecoration(
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide.none,
+                    borderRadius: _textFieldBorderRadius,
+                  ),
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide.none,
+                    borderRadius: _textFieldBorderRadius,
+                  ),
+                  hintText: '사료 추천에 대한 피드백을 작성해주세요.',
+                  hintStyle: TextStyle(color: Color.fromARGB(255, 119, 131, 143)),
+                  filled: true,
+                  fillColor: Colors.white,
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white, width: 2),
+                    borderRadius: _textFieldBorderRadius,
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height: 12.0),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                TextButton(
+                  style: TextButton.styleFrom(
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                  ),
+                  onPressed: () {
+                    _submitFeedback();
+                  },
+                  child: Text(
+                    '등록하기',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+                SizedBox(width: 8.0),
+                TextButton(
+                  style: TextButton.styleFrom(
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text(
+                    '취소',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _submitFeedback() async {
+    String feedbackText = _feedbackController.text;
+    String apiUrl = 'http://54.180.70.169/api/suggestions/1/'; // API 엔드포인트를 여기에 입력하세요.
+
+    try {
+      final response = await http.post(
+        Uri.parse(apiUrl),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: json.encode({
+          'contents': feedbackText,
+        }),
+      );
+
+      if (response.statusCode == 201) {
+        print('피드백이 성공적으로 저장되었습니다: $feedbackText');
+        Navigator.of(context).pop(); // 다이얼로그를 닫습니다.
+      } else {
+        print('피드백 저장 실패: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('피드백 저장 중 오류 발생: $e');
+    }
+  }
+}
+
+void _showFeedbackDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return FeedbackDialog();
+    },
+  );
 }
 
 class MyOvalPainter extends CustomPainter {
