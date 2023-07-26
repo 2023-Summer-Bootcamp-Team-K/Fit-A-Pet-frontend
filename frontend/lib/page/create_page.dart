@@ -10,12 +10,12 @@ import 'package:frontend/model/user.dart';
 class PetInfo {
   final String name;
   final int age;
-  final String? species; // Nullable 타입으로 변경
-  final String? gender; // Nullable 타입으로 변경
+  final String? species;
+  final String? gender;
   final double weight;
   final DateTime startedDate;
-  final String? feed; // Nullable 타입으로 변경
-  final String? soreSpot; // Nullable 타입으로 변경
+  final String? feed;
+  final String? soreSpot;
   final File? profileImage;
 
   PetInfo({
@@ -85,19 +85,41 @@ class _PetRegistrationPageState extends State<PetRegistrationPage> {
     "골든리트리버",
     "진돗개"
   ];
-  final List<String> genderOptions = [
-    "unspayed female",
-    "spayed female",
-    "neutered male",
-    "unneutered male"
-  ];
+  final List<String> genderOptions = ["수컷", "암컷", "중성화된 수컷", "중성화된 암컷"];
   final List<String> feedOptions = ["돼지고기 사료", "소고기 사료", "닭고기 사료", "오리고기 사료"];
   final List<String> soreSpotOptions = ["관절", "피부", "눈", "기관지", "소화"];
 
-  String? _selectedSpecies; // Nullable 타입으로 변경
-  String? _selectedGender; // Nullable 타입으로 변경
-  String? _selectedFeed; // Nullable 타입으로 변경
-  String? _selectedSoreSpot; // Nullable 타입으로 변경
+  String? _selectedSpecies;
+  String? _selectedGender;
+  String? _selectedFeed;
+  String? _selectedSoreSpot;
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime.now(),
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: ThemeData.light().copyWith(
+            primaryColor: Color(0xFFC1CCFF),
+            hintColor: Color(0xFFC1CCFF),
+            colorScheme: ColorScheme.light(
+              primary: Color(0xFFC1CCFF),
+            ),
+            buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
+          ),
+          child: child!,
+        );
+      },
+    );
+    if (picked != null && picked != DateTime.now()) {
+      setState(() {
+        _startedDateController.text = picked.toString().split(' ')[0];
+      });
+    }
+  }
 
   @override
   void didChangeDependencies() {
@@ -159,7 +181,7 @@ class _PetRegistrationPageState extends State<PetRegistrationPage> {
 
   void _registerPet() async {
     final String apiUrl =
-        'http://54.180.70.169/api/pets/create/2/'; //54.180.70.169
+        'http://54.180.70.169/api/pets/create/1/'; //54.180.70.169
 
     final PetInfo petInfo = PetInfo(
       name: _nameController.text,
@@ -225,11 +247,11 @@ class _PetRegistrationPageState extends State<PetRegistrationPage> {
       appBar: AppBar(
         centerTitle: true,
         elevation: 0,
-        title: Text('펫 추가'),
+        title: Text('반려동물 추가', style: TextStyle(fontWeight: FontWeight.bold)),
         backgroundColor: Color(0xFFC1CCFF),
       ),
       body: Container(
-        color: Color(0xFFC1CCFF), // 배경 색상을 Color(0xFFC1CCFF)로 변경
+        color: Color(0xFFC1CCFF),
         child: SingleChildScrollView(
           padding: EdgeInsets.all(16.0),
           child: Column(
@@ -241,7 +263,8 @@ class _PetRegistrationPageState extends State<PetRegistrationPage> {
                   height: 140,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Colors.white, //Colors.grey[300]
+                    color:
+                        Color.fromARGB(255, 248, 245, 250), //Colors.grey[300]
                     image: _pickedImage != null
                         ? DecorationImage(
                             image: FileImage(_pickedImage!),
@@ -319,7 +342,6 @@ class _PetRegistrationPageState extends State<PetRegistrationPage> {
                     );
                   }).toList(),
                 ],
-                // decoration: InputDecoration(labelText: 'Species'), //라벨
               ),
               SizedBox(height: 16),
               DropdownButtonFormField<String>(
@@ -355,7 +377,6 @@ class _PetRegistrationPageState extends State<PetRegistrationPage> {
                     );
                   }).toList(),
                 ],
-                // decoration: InputDecoration(labelText: 'Gender'), //라벨
               ),
               SizedBox(height: 16),
               TextField(
@@ -372,16 +393,21 @@ class _PetRegistrationPageState extends State<PetRegistrationPage> {
                 keyboardType: TextInputType.number,
               ),
               SizedBox(height: 16),
-              TextField(
-                controller: _startedDateController,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(16),
+              GestureDetector(
+                onTap: () => _selectDate(context), // Date picker 호출
+                child: AbsorbPointer(
+                  child: TextFormField(
+                    controller: _startedDateController,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      hintText: '센서착용날짜',
+                      fillColor: Colors.white,
+                      filled: true,
+                      contentPadding: const EdgeInsets.all(10),
+                    ),
                   ),
-                  hintText: '센서착용날짜',
-                  fillColor: Colors.white,
-                  filled: true,
-                  contentPadding: const EdgeInsets.all(10),
                 ),
               ),
               SizedBox(height: 16),
@@ -461,7 +487,7 @@ class _PetRegistrationPageState extends State<PetRegistrationPage> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  backgroundColor: Color(0xFFECB5FF),
+                  backgroundColor: Color.fromARGB(255, 135, 153, 239),
                   padding: EdgeInsets.all(10),
                 ),
                 child: Text(

@@ -17,7 +17,7 @@ class Pet {
   final String? feed;
   final String? soreSpot;
   final String? profileImageUrl;
-  bool isChecked; // 체크박스 상태를 저장하는 변수
+  bool isChecked;
 
   Pet({
     required this.id,
@@ -30,7 +30,7 @@ class Pet {
     this.feed,
     this.soreSpot,
     this.profileImageUrl,
-    this.isChecked = false, // 체크박스 상태를 기본적으로 선택되지 않은 상태로 초기화
+    this.isChecked = false,
   });
 
   factory Pet.fromJson(Map<String, dynamic> json) {
@@ -45,7 +45,7 @@ class Pet {
       feed: json['feed'],
       soreSpot: json['sore_spot'],
       profileImageUrl: json['profile_url'],
-      isChecked: false, // 체크박스 상태를 기본적으로 선택되지 않은 상태로 초기화
+      isChecked: false,
     );
   }
 }
@@ -56,7 +56,7 @@ class PetInfoPage extends StatefulWidget {
 }
 
 class _PetInfoPageState extends State<PetInfoPage> {
-  bool isChecked = false; // 체크 상태를 관리하는 변수
+  bool isChecked = false;
   List<Pet> pets = [];
   @override
   void initState() {
@@ -65,7 +65,7 @@ class _PetInfoPageState extends State<PetInfoPage> {
   }
 
   void fetchPets() async {
-    final apiUrl = 'http://54.180.70.169/api/pets/list/2/';
+    final apiUrl = 'http://54.180.70.169/api/pets/list/1/';
     try {
       final response = await http.get(Uri.parse(apiUrl));
       if (response.statusCode == 200) {
@@ -89,7 +89,7 @@ class _PetInfoPageState extends State<PetInfoPage> {
           pet.isChecked = false;
         }
       });
-      // 선택된 펫의 체크박스를 토글합니다.
+
       selectedPet.isChecked = !selectedPet.isChecked;
     });
   }
@@ -104,7 +104,6 @@ class _PetInfoPageState extends State<PetInfoPage> {
       ),
       child: Row(
         children: [
-          // Left side - Pet Profile Image
           SizedBox(
             width: 102,
             height: 102,
@@ -127,7 +126,6 @@ class _PetInfoPageState extends State<PetInfoPage> {
             ),
           ),
           SizedBox(width: 16),
-          // Right side - Pet Information
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -136,10 +134,10 @@ class _PetInfoPageState extends State<PetInfoPage> {
                   '${pet.name}',
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
-                Text('나이: ${pet.age} 세'),
+                Text('나이: ${pet.age}살'),
                 Text('종: ${pet.species ?? 'Unknown'}'),
                 Text('성별: ${pet.gender ?? 'Unknown'}'),
-                Text('몸무게: ${pet.weight} kg'),
+                Text('몸무게: ${pet.weight}kg'),
                 Text(
                     '센서착용날짜: ${pet.startedDate.toLocal().year}-${pet.startedDate.toLocal().month.toString().padLeft(2, '0')}-${pet.startedDate.toLocal().day.toString().padLeft(2, '0')}'),
                 Text('사료: ${pet.feed ?? 'Unknown'}'),
@@ -147,24 +145,6 @@ class _PetInfoPageState extends State<PetInfoPage> {
               ],
             ),
           ),
-
-          // Checkbox(
-          //   value: pet.isChecked,
-          //   onChanged: (bool? value) {
-          //     if (value == true && !pet.isChecked) {
-          //       // 새로 선택된 경우에만 동작하도록 변경
-          //       setState(() {
-          //         onPetCheckboxChanged(pet); // 라디오 버튼처럼 선택 동작 처리
-          //       });
-          //     }
-          //   },
-          //   shape: RoundedRectangleBorder(
-          //     borderRadius: BorderRadius.circular(10),
-          //   ),
-          //   checkColor: Colors.white,
-          //   activeColor: Color(0xFFC1CCFF),
-          //   materialTapTargetSize: MaterialTapTargetSize.padded,
-          // ),
         ],
       ),
     );
@@ -179,7 +159,7 @@ class _PetInfoPageState extends State<PetInfoPage> {
         appBar: AppBar(
           elevation: 0,
           centerTitle: true,
-          title: Text("반려동물 정보"),
+          title: Text("반려동물 정보", style: TextStyle(fontWeight: FontWeight.bold)),
           backgroundColor: Color(0xFFC1CCFF),
           actions: [
             IconButton(
@@ -205,13 +185,10 @@ class _PetInfoPageState extends State<PetInfoPage> {
                           child: Center(
                             child: Stack(
                               children: [
-                                // Pet Container
                                 createPetContainer(pet, user),
-                                // White Checkbox Container
                                 Positioned(
                                   top: 10,
-                                  left:
-                                      10, // Adjust the left value to move it to the left
+                                  left: 10,
                                   child: Container(
                                     width: 34,
                                     height: 34,
@@ -219,10 +196,8 @@ class _PetInfoPageState extends State<PetInfoPage> {
                                       value: pet.isChecked,
                                       onChanged: (bool? value) {
                                         if (value == true && !pet.isChecked) {
-                                          // 새로 선택된 경우에만 동작하도록 변경
                                           setState(() {
-                                            onPetCheckboxChanged(
-                                                pet); // 라디오 버튼처럼 선택 동작 처리
+                                            onPetCheckboxChanged(pet);
                                           });
                                         }
                                       },
@@ -260,6 +235,7 @@ class _PetInfoPageState extends State<PetInfoPage> {
                   }).toList(),
                 ),
               ),
+              SizedBox(height: 35),
             ],
           ),
         ),
@@ -268,24 +244,20 @@ class _PetInfoPageState extends State<PetInfoPage> {
             navigateToCreatePage(context);
           },
           child: Icon(Icons.add),
-          backgroundColor: Color(0xFFECB5FF),
+          backgroundColor: Color.fromARGB(255, 135, 153, 239),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       ),
     );
   }
 
-  int checkedCount = 0; // 선택된 체크박스 개수를 저장하는 변수
+  int checkedCount = 0;
 
   void navigateToEditPage(BuildContext context, Pet pet) async {
-    // 이전 코드: await Navigator.push(context, MaterialPageRoute(builder: (context) => EditPage(petId: pet.id)));
-
-    // 서버에서 pet 정보를 가져오기 위한 API 호출
     final apiUrl = 'http://54.180.70.169/api/pets/detail/${pet.id}';
     final response = await http.get(Uri.parse(apiUrl));
 
     if (response.statusCode == 200) {
-      // API 호출이 성공하면 가져온 데이터를 사용하여 EditPage로 이동
       final Map<String, dynamic> petData =
           json.decode(utf8.decode(response.bodyBytes));
 
@@ -311,8 +283,6 @@ class _PetInfoPageState extends State<PetInfoPage> {
     if (result != null) {
       setState(() {
         final container = result as Container;
-        // TODO: 새로운 컨테이너를 pets 리스트에 추가하는 코드를 작성하세요.
-        // (container를 사용하여 Pet 모델 객체를 만들어서 pets 리스트에 추가해야 합니다.)
       });
     }
   }

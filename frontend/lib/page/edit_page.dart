@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:frontend/page/pet_info.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
-import 'package:date_format/date_format.dart'; //패키지 추가
-import 'package:timezone/data/latest.dart' as tz; //패키지 추가
-import 'package:timezone/timezone.dart' as tz; //패키지 추가
+import 'package:date_format/date_format.dart';
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 
 class PetInfo {
   final String name;
@@ -79,12 +79,7 @@ class _EditPageState extends State<EditPage> {
     "골든리트리버",
     "진돗개"
   ];
-  final List<String> genderOptions = [
-    "unspayed female",
-    "spayed female",
-    "neutered male",
-    "unneutered male"
-  ];
+  final List<String> genderOptions = ["수컷", "암컷", "중성화된 수컷", "중성화된 암컷"];
   final List<String> feedOptions = ["돼지고기 사료", "소고기 사료", "닭고기 사료", "오리고기 사료"];
   final List<String> soreSpotOptions = ["관절", "피부", "눈", "기관지", "소화"];
 
@@ -93,7 +88,9 @@ class _EditPageState extends State<EditPage> {
   String _selectedFeed = '';
   String _selectedSoreSpot = '';
 
-  String? _profileImageUrl; // 프로필 이미지 URL
+  String? _profileImageUrl;
+  bool _isNoButtonPressed = false;
+  bool _isYesButtonPressed = false;
 
   @override
   void initState() {
@@ -112,7 +109,6 @@ class _EditPageState extends State<EditPage> {
     _selectedFeed = widget.petData['feed'] ?? feedOptions[0];
     _selectedSoreSpot = widget.petData['soreSpot'] ?? soreSpotOptions[0];
 
-    // 프로필 이미지 URL을 가져옵니다.
     _profileImageUrl = widget.petData['profile_url'];
   }
 
@@ -121,42 +117,98 @@ class _EditPageState extends State<EditPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('펫 정보 삭제'),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          title: Row(
+            children: [
+              Icon(
+                Icons.error,
+                color: Color(0xFF878CEF),
+              ),
+              SizedBox(width: 8),
+              Text('펫 정보 삭제'),
+            ],
+          ),
           content: Text('정말 삭제하시겠습니까?'),
           actions: <Widget>[
-            TextButton(
-              child: Text(
-                '예',
-                style: TextStyle(
-                  color: Color(0xFF878CEF), // 바이올렛
-                  fontWeight: FontWeight.bold, // 굵게
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 0),
+                  child: SizedBox(
+                    width: 100,
+                    height: 40,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: _isYesButtonPressed
+                            ? Color(0xFFC1CCFF).withAlpha(128) //'예'버튼 눌렀을때
+                            : Colors.white, //'예'버튼 안눌렀을때
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: TextButton(
+                        child: Text(
+                          '예',
+                          style: TextStyle(
+                            color: Color(0xFF878CEF),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => PetInfoPage()),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
                 ),
-              ),
-              onPressed: () {
-                _deletePet();
-                Navigator.of(context).pop(); // 경고창 닫기
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => PetInfoPage()),
-                );
-              },
-            ),
-            TextButton(
-              child: Text(
-                '아니요',
-                style: TextStyle(
-                  color: Color(0xFF878CEF), // 바이올렛
-                  fontWeight: FontWeight.bold, // 굵게
+                SizedBox(width: 20),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 2),
+                  child: SizedBox(
+                    width: 100,
+                    height: 40,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: _isNoButtonPressed
+                            ? Color(0xFFC1CCFF).withAlpha(128) //'아니오'버튼 눌렀을때
+                            : Colors.white, //'아니오'버튼 안눌렀을때
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: TextButton(
+                        child: Text(
+                          '아니요',
+                          style: TextStyle(
+                            color: Color(0xFF878CEF),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _isNoButtonPressed = !_isNoButtonPressed;
+                          });
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ),
+                  ),
                 ),
-              ),
-              onPressed: () {
-                Navigator.of(context).pop(); // 경고창 닫기
-              },
+              ],
             ),
           ],
         );
       },
-    );
+    ).then((value) {
+      setState(() {
+        _isYesButtonPressed = false;
+        _isNoButtonPressed = false;
+      });
+    });
   }
 
 //여기까지
@@ -166,14 +218,12 @@ class _EditPageState extends State<EditPage> {
       initialDate: DateTime.now().toLocal(),
       firstDate: DateTime(2022).toLocal(),
       lastDate: DateTime.now().toLocal(),
-      // 테마를 연보라색으로 설정합니다.
       builder: (BuildContext context, Widget? child) {
         return Theme(
           data: ThemeData.light().copyWith(
-            primaryColor: Color(0xFFC1CCFF), // 타이틀 색상
-            hintColor: Color(0xFFC1CCFF), // 캘린더 아이콘 색상
-            colorScheme:
-                ColorScheme.light(primary: Color(0xFFC1CCFF)), // 일자 선택 색상
+            primaryColor: Color(0xFFC1CCFF),
+            hintColor: Color(0xFFC1CCFF),
+            colorScheme: ColorScheme.light(primary: Color(0xFFC1CCFF)),
             buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
           ),
           child: child!,
@@ -204,22 +254,20 @@ class _EditPageState extends State<EditPage> {
                     leading: Icon(Icons.camera_alt),
                     title: Text('Camera'),
                     onTap: () async {
-                      await Future.delayed(
-                          Duration(milliseconds: 500)); // 약간의 지연
+                      await Future.delayed(Duration(milliseconds: 500));
                       final image = await _imagePicker.pickImage(
                           source: ImageSource.camera);
-                      Navigator.pop(context, image); // 이미지 반환
+                      Navigator.pop(context, image);
                     },
                   ),
                   ListTile(
                     leading: Icon(Icons.photo_library),
                     title: Text('Gallery'),
                     onTap: () async {
-                      await Future.delayed(
-                          Duration(milliseconds: 500)); // 약간의 지연
+                      await Future.delayed(Duration(milliseconds: 500));
                       final image = await _imagePicker.pickImage(
                           source: ImageSource.gallery);
-                      Navigator.pop(context, image); // 이미지 반환
+                      Navigator.pop(context, image);
                     },
                   ),
                 ],
@@ -310,7 +358,10 @@ class _EditPageState extends State<EditPage> {
       appBar: AppBar(
         centerTitle: true,
         elevation: 0,
-        title: Text('펫 수정'),
+        title: Text(
+          '반려동물 정보 수정',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
         backgroundColor: Color(0xFFC1CCFF),
         actions: [
           IconButton(
@@ -318,11 +369,10 @@ class _EditPageState extends State<EditPage> {
               Icons.delete,
               color: Colors.white,
             ),
-            onPressed: () => _deletePetConfirmation(context), // 경고창 보여주기
+            onPressed: () => _deletePetConfirmation(context),
           ),
         ],
       ),
-      //////////////////////////////////////////////////////////////////
       body: Container(
         color: Color(0xFFC1CCFF),
         child: SingleChildScrollView(
@@ -336,7 +386,8 @@ class _EditPageState extends State<EditPage> {
                   height: 140,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Colors.white, //Colors.grey[300]
+                    color:
+                        Color.fromARGB(255, 248, 245, 250), //Colors.grey[300]
                     image: _pickedImage != null
                         ? DecorationImage(
                             image: FileImage(_pickedImage!),
@@ -360,7 +411,6 @@ class _EditPageState extends State<EditPage> {
                             )), //카메라 아이콘 //Color(0xFF878CEF)
                 ),
               ),
-              //////////////////////////////////////////////////////////////////
               SizedBox(height: 35),
               TextField(
                 controller: _nameController,
@@ -474,10 +524,8 @@ class _EditPageState extends State<EditPage> {
               ),
               SizedBox(height: 16),
               GestureDetector(
-                onTap: () =>
-                    _selectDate(context), // date picker를 호출하기 위해 onTap 이벤트 추가
+                onTap: () => _selectDate(context),
                 child: AbsorbPointer(
-                  // date picker를 호출하는 부분을 탭으로 클릭하지 못하도록 AbsorbPointer로 감쌉니다.
                   child: TextField(
                     controller: _startedDateController,
                     decoration: InputDecoration(
@@ -567,7 +615,7 @@ class _EditPageState extends State<EditPage> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  backgroundColor: Color(0xFFECB5FF),
+                  backgroundColor: Color.fromARGB(255, 135, 153, 239),
                   padding: EdgeInsets.all(10),
                 ),
                 child: Text(
