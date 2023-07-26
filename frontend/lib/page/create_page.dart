@@ -1,26 +1,245 @@
+import 'dart:convert';
 import 'dart:io';
-
 import 'package:flutter/material.dart';
+import 'package:frontend/page/pet_info.dart';
+import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
-import 'package:frontend/model/user.dart';
 import 'package:provider/provider.dart';
+import 'package:frontend/model/user.dart';
 
-class CreatePage extends StatefulWidget {
-  @override
-  _CreatePageState createState() => _CreatePageState();
+class PetInfo {
+  final String name;
+  final int age;
+  final String? species;
+  final String? gender;
+  final double weight;
+  final DateTime startedDate;
+  final String? feed;
+  final String? soreSpot;
+  final File? profileImage;
+
+  PetInfo({
+    required this.name,
+    required this.age,
+    this.species,
+    this.gender,
+    required this.weight,
+    required this.startedDate,
+    this.feed,
+    this.soreSpot,
+    this.profileImage,
+  });
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = {
+      'name': name,
+      'age': age,
+      'weight': weight,
+      'started_date': startedDate.toIso8601String(),
+    };
+
+    if (species != null) {
+      data['species'] = species;
+    }
+
+    if (gender != null) {
+      data['gender'] = gender;
+    }
+
+    if (feed != null) {
+      data['feed'] = feed;
+    }
+
+    if (soreSpot != null) {
+      data['sore_spot'] = soreSpot;
+    }
+
+    if (profileImage != null) {
+      data['profile_image'] = base64Encode(profileImage!.readAsBytesSync());
+    }
+
+    return data;
+  }
 }
 
-class _CreatePageState extends State<CreatePage> {
-  final TextEditingController usernameController = TextEditingController();
-  final TextEditingController userageController = TextEditingController();
-  final TextEditingController usersensorwearController =
-      TextEditingController();
-  String foodValue = '사료';
-  String countValue = '인슐린 주사 일일 투여 횟수';
-  String genderValue = '성별';
-  String specieValue = '종';
-  String supplementValue = '필요 영양제';
-  String userImage = '';
+class PetRegistrationPage extends StatefulWidget {
+  @override
+  _PetRegistrationPageState createState() => _PetRegistrationPageState();
+}
+
+class _PetRegistrationPageState extends State<PetRegistrationPage> {
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _ageController = TextEditingController();
+  final TextEditingController _weightController = TextEditingController();
+  final TextEditingController _startedDateController = TextEditingController();
+
+  File? _pickedImage;
+
+  final List<String> speciesOptions = [
+    "말티즈",
+    "푸들",
+    "포메라니안",
+    "믹스견",
+    "치와와",
+    "시츄",
+    "골든리트리버",
+    "진돗개"
+  ];
+  final List<String> genderOptions = ["수컷", "암컷", "중성화된 수컷", "중성화된 암컷"];
+  final List<String> feedOptions = ["돼지고기 사료", "소고기 사료", "닭고기 사료", "오리고기 사료"];
+  final List<String> soreSpotOptions = ["관절", "피부", "눈", "기관지", "소화"];
+
+  String? _selectedSpecies;
+  String? _selectedGender;
+  String? _selectedFeed;
+  String? _selectedSoreSpot;
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime.now(),
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: ThemeData.light().copyWith(
+            primaryColor: Color(0xFFC1CCFF),
+            hintColor: Color(0xFFC1CCFF),
+            colorScheme: ColorScheme.light(
+              primary: Color(0xFFC1CCFF),
+            ),
+            buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
+          ),
+          child: child!,
+        );
+      },
+    );
+    if (picked != null && picked != DateTime.now()) {
+      setState(() {
+        _startedDateController.text = picked.toString().split(' ')[0];
+      });
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_pickedImage != null && !mounted) {
+      setState(() {
+        _pickedImage = null;
+      });
+    }
+  }
+
+  Future<void> _pickImage() async {
+    final ImagePicker _imagePicker = ImagePicker();
+    final pickedImage = await showModalBottomSheet<XFile>(
+      context: context,
+      builder: (BuildContext context) {
+        return Builder(
+          builder: (BuildContext context) {
+            return SafeArea(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  ListTile(
+                    leading: Icon(Icons.camera_alt),
+                    title: Text('Camera'),
+                    onTap: () async {
+                      await Future.delayed(
+                          Duration(milliseconds: 500)); // 약간의 지연
+                      final image = await _imagePicker.pickImage(
+                          source: ImageSource.camera);
+                      Navigator.pop(context, image); // 이미지 반환
+                    },
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.photo_library),
+                    title: Text('Gallery'),
+                    onTap: () async {
+                      await Future.delayed(
+                          Duration(milliseconds: 500)); // 약간의 지연
+                      final image = await _imagePicker.pickImage(
+                          source: ImageSource.gallery);
+                      Navigator.pop(context, image); // 이미지 반환
+                    },
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+
+    if (pickedImage != null && mounted) {
+      setState(() {
+        _pickedImage = File(pickedImage.path);
+      });
+    }
+  }
+
+  void _registerPet() async {
+    final String apiUrl =
+        'http://54.180.70.169/api/pets/create/1/'; //54.180.70.169
+
+    final PetInfo petInfo = PetInfo(
+      name: _nameController.text,
+      age: int.parse(_ageController.text),
+      species: _selectedSpecies,
+      gender: _selectedGender,
+      weight: double.parse(_weightController.text),
+      startedDate: DateTime.parse(_startedDateController.text),
+      feed: _selectedFeed,
+      soreSpot: _selectedSoreSpot,
+      profileImage: _pickedImage,
+    );
+
+    final Map<String, String> requestBody = {
+      'name': petInfo.name,
+      'age': petInfo.age.toString(),
+      'weight': petInfo.weight.toString(),
+      'started_date': petInfo.startedDate.toIso8601String(),
+    };
+
+    if (petInfo.species != null) {
+      requestBody['species'] = petInfo.species!;
+    }
+
+    if (petInfo.gender != null) {
+      requestBody['gender'] = petInfo.gender!;
+    }
+
+    if (petInfo.feed != null) {
+      requestBody['feed'] = petInfo.feed!;
+    }
+
+    if (petInfo.soreSpot != null) {
+      requestBody['sore_spot'] = petInfo.soreSpot!;
+    }
+
+    var uri = Uri.parse(apiUrl);
+    var request = http.MultipartRequest('POST', uri)
+      ..fields.addAll(requestBody);
+
+    if (petInfo.profileImage != null) {
+      request.files.add(
+        await http.MultipartFile.fromPath(
+          'profile_image',
+          petInfo.profileImage!.path,
+        ),
+      );
+    }
+
+    var response = await request.send();
+    if (response.statusCode == 201) {
+      response.stream.transform(utf8.decoder).listen((value) {
+        print(value);
+      });
+    } else {
+      print('Failed to register pet. Status code: ${response.statusCode}');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,514 +247,269 @@ class _CreatePageState extends State<CreatePage> {
       appBar: AppBar(
         centerTitle: true,
         elevation: 0,
-        title: Text('Pet Create'),
+        title: Text('반려동물 추가', style: TextStyle(fontWeight: FontWeight.bold)),
         backgroundColor: Color(0xFFC1CCFF),
       ),
-      body: SingleChildScrollView(
-        child: Container(
-          color: Color(0xFFC1CCFF),
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Center(
-                  child: GestureDetector(
-                    onTap: () {
-                      selectImage();
-                    },
-                    child: Container(
-                      width: 140,
-                      height: 140,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.grey[300],
-                        image: userImage.isNotEmpty
-                            ? DecorationImage(
-                                image: FileImage(File(userImage)),
-                                fit: BoxFit.cover,
-                              )
-                            : null,
-                      ),
-                      child: userImage.isNotEmpty
-                          ? null
-                          : Icon(Icons.camera_alt,
-                              size: 60, color: Colors.grey[600]),
-                    ),
+      body: Container(
+        color: Color(0xFFC1CCFF),
+        child: SingleChildScrollView(
+          padding: EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              GestureDetector(
+                onTap: _pickImage,
+                child: Container(
+                  width: 140,
+                  height: 140,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color:
+                        Color.fromARGB(255, 248, 245, 250), //Colors.grey[300]
+                    image: _pickedImage != null
+                        ? DecorationImage(
+                            image: FileImage(_pickedImage!),
+                            fit: BoxFit.cover,
+                          )
+                        : null,
                   ),
+                  child: _pickedImage != null
+                      ? null
+                      : Icon(
+                          Icons.camera_alt,
+                          size: 60,
+                          color: Color(0xFF878CEF),
+                        ), //color: Color(0xFF878CEF), //Colors.grey[600]
                 ),
-                SizedBox(height: 30),
-                buildUsernameTextField(),
-                SizedBox(height: 20),
-                buildUserageTextField(),
-                SizedBox(height: 20),
-                buildUserfoodDropdown(),
-                SizedBox(height: 20),
-                buildUsercountDropdown(),
-                SizedBox(height: 20),
-                buildUsergenderDropdown(),
-                SizedBox(height: 20),
-                buildUserspecieDropdown(),
-                SizedBox(height: 20),
-                buildUsersupplementDropdown(),
-                SizedBox(height: 20),
-                buildUsersensorwearTextField(),
-                SizedBox(height: 30),
-                Center(
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      backgroundColor: Color(0xFFECB5FF),
-                      padding: EdgeInsets.all(10),
-                    ),
+              ),
+              SizedBox(height: 35),
+              TextField(
+                controller: _nameController,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  hintText: '이름',
+                  fillColor: Colors.white,
+                  filled: true,
+                  contentPadding: const EdgeInsets.all(10),
+                ),
+              ),
+              SizedBox(height: 16),
+              TextField(
+                controller: _ageController,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  hintText: '나이',
+                  fillColor: Colors.white,
+                  filled: true,
+                  contentPadding: const EdgeInsets.all(10),
+                ),
+                keyboardType: TextInputType.number,
+              ),
+              SizedBox(height: 16),
+              DropdownButtonFormField<String>(
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  filled: true,
+                  fillColor: Colors.white,
+                  contentPadding: const EdgeInsets.all(10),
+                ),
+                value: _selectedSpecies,
+                onChanged: (newValue) {
+                  setState(() {
+                    _selectedSpecies = newValue;
+                  });
+                },
+                items: [
+                  DropdownMenuItem<String>(
+                    value: null,
                     child: Text(
-                      "입력완료",
+                      '종',
                       style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
+                        color: Color.fromARGB(255, 75, 75, 75),
                       ),
                     ),
-                    onPressed: saveUser,
                   ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget buildUsernameTextField() => TextField(
-        controller: usernameController,
-        decoration: InputDecoration(
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          hintText: '이름',
-          fillColor: Colors.white,
-          filled: true,
-          contentPadding: const EdgeInsets.all(10),
-        ),
-      );
-
-  Widget buildUserageTextField() => TextField(
-        controller: userageController,
-        decoration: InputDecoration(
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          hintText: '나이',
-          fillColor: Colors.white,
-          filled: true,
-          contentPadding: const EdgeInsets.all(10),
-        ),
-      );
-
-  Widget buildUserfoodDropdown() {
-    final foodListData = [
-      {"title": "돼지고기사료", "value": "1"},
-      {"title": "소고기사료", "value": "2"},
-      {"title": "닭고기사료", "value": "3"},
-      {"title": "오리고기사료", "value": "4"},
-    ];
-
-    return DropdownButtonFormField<String>(
-      decoration: InputDecoration(
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
-        filled: true,
-        fillColor: Colors.white,
-        contentPadding: const EdgeInsets.all(10),
-      ),
-      value: foodValue.isEmpty ? null : foodValue,
-      items: [
-        DropdownMenuItem(
-          child: Text(
-            '사료',
-            style: TextStyle(
-              color: Color.fromARGB(255, 75, 75, 75),
-            ),
-          ),
-          value: '사료',
-        ),
-        ...foodListData.map<DropdownMenuItem<String>>((data) {
-          return DropdownMenuItem(
-            child: Text(data['title']!),
-            value: data['value'],
-          );
-        }),
-      ],
-      onChanged: (String? value) {
-        setState(() {
-          foodValue = value!;
-        });
-      },
-    );
-  }
-
-  Widget buildUsercountDropdown() {
-    final countListData = [
-      {"title": "1회", "value": "1"},
-      {"title": "2회", "value": "2"},
-      {"title": "3회", "value": "3"},
-      {"title": "4회", "value": "4"},
-    ];
-
-    return DropdownButtonFormField<String>(
-      decoration: InputDecoration(
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
-        filled: true,
-        fillColor: Colors.white,
-        contentPadding: const EdgeInsets.all(10),
-      ),
-      value: countValue.isEmpty ? null : countValue,
-      items: [
-        DropdownMenuItem(
-          child: Text(
-            '인슐린 주사 일일 투여 횟수',
-            style: TextStyle(
-              color: Color.fromARGB(255, 75, 75, 75),
-            ),
-          ),
-          value: '인슐린 주사 일일 투여 횟수',
-        ),
-        ...countListData.map<DropdownMenuItem<String>>((data) {
-          return DropdownMenuItem(
-            child: Text(data['title']!),
-            value: data['value'],
-          );
-        }),
-      ],
-      onChanged: (String? value) {
-        setState(() {
-          countValue = value!;
-        });
-      },
-    );
-  }
-
-  Widget buildUsergenderDropdown() {
-    final genderListData = [
-      {"title": "남성", "value": "1"},
-      {"title": "여성", "value": "2"},
-      {"title": "중성", "value": "3"},
-    ];
-
-    return DropdownButtonFormField<String>(
-      decoration: InputDecoration(
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
-        filled: true,
-        fillColor: Colors.white,
-        contentPadding: const EdgeInsets.all(10),
-      ),
-      value: genderValue.isEmpty ? null : genderValue,
-      items: [
-        DropdownMenuItem(
-          child: Text(
-            '성별',
-            style: TextStyle(
-              color: Color.fromARGB(255, 75, 75, 75),
-            ),
-          ),
-          value: '성별',
-        ),
-        ...genderListData.map<DropdownMenuItem<String>>((data) {
-          return DropdownMenuItem(
-            child: Text(data['title']!),
-            value: data['value'],
-          );
-        }),
-      ],
-      onChanged: (String? value) {
-        setState(() {
-          genderValue = value!;
-        });
-      },
-    );
-  }
-
-  Widget buildUserspecieDropdown() {
-    final specieListData = [
-      //한국에서 인기있는 강아지 Top8
-      {"title": "말티즈", "value": "1"},
-      {"title": "푸들", "value": "2"},
-      {"title": "포메라니안", "value": "3"},
-      {"title": "믹스견", "value": "4"},
-      {"title": "치와와", "value": "5"},
-      {"title": "시츄", "value": "6"},
-      {"title": "골든리트리버", "value": "7"},
-      {"title": "진돗개", "value": "8"},
-    ];
-
-    return DropdownButtonFormField<String>(
-      decoration: InputDecoration(
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
-        filled: true,
-        fillColor: Colors.white,
-        contentPadding: const EdgeInsets.all(10),
-      ),
-      value: specieValue.isEmpty ? null : specieValue,
-      items: [
-        DropdownMenuItem(
-          child: Text(
-            '종',
-            style: TextStyle(
-              color: Color.fromARGB(255, 75, 75, 75),
-            ),
-          ),
-          value: '종',
-        ),
-        ...specieListData.map<DropdownMenuItem<String>>((data) {
-          return DropdownMenuItem(
-            child: Text(data['title']!),
-            value: data['value'],
-          );
-        }),
-      ],
-      onChanged: (String? value) {
-        setState(() {
-          specieValue = value!;
-        });
-      },
-    );
-  }
-
-  Widget buildUsersupplementDropdown() {
-    final supplementListData = [
-      //필요 영양제 5가지
-      {"title": "관절영양제", "value": "1"},
-      {"title": "피부영양제", "value": "2"},
-      {"title": "기관지영양제", "value": "3"},
-      {"title": "눈영양제", "value": "4"},
-      {"title": "소화영양제", "value": "5"},
-    ];
-
-    return DropdownButtonFormField<String>(
-      decoration: InputDecoration(
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
-        filled: true,
-        fillColor: Colors.white,
-        contentPadding: const EdgeInsets.all(10),
-      ),
-      value: supplementValue.isEmpty ? null : supplementValue,
-      items: [
-        DropdownMenuItem(
-          child: Text(
-            '필요 영양제',
-            style: TextStyle(
-              color: Color.fromARGB(255, 75, 75, 75),
-            ),
-          ),
-          value: '필요 영양제',
-        ),
-        ...supplementListData.map<DropdownMenuItem<String>>((data) {
-          return DropdownMenuItem(
-            child: Text(data['title']!),
-            value: data['value'],
-          );
-        }),
-      ],
-      onChanged: (String? value) {
-        setState(() {
-          supplementValue = value!;
-        });
-      },
-    );
-  }
-
-  Widget buildUsersensorwearTextField() => TextField(
-        controller: usersensorwearController,
-        decoration: InputDecoration(
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          hintText: '센서 착용 날짜',
-          fillColor: Colors.white,
-          filled: true,
-          contentPadding: const EdgeInsets.all(10),
-        ),
-      );
-
-  void selectImage() async {
-    final pickedFile =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      setState(() {
-        userImage = pickedFile.path;
-      });
-    }
-  }
-
-  void saveUser() {
-    final state = Provider.of<User>(context, listen: false);
-    state.username = usernameController.text;
-    state.userage = userageController.text;
-    state.userfood = getSelectedFoodTitle(foodValue);
-    state.usercount = getSelectedCountTitle(countValue);
-    state.usergender = getSelectedGenderTitle(genderValue);
-    state.userspecie = getSelectedSpecieTitle(specieValue);
-    state.usersupplement = getSelectedSupplementTitle(supplementValue);
-    state.usersensorwear = usersensorwearController.text;
-    state.userImage = userImage;
-
-    Navigator.pop(
-      context,
-      Container(
-        margin: EdgeInsets.symmetric(horizontal: 16),
-        padding: EdgeInsets.fromLTRB(15, 15, 15, 15),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Row(
-              children: [
-                SizedBox(
-                  width: 102,
-                  height: 102,
-                  child: CircleAvatar(
-                    backgroundImage: state.userImage.isNotEmpty
-                        ? FileImage(File(state.userImage))
-                        : AssetImage("images/pet_basic.png")
-                            as ImageProvider<Object>,
+                  ...speciesOptions
+                      .map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                ],
+              ),
+              SizedBox(height: 16),
+              DropdownButtonFormField<String>(
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
                   ),
+                  filled: true,
+                  fillColor: Colors.white,
+                  contentPadding: const EdgeInsets.all(10),
                 ),
-                SizedBox(width: 20),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(height: 20),
-                      Text(
-                        state.username,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 25,
-                        ),
+                value: _selectedGender,
+                onChanged: (newValue) {
+                  setState(() {
+                    _selectedGender = newValue;
+                  });
+                },
+                items: [
+                  DropdownMenuItem<String>(
+                    value: null,
+                    child: Text(
+                      '성별',
+                      style: TextStyle(
+                        color: Color.fromARGB(255, 75, 75, 75),
                       ),
-                      SizedBox(height: 13),
-                      buildUserField('나이:', state.userage, fontSize: 13),
-                      SizedBox(height: 13),
-                      buildUserField('사료:', state.userfood, fontSize: 13),
-                      SizedBox(height: 13),
-                      buildUserField('인슐린 주사 일일 투여 횟수:', state.usercount,
-                          fontSize: 13),
-                      SizedBox(height: 13),
-                      buildUserField('성별:', state.usergender, fontSize: 13),
-                      SizedBox(height: 13),
-                      buildUserField('종:', state.userspecie, fontSize: 13),
-                      SizedBox(height: 13),
-                      buildUserField('필요 영양제:', state.usersupplement,
-                          fontSize: 13),
-                      SizedBox(height: 13),
-                      buildUserField('센서착용날짜:', state.usersensorwear,
-                          fontSize: 13),
-                      SizedBox(height: 13),
-                    ],
+                    ),
+                  ),
+                  ...genderOptions
+                      .map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                ],
+              ),
+              SizedBox(height: 16),
+              TextField(
+                controller: _weightController,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  hintText: '몸무게',
+                  fillColor: Colors.white,
+                  filled: true,
+                  contentPadding: const EdgeInsets.all(10),
+                ),
+                keyboardType: TextInputType.number,
+              ),
+              SizedBox(height: 16),
+              GestureDetector(
+                onTap: () => _selectDate(context), // Date picker 호출
+                child: AbsorbPointer(
+                  child: TextFormField(
+                    controller: _startedDateController,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      hintText: '센서착용날짜',
+                      fillColor: Colors.white,
+                      filled: true,
+                      contentPadding: const EdgeInsets.all(10),
+                    ),
                   ),
                 ),
-              ],
-            ),
-          ],
+              ),
+              SizedBox(height: 16),
+              DropdownButtonFormField<String>(
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  filled: true,
+                  fillColor: Colors.white,
+                  contentPadding: const EdgeInsets.all(10),
+                ),
+                value: _selectedFeed,
+                onChanged: (newValue) {
+                  setState(() {
+                    _selectedFeed = newValue;
+                  });
+                },
+                items: [
+                  DropdownMenuItem<String>(
+                    value: null,
+                    child: Text(
+                      '사료',
+                      style: TextStyle(
+                        color: Color.fromARGB(255, 75, 75, 75),
+                      ),
+                    ),
+                  ),
+                  ...feedOptions.map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                ],
+                // decoration: InputDecoration(labelText: 'Feed'),
+              ),
+              SizedBox(height: 16),
+              DropdownButtonFormField<String>(
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  filled: true,
+                  fillColor: Colors.white,
+                  contentPadding: const EdgeInsets.all(10),
+                ),
+                value: _selectedSoreSpot,
+                onChanged: (newValue) {
+                  setState(() {
+                    _selectedSoreSpot = newValue;
+                  });
+                },
+                items: [
+                  DropdownMenuItem<String>(
+                    value: null,
+                    child: Text(
+                      '불편한 부위',
+                      style: TextStyle(
+                        color: Color.fromARGB(255, 75, 75, 75),
+                      ),
+                    ),
+                  ),
+                  ...soreSpotOptions
+                      .map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                ],
+                // decoration: InputDecoration(labelText: 'Sore Spot'),
+              ),
+              SizedBox(height: 25),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  backgroundColor: Color.fromARGB(255, 135, 153, 239),
+                  padding: EdgeInsets.all(10),
+                ),
+                child: Text(
+                  "입력완료",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                  ),
+                ),
+                onPressed: () {
+                  _registerPet();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => PetInfoPage()),
+                  );
+                },
+              ),
+              SizedBox(height: 50),
+            ],
+          ),
         ),
       ),
     );
-  }
-
-  Widget buildUserField(String label, String value, {double fontSize = 20}) {
-    return Row(
-      children: <Widget>[
-        Text(
-          label,
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: fontSize),
-        ),
-        SizedBox(width: 8),
-        Text(
-          value ?? '',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: fontSize),
-        ),
-      ],
-    );
-  }
-
-  String getSelectedFoodTitle(String value) {
-    final foodListData = [
-      {"title": "돼지고기사료", "value": "1"},
-      {"title": "소고기사료", "value": "2"},
-      {"title": "닭고기사료", "value": "3"},
-      {"title": "오리고기사료", "value": "4"},
-    ];
-
-    final item = foodListData.firstWhere((item) => item['value'] == value);
-    return item['title']!;
-  }
-
-  String getSelectedCountTitle(String value) {
-    final countListData = [
-      {"title": "1회", "value": "1"},
-      {"title": "2회", "value": "2"},
-      {"title": "3회", "value": "3"},
-      {"title": "4회", "value": "4"},
-    ];
-
-    final item = countListData.firstWhere((item) => item['value'] == value);
-    return item['title']!;
-  }
-
-  String getSelectedGenderTitle(String value) {
-    final genderListData = [
-      {"title": "남성", "value": "1"},
-      {"title": "여성", "value": "2"},
-      {"title": "중성", "value": "3"},
-    ];
-
-    final item = genderListData.firstWhere((item) => item['value'] == value);
-    return item['title']!;
-  }
-
-  String getSelectedSpecieTitle(String value) {
-    final specieListData = [
-      //한국에서 인기있는 강아지 Top8
-      {"title": "말티즈", "value": "1"},
-      {"title": "푸들", "value": "2"},
-      {"title": "포메라니안", "value": "3"},
-      {"title": "믹스견", "value": "4"},
-      {"title": "치와와", "value": "5"},
-      {"title": "시츄", "value": "6"},
-      {"title": "골든리트리버", "value": "7"},
-      {"title": "진돗개", "value": "8"},
-    ];
-
-    final item = specieListData.firstWhere((item) => item['value'] == value);
-    return item['title']!;
-  }
-
-  String getSelectedSupplementTitle(String value) {
-    final supplementListData = [
-      //필요 영양제 5가지
-      {"title": "관절영양제", "value": "1"},
-      {"title": "피부영양제", "value": "2"},
-      {"title": "기관지영양제", "value": "3"},
-      {"title": "눈영양제", "value": "4"},
-      {"title": "소화영양제", "value": "5"},
-    ];
-
-    final item =
-        supplementListData.firstWhere((item) => item['value'] == value);
-    return item['title']!;
   }
 }
