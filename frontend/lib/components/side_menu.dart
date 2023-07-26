@@ -3,6 +3,7 @@ import 'package:frontend/components/info_card.dart';
 import 'package:frontend/page/pet_info.dart';
 import 'package:frontend/screens/chart_screen.dart';
 import 'package:frontend/screens/feed.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 void main() {
   runApp(const SideMenu());
@@ -56,11 +57,30 @@ class _SideMenuState extends State<SideMenu> {
                         }
                       },
                       child: NewRow(
-                        text: 'Pet Profile',
+                        text: '홈',
+                        image: AssetImage('assets/icons/home.png'),
+                      ),
+                    ),
+                    SizedBox(height: 40),
+                    InkWell(
+                      onTap: () {
+                        setState(() {
+                          isActive = !isActive;
+                        });
+                        if (isActive) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => PetInfoPage()),
+                          );
+                        }
+                      },
+                      child: NewRow(
+                        text: '반려동물 정보',
                         image: AssetImage('assets/icons/paw.png'),
                       ),
                     ),
-                    SizedBox(height: 20),
+                    SizedBox(height: 40),
                     InkWell(
                       onTap: () {
                         setState(() {
@@ -75,11 +95,11 @@ class _SideMenuState extends State<SideMenu> {
                         }
                       },
                       child: NewRow(
-                        text: 'Chart',
+                        text: '혈당 차트',
                         image: AssetImage('assets/icons/chart.png'),
                       ),
                     ),
-                    SizedBox(height: 20),
+                    SizedBox(height: 40),
                     InkWell(
                       onTap: () {
                         setState(() {
@@ -94,10 +114,21 @@ class _SideMenuState extends State<SideMenu> {
                         }
                       },
                       child: NewRow(
-                        text: 'Feed Recommendations',
+                        text: '사료 추천',
                         image: AssetImage('assets/icons/feed_rcmd.png'),
                       ),
                     ),
+                    SizedBox(height: 40),
+                    InkWell(
+                      onTap: () {
+                        _launchURL;
+                      },
+                      child: NewRow(
+                        text: '수의사와 상담',
+                        image: AssetImage('assets/icons/chat.png'),
+                      ),
+                    ),
+                    SizedBox(height: 20),
                   ],
                 ),
               ),
@@ -106,7 +137,6 @@ class _SideMenuState extends State<SideMenu> {
                 padding: EdgeInsets.only(left: 30, bottom: 40),
                 child: InkWell(
                   onTap: () {
-                    // Handle logout
                   },
                   child: Row(
                     children: <Widget>[
@@ -165,3 +195,13 @@ class NewRow extends StatelessWidget {
     );
   }
 }
+
+
+  _launchURL() async {
+    const url = 'https://open.kakao.com/o/sOmd7Zuf';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
