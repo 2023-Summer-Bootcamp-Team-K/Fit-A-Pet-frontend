@@ -176,15 +176,16 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           child: Row(
                             children: <Widget>[
-                              SizedBox(width: screenWidth * 0.03),
+                              SizedBox(width: screenWidth * 0.055),
                               Transform.translate(
                                 offset: Offset(0, -screenWidth * 0.02),
                                 child: Text(
-                                  'Hi!',
+                                  '반가워요!',
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontSize: screenWidth * 0.09,
                                     fontWeight: FontWeight.bold,
+                                    fontFamily: 'Fit-A-Pet-Hi',
                                   ),
                                 ),
                               ),
@@ -233,11 +234,12 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                               SizedBox(width: screenWidth * 0.05),
                               Image.asset(
-                                'images/main_doctor.png',
-                                width: screenWidth * 0.2,
-                                height: screenWidth * 0.2,
+                                'images/doctor.png',
+                                width: screenWidth * 0.3,
+                                height: screenWidth * 0.4,
+                                scale: 1,
                               ),
-                              SizedBox(width: screenWidth * 0.05),
+                              SizedBox(width: screenWidth * 0.03),
                             ],
                           ),
                         ),
@@ -293,7 +295,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                       '$recentBloodSugar',
                                       style: TextStyle(
                                         fontSize: 40,
-                                        fontWeight: FontWeight.bold,
+                                        fontWeight: FontWeight.normal,
+                                        fontFamily: 'Fit-A-Pet-Num',
                                       ),
                                     ),
                                   ],
@@ -309,6 +312,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                       'mg/dL',
                                       style: TextStyle(
                                         fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: 'Fit-A-Pet-MG',
                                       ),
                                     ),
                                   ],
@@ -357,7 +362,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: Stack(
                             children: [
                               Positioned(
-                                top: screenWidth * 0.04,
+                                top: screenWidth * 0.03,
                                 left: screenWidth * 0.025,
                                 child: Image.asset(
                                   'images/blood.png',
@@ -377,7 +382,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                               ),
                               Positioned(
-                                top: screenWidth * 0.31,
+                                top: screenWidth * 0.32,
                                 right: screenWidth * 0.05,
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -388,6 +393,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold,
+                                        fontFamily: 'Fit-A-Pet-MG',
                                       ),
                                     ),
                                   ],
@@ -403,7 +409,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                       '$hba1c',
                                       style: TextStyle(
                                         fontSize: 40,
-                                        fontWeight: FontWeight.bold,
+                                        fontWeight: FontWeight.normal,
+                                        fontFamily: 'Fit-A-Pet-Num',
                                       ),
                                     ),
                                   ],

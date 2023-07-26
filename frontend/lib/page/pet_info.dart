@@ -130,19 +130,46 @@ class _PetInfoPageState extends State<PetInfoPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  '${pet.name}',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 4), // Add bottom padding of 8 units
+                  child: Text(
+                    '${pet.name}',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, fontFamily: 'Fit-A-Pet'),
+                  ),
                 ),
-                Text('나이: ${pet.age}살'),
-                Text('종: ${pet.species ?? 'Unknown'}'),
-                Text('성별: ${pet.gender ?? 'Unknown'}'),
-                Text('몸무게: ${pet.weight}kg'),
-                Text(
-                    '센서착용날짜: ${pet.startedDate.toLocal().year}-${pet.startedDate.toLocal().month.toString().padLeft(2, '0')}-${pet.startedDate.toLocal().day.toString().padLeft(2, '0')}'),
-                Text('사료: ${pet.feed ?? 'Unknown'}'),
-                Text('필요영양제: ${pet.soreSpot ?? 'Unknown'}'),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 4), // Add bottom padding of 4 units
+                  child: Text('나이: ${pet.age}살', style: TextStyle(fontFamily: 'Fit-A-Pet')),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 4), // Add bottom padding of 4 units
+                  child: Text('종: ${pet.species ?? 'Unknown'}', style: TextStyle(fontFamily: 'Fit-A-Pet')),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 4), // Add bottom padding of 4 units
+                  child: Text('성별: ${pet.gender ?? 'Unknown'}', style: TextStyle(fontFamily: 'Fit-A-Pet')),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 4), // Add bottom padding of 4 units
+                  child: Text('몸무게: ${pet.weight}kg', style: TextStyle(fontFamily: 'Fit-A-Pet')),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 4), // Add bottom padding of 4 units
+                  child: Text(
+                    '센서착용날짜: ${pet.startedDate.toLocal().year}-${pet.startedDate.toLocal().month.toString().padLeft(2, '0')}-${pet.startedDate.toLocal().day.toString().padLeft(2, '0')}',
+                    style: TextStyle(fontFamily: 'Fit-A-Pet'),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 4), // Add bottom padding of 4 units
+                  child: Text('사료: ${pet.feed ?? 'Unknown'}', style: TextStyle(fontFamily: 'Fit-A-Pet')),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 4), // Add bottom padding of 4 units
+                  child: Text('필요영양제: ${pet.soreSpot ?? 'Unknown'}', style: TextStyle(fontFamily: 'Fit-A-Pet')),
+                ),
               ],
+
             ),
           ),
         ],
@@ -155,11 +182,11 @@ class _PetInfoPageState extends State<PetInfoPage> {
     final user = Provider.of<User>(context);
     return MaterialApp(
       home: Scaffold(
-        backgroundColor: Color(0xFFC1CCFF),
+        backgroundColor: Color(0xFFC1CCFF), 
         appBar: AppBar(
           elevation: 0,
           centerTitle: true,
-          title: Text("반려동물 정보", style: TextStyle(fontWeight: FontWeight.bold)),
+          title: Text("반려동물 정보", style: TextStyle(fontWeight: FontWeight.bold, fontFamily: 'Fit-A-Pet')),
           backgroundColor: Color(0xFFC1CCFF),
           actions: [
             IconButton(

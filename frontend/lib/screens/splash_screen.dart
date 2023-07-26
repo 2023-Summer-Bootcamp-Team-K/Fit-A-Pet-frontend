@@ -46,9 +46,10 @@ class _SplashScreenState extends State<SplashScreen>
             Text(
               'Fit-A-Pet',
               style: TextStyle(
-                fontStyle: FontStyle.italic,
+                fontStyle: FontStyle.normal,
                 color: Colors.white,
-                fontSize: 32,
+                fontSize: 40,
+                fontFamily: 'Fit-A-Pet-Splash'
               ),
             ),
           ],

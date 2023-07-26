@@ -70,6 +70,22 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+  fonts:
+    - family: Fit-A-Pet-MG
+      fonts:
+        - asset: fonts/NanumSquareRoundL.ttf
+    - family: Fit-A-Pet
+      fonts:
+        - asset: fonts/NanumSquareRoundR.ttf
+    - family: Fit-A-Pet-Hi
+      fonts:
+        - asset: fonts/NanumSquareRoundEB.ttf
+    - family: Fit-A-Pet-Splash
+      fonts:
+        - asset: fonts/RixInooAriDuri Regular.ttf
+    - family: Fit-A-Pet-Num
+      fonts:
+        - asset: fonts/Recipekorea 레코체 FONT.ttf
 
   # To add assets to your application, add an assets section, like this:
   assets:
@@ -92,6 +108,8 @@ flutter:
     - images/pet_basic.png
     - assets/icons/ic_camera.svg
     - images/feedpage.png
+    - images/doctor.png
+    - images/doctor2.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
