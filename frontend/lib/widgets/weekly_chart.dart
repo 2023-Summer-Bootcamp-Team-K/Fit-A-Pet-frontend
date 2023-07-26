@@ -83,12 +83,53 @@ class WeeklyChart extends StatefulWidget {
 
   Widget bottomTitleWidgets(double value, TitleMeta meta) {
     final timestamp = DateTime.fromMillisecondsSinceEpoch(value.toInt());
-    final String formattedTime = '${timestamp.hour.toString().padLeft(2, '0')}:${timestamp.minute.toString().padLeft(2, '0')}';
+    final String formattedTime =
+        '${timestamp.day.toString().padLeft(2)}';
+    if (timestamp.day == 0) {
+      return Text(
+      "0",
+      style: TextStyle(
+        fontSize: 10,
+        color: const Color.fromARGB(255, 21, 20, 20),
+      ),
+    );
+    }
+    if (timestamp.day == 5) {
+      return Text(
+      "(일)",
+      style: TextStyle(
+        fontSize: 10,
+        color: const Color.fromARGB(255, 21, 20, 20),
+      ),
+    );
+    }
     return Text(
       formattedTime,
       style: TextStyle(
-        fontSize: 8,
-        color: Colors.black,
+        fontSize: 9,
+        color: const Color.fromARGB(255, 21, 20, 20),
+      ),
+    );
+  }
+
+  Widget leftTitleWidgets(double value, TitleMeta meta) {
+    if (value.toInt() == 0) {
+      return Text('');
+    }
+    if (value.toInt() == 200) {
+      return Text(
+      '(mg/dL)',
+      style: TextStyle(
+        fontSize: 9,
+        color: const Color.fromARGB(255, 21, 20, 20),
+      ),
+    );
+    }
+    return Text(
+      '${value.toInt()}',
+      style: TextStyle(
+        fontSize: 10,
+        color: const Color.fromARGB(255, 21, 20, 20),
       ),
     );
   }
@@ -100,17 +141,25 @@ class WeeklyChart extends StatefulWidget {
         child: CircularProgressIndicator(),
       );
     }
-    return AspectRatio(
-    aspectRatio: 2.5,
-    child: LineChart(
-      LineChartData(
-        minY: 30,
-        maxY: 200,
-        gridData: FlGridData(
-        show: true,
+  return AspectRatio(
+    aspectRatio: 1.4,
+    child: Stack(
+      children: [
+        BelowLineToFill(
+          startY: 93,
+          endY: 140,
+          fillColor: Color.fromARGB(255, 135, 153, 239).withOpacity(0.3),
+        ),
+        LineChart(
+          LineChartData(
+            minY: 0,
+            maxY: 200,
+        gridData: FlGridData(show: true,
         drawHorizontalLine: true,
         drawVerticalLine: true,
         checkToShowHorizontalLine : showAllGrids,
+        horizontalInterval: 40,
+        verticalInterval: 1 * 60 * 60 * 24000,
         ),
         borderData: FlBorderData(
           show: false
@@ -129,7 +178,9 @@ class WeeklyChart extends StatefulWidget {
           sideTitles: SideTitles(
             showTitles: true,
             reservedSize: 35,
-            interval: 30,
+            interval: 40,
+            getTitlesWidget: leftTitleWidgets, 
+
           ),
           ),
           topTitles: const AxisTitles(
@@ -163,14 +214,63 @@ class WeeklyChart extends StatefulWidget {
               getTooltipItems: (List<LineBarSpot> touchedSpots) {
                 return touchedSpots.map((spot) {
                   final DateTime timestamp = DateTime.fromMillisecondsSinceEpoch(spot.x.toInt());
-                  final String timeStr = '${timestamp.month}월 ${timestamp.day}일 ${timestamp.hour}시 ${timestamp.minute}분';
-                  return LineTooltipItem('혈당: ${spot.y}\n시간: $timeStr', const TextStyle(color: Colors.white));
+                  final String timeStr = '${timestamp.day}일 ${timestamp.hour}시 ${timestamp.minute}분';
+                  return LineTooltipItem('혈당: ${spot.y}\n시간: $timeStr', const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold
+                    ),
+                    );
                 }).toList();
               },
+                ),
+              ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }
+}
+
+class BelowLineToFill extends StatelessWidget {
+  final double startY;
+  final double endY;
+  final Color fillColor;
+
+  BelowLineToFill({
+    required this.startY,
+    required this.endY,
+    required this.fillColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned.fill(
+      child: ClipPath(
+        clipper: _BelowLineToFillClipper(startY, endY),
+        child: Container(color: fillColor),
+      ),
+    );
+  }
+}
+
+class _BelowLineToFillClipper extends CustomClipper<Path> {
+  final double startY;
+  final double endY;
+
+  _BelowLineToFillClipper(this.startY, this.endY);
+
+  @override
+  Path getClip(Size size) {
+    final path = Path();
+    path.moveTo(34, startY);
+    path.lineTo(size.width, startY);
+    path.lineTo(size.width, endY);
+    path.lineTo(34, endY);
+    path.close();
+    return path;
+  }
+
+  @override
+  bool shouldReclip(_BelowLineToFillClipper oldClipper) => true;
 }

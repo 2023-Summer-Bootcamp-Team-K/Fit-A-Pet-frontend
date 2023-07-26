@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:frontend/constant.dart';
-import 'package:frontend/screens/home_screen.dart';
 import 'package:frontend/widgets/daily_chart.dart';
 import 'package:frontend/widgets/monthly_chart.dart';
 import 'package:frontend/widgets/weekly_chart.dart';
@@ -15,7 +14,7 @@ class ChartScreen extends StatefulWidget {
 class _ChartScreenState extends State<ChartScreen> {
   int _selectedIndex = 0;
   DateTime selectedDate = DateTime.now();
-  int petId = 105;
+  int petId = 10;
   List<Widget> _chartWidgets = [];
   DateTime startDate = DateTime.now().subtract(Duration(days: 7));
   DateTime endDate = DateTime.now();
@@ -301,10 +300,18 @@ class _ChartScreenState extends State<ChartScreen> {
                       color: _selectedIndex == 0
                           ? Color.fromARGB(255, 135, 153, 239)
                           : Colors.white,
+                          boxShadow: [
+                        BoxShadow(
+                        offset: Offset(0, 21),
+                        blurRadius: 80,
+                        color: Colors.black.withOpacity(0.1),
+                      ),
+                    ],
                     ),
                     child: Text(
                       "일",
                       style: TextStyle(
+                        fontWeight: FontWeight.bold,
                         color: _selectedIndex == 0 ? Colors.white : Colors.black,
                       ),
                     ),
@@ -322,11 +329,19 @@ class _ChartScreenState extends State<ChartScreen> {
                       color: _selectedIndex == 1
                           ? Color.fromARGB(255, 135, 153, 239)
                           : Colors.white,
+                      boxShadow: [
+                      BoxShadow(
+                        offset: Offset(0, 21),
+                        blurRadius: 80,
+                        color: Colors.black.withOpacity(0.1),
+                      ),
+                    ],
                     ),
                     child: Text(
                       "주",
                       style: TextStyle(
                         color: _selectedIndex == 1 ? Colors.white : Colors.black,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
@@ -343,29 +358,32 @@ class _ChartScreenState extends State<ChartScreen> {
                       color: _selectedIndex == 2
                           ? Color.fromARGB(255, 135, 153, 239)
                           : Colors.white,
+                          boxShadow: [
+                      BoxShadow(
+                        offset: Offset(0, 21),
+                        blurRadius: 80,
+                        color: Colors.black.withOpacity(0.1),
+                      ),
+                    ],
                     ),
                     child: Text(
                       "월",
                       style: TextStyle(
                         color: _selectedIndex == 2 ? Colors.white : Colors.black,
+                        fontWeight: FontWeight.bold,                      
                       ),
                     ),
                   ),
                 ),
-                SizedBox(width: 10),
               ],
             ),
           ),
-          Expanded(
-            child: ListView.builder(
-              padding: EdgeInsets.all(22),
-              itemCount: 1,
-              itemBuilder: (context, index) {
-                String formattedDate = "${selectedDate.month}월 ${selectedDate.day}일";
-                return Container(
-                  margin: EdgeInsets.only(bottom: 5),
-                  padding: EdgeInsets.fromLTRB(15, 15, 20, 30),
-                  decoration: BoxDecoration(
+                SizedBox(height: 15),
+                Container(
+                  height: 350,
+                  margin:EdgeInsets.fromLTRB(20, 0, 22, 0),
+                padding: EdgeInsets.fromLTRB(20, 20, 20, 10),
+                decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(30),
                     boxShadow: [
@@ -419,62 +437,146 @@ class _ChartScreenState extends State<ChartScreen> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 65),
+                      SizedBox(height: 20),
                       _chartWidgets[_selectedIndex],
                     ],
                   ),
-                );
-              },
-            ),
-          ),
-          Container(
+                ),
+              SizedBox(height: 15),
+              Container(
             padding: EdgeInsets.fromLTRB(20, 0, 20, 20),
             alignment: Alignment.bottomCenter,
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                Column(
                   children: [
                     Container(
-                      alignment: Alignment.topCenter,
-                      height: 380,
-                      width: MediaQuery.of(context).size.width * 0.43,
+                      alignment: Alignment.topLeft,
+                      height: 110,
+                      width: 390,
                       padding: EdgeInsets.all(20),
                       decoration: BoxDecoration(
                         color: Color.fromARGB(255, 232, 244, 255),
                         borderRadius: BorderRadius.circular(30),
                       ),
-                      child: Text(
-                        'Spike가 위로 솟을 때',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '혈당 범위',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(height: 5),
+                          Text(
+                            '정상 범위 - 70~140mg/dl(개, 고양이)',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 14,
+                            ),
+                          ),
+                          SizedBox(height: 5),
+                          Text(
+                            '당뇨 시 - 개 : 200mg/dl, 고양이: 250mg/dl',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    SizedBox(width: 10),
+                    SizedBox(height: 15),
+                  ],
+                ),
+                Column(
+                  children: [
                     Container(
-                      alignment: Alignment.topCenter,
-                      height: 380,
-                      width: MediaQuery.of(context).size.width * 0.43,
+                      alignment: Alignment.topLeft,
+                      height: 230,
+                      width: 390,
                       padding: EdgeInsets.all(20),
                       decoration: BoxDecoration(
                         color: Color.fromARGB(255, 255, 253, 243),
                         borderRadius: BorderRadius.circular(30),
                       ),
-                      child: Text(
-                        'Spike가 아래로 들어갔을 때',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '주의 사항',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(height: 5),
+                          Text(
+                            '1. 인슐린 투여 후 최저점',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 15,
+                            ),
+                          ),
+                          SizedBox(height: 5),
+                          Text(
+                            '    (1) 150mg/dl 이하 - 경계',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 14,
+                            ),
+                          ),
+                          SizedBox(height: 5),
+                          Text(
+                            '    (2) 120mg/dl 이하 - 주의',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 14,
+                            ),
+                          ),
+                          SizedBox(height: 5),
+                          Text(
+                            '    (3) 100mg/dl 이하 - 병원 내원 및 당 섭취 권고',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 14,
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          Text(
+                            '2. 사료 섭취 후 기울기 변화',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 15,
+                            ),
+                          ),
+                          SizedBox(height: 5),
+                          Text(
+                            '    (1) 고혈당 사료/간식 : 100mg/dl 이상 상승',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 14,
+                            ),
+                          ),
+                          SizedBox(height: 5),
+                          Text(
+                            '    (2) 저혈당 사료/간식 : 30mg/dl 이상 상승',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
+                    SizedBox(height: 5),
                   ],
                 ),
-                SizedBox(height: 20),
               ],
             ),
           ),

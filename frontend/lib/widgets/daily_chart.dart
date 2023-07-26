@@ -1,6 +1,5 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -8,9 +7,9 @@ class DailyChart extends StatefulWidget {
   final int petId;
   final int month;
   final int day;
-  final Function(DateTime) onDateSelected; 
+  final Function(DateTime) onDateSelected;
 
-  DailyChart(this.petId, this.month, this.day, this.onDateSelected); 
+  DailyChart(this.petId, this.month, this.day, this.onDateSelected);
   @override
   _DailyChartPageState createState() => _DailyChartPageState();
 }
@@ -76,11 +75,52 @@ class _DailyChartPageState extends State<DailyChart> {
 
   Widget bottomTitleWidgets(double value, TitleMeta meta) {
     final timestamp = DateTime.fromMillisecondsSinceEpoch(value.toInt());
-    final String formattedTime = '${timestamp.hour.toString().padLeft(2, '0')}:${timestamp.minute.toString().padLeft(2, '0')}';
+    final String formattedTime =
+        '${timestamp.hour.toString().padLeft(2)}';
+    if (timestamp.hour == 0) {
+      return Text(
+      "0",
+      style: TextStyle(
+        fontSize: 10,
+        color: const Color.fromARGB(255, 21, 20, 20),
+      ),
+    );
+    }
+    if (timestamp.hour == 23) {
+      return Text(
+      "(시)",
+      style: TextStyle(
+        fontSize: 10,
+        color: const Color.fromARGB(255, 21, 20, 20),
+      ),
+    );
+    }
     return Text(
       formattedTime,
       style: TextStyle(
-        fontSize: 11,
+        fontSize: 10,
+        color: const Color.fromARGB(255, 21, 20, 20),
+      ),
+    );
+  }
+
+  Widget leftTitleWidgets(double value, TitleMeta meta) {
+    if (value.toInt() == 0) {
+      return Text('');
+    }
+    if (value.toInt() == 200) {
+      return Text(
+      '(mg/dL)',
+      style: TextStyle(
+        fontSize: 9,
+        color: const Color.fromARGB(255, 21, 20, 20),
+      ),
+    );
+    }
+    return Text(
+      '${value.toInt()}',
+      style: TextStyle(
+        fontSize: 9,
         color: const Color.fromARGB(255, 21, 20, 20),
       ),
     );
@@ -94,15 +134,24 @@ class _DailyChartPageState extends State<DailyChart> {
       );
     }
     return AspectRatio(
-    aspectRatio: 2.5,
-    child: LineChart(
-      LineChartData(
-        minY: 40,
-        maxY: 170,
+      aspectRatio:1.4,
+      child: Stack(
+        children: [
+          BelowLineToFill(
+            startY: 93,
+            endY: 140,
+            fillColor: Color.fromARGB(255, 135, 153, 239).withOpacity(0.3),
+          ),
+          LineChart(
+            LineChartData(
+              minY: 0,
+              maxY: 200,
         gridData: FlGridData(show: true,
         drawHorizontalLine: true,
         drawVerticalLine: true,
         checkToShowHorizontalLine : showAllGrids,
+        horizontalInterval: 40,
+        verticalInterval: 3 * 60 * 60 * 1000,
         ),
         borderData: FlBorderData(show: false),
         titlesData: FlTitlesData(
@@ -110,16 +159,17 @@ class _DailyChartPageState extends State<DailyChart> {
         bottomTitles: AxisTitles(
           sideTitles: SideTitles(
             showTitles: true,
-            reservedSize: 10,
-            interval: 1 * 60 * 60 * 6000, 
-            getTitlesWidget: bottomTitleWidgets, 
+            reservedSize: 15,
+            interval: 3 * 60 * 60 * 1000,
+            getTitlesWidget: bottomTitleWidgets,
           ),
         ),
         leftTitles: AxisTitles(
           sideTitles: SideTitles(
             showTitles: true,
             reservedSize: 35,
-            interval: 30,
+            interval: 40,
+            getTitlesWidget: leftTitleWidgets,
           ),
           ),
           topTitles: const AxisTitles(
@@ -150,7 +200,7 @@ class _DailyChartPageState extends State<DailyChart> {
                 return touchedSpots.map((spot) {
                   final DateTime timestamp = DateTime.fromMillisecondsSinceEpoch(spot.x.toInt());
                   final String timeStr = '${timestamp.hour}시 ${timestamp.minute}분';
-                  return LineTooltipItem('혈당: ${spot.y}\n시간: $timeStr', 
+                  return LineTooltipItem('혈당: ${spot.y}\n 시간: $timeStr',
                   const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold
@@ -158,10 +208,55 @@ class _DailyChartPageState extends State<DailyChart> {
                   );
                 }).toList();
               },
+                ),
+              ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }
+}
+
+class BelowLineToFill extends StatelessWidget {
+  final double startY;
+  final double endY;
+  final Color fillColor;
+
+  BelowLineToFill({
+    required this.startY,
+    required this.endY,
+    required this.fillColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned.fill(
+      child: ClipPath(
+        clipper: _BelowLineToFillClipper(startY, endY),
+        child: Container(color: fillColor),
+      ),
+    );
+  }
+}
+
+class _BelowLineToFillClipper extends CustomClipper<Path> {
+  final double startY;
+  final double endY;
+
+  _BelowLineToFillClipper(this.startY, this.endY);
+
+  @override
+  Path getClip(Size size) {
+    final path = Path();
+    path.moveTo(34, startY);
+    path.lineTo(size.width, startY);
+    path.lineTo(size.width, endY);
+    path.lineTo(34, endY);
+    path.close();
+    return path;
+  }
+
+  @override
+  bool shouldReclip(_BelowLineToFillClipper oldClipper) => true;
 }
