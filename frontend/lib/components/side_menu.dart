@@ -3,16 +3,21 @@ import 'package:frontend/components/info_card.dart';
 import 'package:frontend/page/pet_info.dart';
 import 'package:frontend/screens/chart_screen.dart';
 import 'package:frontend/screens/feed.dart';
+
 void main() {
   runApp(const SideMenu());
 }
+
 class SideMenu extends StatefulWidget {
   const SideMenu({Key? key}) : super(key: key);
+
   @override
   State<SideMenu> createState() => _SideMenuState();
 }
+
 class _SideMenuState extends State<SideMenu> {
   bool isActive = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -84,7 +89,7 @@ class _SideMenuState extends State<SideMenu> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => Feed_Page()),
+                                builder: (context) => Feed_Page(petID: 'your_pet_id')),
                           );
                         }
                       },
@@ -129,14 +134,17 @@ class _SideMenuState extends State<SideMenu> {
     );
   }
 }
+
 class NewRow extends StatelessWidget {
   final String text;
   final AssetImage image;
+
   const NewRow({
     Key? key,
     required this.text,
     required this.image,
   }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Row(
