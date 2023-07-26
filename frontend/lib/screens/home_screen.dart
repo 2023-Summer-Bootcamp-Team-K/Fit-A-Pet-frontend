@@ -6,6 +6,9 @@ import 'package:frontend/constant.dart';
 import 'package:frontend/screens/chart_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:frontend/screens/feed.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:intl/intl.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -16,6 +19,77 @@ class _HomeScreenState extends State<HomeScreen> {
   double xOffset = 0;
   double yOffset = 0;
   bool isDrawerOpen = false;
+  String petID = '10';
+  int? hba1c;
+  String? recentTimestamp;
+  int? recentBloodSugar;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchHba1cData();
+    fetchRecentBloodSugarData(petID);
+  }
+
+  String extractTimeFromTimestamp(String? timestamp) {
+    if (timestamp == null) return '';
+
+    final DateTime dateTime = DateTime.parse(timestamp);
+    final String formattedTime =
+        DateFormat('M월 d일 HH시 mm분').format(dateTime);
+    return formattedTime;
+  }
+
+  Future<void> fetchHba1cData() async {
+    String Hba1curl = 'http://54.180.70.169/api/data/hba1c/10/';
+
+    try {
+      final response = await http.get(
+        Uri.parse(Hba1curl),
+      );
+
+      if (response.statusCode == 200) {
+        final responseData = json.decode(response.body);
+        int? newHba1c =
+            responseData['hba1c'];
+
+        if (newHba1c != null) {
+          setState(() {
+            hba1c = newHba1c;
+          });
+        }
+      } else {
+        throw Exception('Failed to load data');
+      }
+    } catch (error) {
+      throw Exception('Error: $error');
+    }
+  }
+
+  Future<void> fetchRecentBloodSugarData(String petId) async {
+    String apiUrl = 'http://54.180.70.169/api/data/recent/10/';
+
+    try {
+      final response = await http.get(Uri.parse(apiUrl));
+
+      if (response.statusCode == 200) {
+        final responseData = json.decode(response.body);
+        String? timestamp = responseData['timestamp'];
+        int? bloodSugar = responseData['scan_bloodsugar'];
+
+        if (timestamp != null && bloodSugar != null) {
+          setState(() {
+            recentTimestamp = DateTime.parse(timestamp).toString();
+            recentBloodSugar = bloodSugar;
+          });
+        }
+      } else {
+        throw Exception('데이터를 불러오지 못했습니다');
+      }
+    } catch (error) {
+      throw Exception('에러: $error');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +106,9 @@ class _HomeScreenState extends State<HomeScreen> {
             duration: Duration(milliseconds: 200),
             decoration: BoxDecoration(
               color: kPrimaryColor,
-              borderRadius: isDrawerOpen ? BorderRadius.circular(40) : BorderRadius.circular(0),
+              borderRadius: isDrawerOpen
+                  ? BorderRadius.circular(40)
+                  : BorderRadius.circular(0),
             ),
             child: SingleChildScrollView(
               child: Column(
@@ -68,7 +144,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           onTap: () {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => NotificationPage()),
+                              MaterialPageRoute(
+                                  builder: (context) => NotificationPage()),
                             );
                           },
                           child: Icon(CupertinoIcons.bell_fill),
@@ -124,7 +201,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           height: screenWidth * 0.3,
                           decoration: BoxDecoration(
                             color: Colors.white,
-                            borderRadius: BorderRadius.circular(screenWidth * 0.05),
+                            borderRadius:
+                                BorderRadius.circular(screenWidth * 0.05),
                             boxShadow: [
                               BoxShadow(
                                 color: Colors.grey.withOpacity(0.5),
@@ -167,13 +245,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       Positioned(
                         top: screenWidth * 0.6,
                         left: screenWidth * 0.05,
-                        right: screenWidth * 0.5,
                         child: Container(
-                          width: screenWidth * 0.4,
+                          width: screenWidth * 0.42,
                           height: screenWidth * 0.4,
                           decoration: BoxDecoration(
-                            color: Color(0xffF4DCF0),
-                            borderRadius: BorderRadius.circular(screenWidth * 0.05),
+                            color: Color.fromARGB(255, 191, 227, 255),
+                            borderRadius:
+                                BorderRadius.circular(screenWidth * 0.05),
                             boxShadow: [
                               BoxShadow(
                                 color: Colors.grey.withOpacity(0.5),
@@ -186,21 +264,71 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: Stack(
                             children: [
                               Positioned(
-                                top: screenWidth * 0.025,
+                                top: screenWidth * 0.035,
                                 left: screenWidth * 0.025,
                                 child: Image.asset(
                                   'images/spoid.png',
-                                  width: screenWidth * 0.08,
+                                  width: screenWidth * 0.1,
                                   height: screenWidth * 0.08,
                                 ),
                               ),
-                              Center(
+                              Positioned(
+                                top: screenWidth * 0.045,
+                                left: screenWidth * 0.135,
                                 child: Text(
-                                  '최근 혈당, 체크한 시간',
+                                  '최근 혈당',
                                   style: TextStyle(
-                                    fontSize: screenWidth * 0.035,
+                                    fontSize: 20,
                                     fontWeight: FontWeight.bold,
                                   ),
+                                ),
+                              ),
+                              Positioned(
+                                top: screenWidth * 0.2,
+                                right: screenWidth * 0.05,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      '$recentBloodSugar',
+                                      style: TextStyle(
+                                        fontSize: 40,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Positioned(
+                                top: screenWidth * 0.31,
+                                right: screenWidth * 0.05,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      'mg/dL',
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Positioned(
+                                top: screenWidth * 0.13,
+                                right: screenWidth * 0.06,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      '${extractTimeFromTimestamp(recentTimestamp)}',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ],
@@ -211,11 +339,12 @@ class _HomeScreenState extends State<HomeScreen> {
                         top: screenWidth * 0.6,
                         right: screenWidth * 0.05,
                         child: Container(
-                          width: screenWidth * 0.4,
+                          width: screenWidth * 0.42,
                           height: screenWidth * 0.4,
                           decoration: BoxDecoration(
                             color: Color(0xFFFEFFC9),
-                            borderRadius: BorderRadius.circular(screenWidth * 0.05),
+                            borderRadius:
+                                BorderRadius.circular(screenWidth * 0.05),
                             boxShadow: [
                               BoxShadow(
                                 color: Colors.grey.withOpacity(0.5),
@@ -228,7 +357,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: Stack(
                             children: [
                               Positioned(
-                                top: screenWidth * 0.025,
+                                top: screenWidth * 0.04,
                                 left: screenWidth * 0.025,
                                 child: Image.asset(
                                   'images/blood.png',
@@ -236,13 +365,48 @@ class _HomeScreenState extends State<HomeScreen> {
                                   height: screenWidth * 0.08,
                                 ),
                               ),
-                              Center(
+                              Positioned(
+                                top: screenWidth * 0.045,
+                                left: screenWidth * 0.135,
                                 child: Text(
-                                  '평균혈당',
+                                  '당화혈 색소',
                                   style: TextStyle(
-                                    fontSize: screenWidth * 0.035,
+                                    fontSize: 20,
                                     fontWeight: FontWeight.bold,
                                   ),
+                                ),
+                              ),
+                              Positioned(
+                                top: screenWidth * 0.31,
+                                right: screenWidth * 0.05,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      '%',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Positioned(
+                                top: screenWidth * 0.2,
+                                right: screenWidth * 0.05,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      '$hba1c',
+                                      style: TextStyle(
+                                        fontSize: 40,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ],
@@ -274,7 +438,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             height: screenWidth * 0.3,
                             decoration: BoxDecoration(
                               color: Color(0xFFF86A1FF),
-                              borderRadius: BorderRadius.circular(screenWidth * 0.05),
+                              borderRadius:
+                                  BorderRadius.circular(screenWidth * 0.05),
                               boxShadow: [
                                 BoxShadow(
                                   color: Colors.grey.withOpacity(0.5),
@@ -290,7 +455,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 Expanded(
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         '혈당차트',
@@ -321,26 +487,15 @@ class _HomeScreenState extends State<HomeScreen> {
                         right: screenWidth * 0.05,
                         child: GestureDetector(
                           onTap: () {
-                            Navigator.push(
-                              context,
-                              PageRouteBuilder(
-                                transitionDuration: Duration(milliseconds: 500),
-                                pageBuilder: (_, __, ___) => Feed_Page(),
-                                transitionsBuilder: (_, animation, __, child) {
-                                  return FadeTransition(
-                                    opacity: animation,
-                                    child: child,
-                                  );
-                                },
-                              ),
-                            );
+                            _onRecommendationButtonPressed(context);
                           },
                           child: Container(
                             width: screenWidth * 0.6,
                             height: screenWidth * 0.3,
                             decoration: BoxDecoration(
                               color: Color(0xFFF86A1FF),
-                              borderRadius: BorderRadius.circular(screenWidth * 0.05),
+                              borderRadius:
+                                  BorderRadius.circular(screenWidth * 0.05),
                               boxShadow: [
                                 BoxShadow(
                                   color: Colors.grey.withOpacity(0.5),
@@ -356,7 +511,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 Expanded(
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         '사료추천',
@@ -382,8 +538,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                       Positioned(
-                        bottom: screenWidth * 0.25,
-                        right: 30,
+                        bottom: screenWidth * 0.29,
+                        right: 35,
                         child: FloatingActionButton(
                           backgroundColor: Colors.white,
                           onPressed: _launchURL,
@@ -400,6 +556,23 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  void _onRecommendationButtonPressed(BuildContext context) {
+    Navigator.push(
+      context,
+      PageRouteBuilder(
+        transitionDuration: Duration(milliseconds: 500),
+        pageBuilder: (_, __, ___) =>
+            Feed_Page(petID: petID), // Feed_Page로 petID를 넘겨줍니다.
+        transitionsBuilder: (_, animation, __, child) {
+          return FadeTransition(
+            opacity: animation,
+            child: child,
+          );
+        },
       ),
     );
   }

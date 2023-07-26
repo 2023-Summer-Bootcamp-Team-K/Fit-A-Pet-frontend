@@ -36,7 +36,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   flutter_svg: ^2.0.7
   fl_chart: ^0.63.0
-  syncfusion_flutter_datepicker: ^22.1.37
+  syncfusion_flutter_datepicker: ^22.1.39
   url_launcher: ^6.0.12
   flutter_local_notifications: ^15.1.0+1
   timezone: ^0.9.0
@@ -46,6 +46,8 @@ dependencies:
   foundation_flutter: ^0.2.0
   image_picker: ^1.0.1
   date_format: ^2.0.7
+  intl: ^0.18.0
+  http: ^1.1.0
 
 dev_dependencies:
   flutter_test:
@@ -89,6 +91,7 @@ flutter:
     - images/mickey.png
     - images/pet_basic.png
     - assets/icons/ic_camera.svg
+    - images/feedpage.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
