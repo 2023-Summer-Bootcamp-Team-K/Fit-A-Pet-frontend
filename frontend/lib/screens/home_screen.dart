@@ -51,10 +51,9 @@ class _HomeScreenState extends State<HomeScreen> {
       if (response.statusCode == 200) {
         final responseData = json.decode(response.body);
         int? newHba1c =
-            responseData['hba1c']; // 가져온 값이 null이 될 수 있으므로 int? 형으로 선언
+            responseData['hba1c'];
 
         if (newHba1c != null) {
-          // null이 아닐 때만 업데이트
           setState(() {
             hba1c = newHba1c;
           });
