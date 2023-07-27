@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:frontend/constant.dart';
 import 'package:frontend/screens/home_screen.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:time_picker_spinner/time_picker_spinner.dart';
@@ -30,7 +31,7 @@ class _NotificationPageState extends State<NotificationPage> {
       appBar: AppBar(
         backgroundColor: kPrimaryColor,
         title: Text(
-          'Notification',
+          '알림 받기',
           style: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
@@ -45,10 +46,10 @@ class _NotificationPageState extends State<NotificationPage> {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(
-                builder: (context) {
-                  return HomeScreen();
-                },
+              PageTransition(
+                type: PageTransitionType.leftToRight,
+                duration: Duration(milliseconds: 250),
+                child: HomeScreen(),
               ),
             );
           },
