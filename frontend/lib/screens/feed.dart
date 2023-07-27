@@ -27,7 +27,7 @@ class _Feed_PageState extends State<Feed_Page> {
   String oilImageUrl = '';
 
   String supplementName = '';
-  String supplementDescription = '';  
+  String supplementDescription = '';
   String supplementImageUrl = '';
 
   String petName = '';
@@ -188,14 +188,14 @@ class _Feed_PageState extends State<Feed_Page> {
           ),
           Positioned(
             top: screenHeight * 0.004,
-            right: screenWidth * 0.09,
+            right: screenWidth * 0.06,
             child: Center(
               child: Text(
                 '# $petName\n# 키워드',
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 26,
-                  // fontWeight: FontWeight.bold,
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
@@ -210,8 +210,8 @@ class _Feed_PageState extends State<Feed_Page> {
             ),
           ),
           Positioned(
-            top: screenHeight * 0.099,
-            right: screenWidth * 0.14,
+            top: screenHeight * 0.11,
+            right: screenWidth * 0.17,
             child: Stack(
               children: [
                 Container(
@@ -484,14 +484,30 @@ class _Feed_PageState extends State<Feed_Page> {
               ),
               width: screenWidth * 0.9,
               height: screenHeight * 0.235,
-              child: Center(
-                child: Wrap(
-                  alignment: WrapAlignment.center,
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: 20.0, vertical: 20.0), // 행간을 넓혀줍니다.
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      ' $meatDescription \n'
-                      ' $oilDescription \n'
-                      ' $supplementDescription',
+                      '• meat - $meatDescription',
+                      style: TextStyle(
+                        color: Color.fromRGBO(119, 131, 143, 1.0),
+                        fontSize: 17,
+                      ),
+                    ),
+                    SizedBox(height: 10), // 행간을 넓혀줍니다.
+                    Text(
+                      '• oil - $oilDescription',
+                      style: TextStyle(
+                        color: Color.fromRGBO(119, 131, 143, 1.0),
+                        fontSize: 17,
+                      ),
+                    ),
+                    SizedBox(height: 10), // 행간을 넓혀줍니다.
+                    Text(
+                      '• supplement - $supplementDescription',
                       style: TextStyle(
                         color: Color.fromRGBO(119, 131, 143, 1.0),
                         fontSize: 17,
@@ -580,11 +596,15 @@ class _Feed_PageState extends State<Feed_Page> {
                       SizedBox(width: 1),
                       Expanded(
                         child: Center(
-                          child: Text(
-                            '피드백 보내기',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 14,
+                          child: Padding(
+                            padding: EdgeInsets.only(
+                                right: 8), // 이 부분을 조절하여 텍스트를 왼쪽으로 옮깁니다.
+                            child: Text(
+                              '피드백 보내기',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 14,
+                              ),
                             ),
                           ),
                         ),
@@ -666,7 +686,8 @@ class _FeedbackDialogState extends State<FeedbackDialog> {
                     borderRadius: _textFieldBorderRadius,
                   ),
                   hintText: '사료 추천에 대한 피드백을 작성해주세요.',
-                  hintStyle: TextStyle(color: Color.fromARGB(255, 119, 131, 143)),
+                  hintStyle:
+                      TextStyle(color: Color.fromARGB(255, 119, 131, 143)),
                   filled: true,
                   fillColor: Colors.white,
                   focusedBorder: OutlineInputBorder(
@@ -682,7 +703,8 @@ class _FeedbackDialogState extends State<FeedbackDialog> {
               children: [
                 TextButton(
                   style: TextButton.styleFrom(
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
                   ),
                   onPressed: () {
                     _submitFeedback();
@@ -699,7 +721,8 @@ class _FeedbackDialogState extends State<FeedbackDialog> {
                 SizedBox(width: 8.0),
                 TextButton(
                   style: TextButton.styleFrom(
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
                   ),
                   onPressed: () {
                     Navigator.of(context).pop();
@@ -723,7 +746,8 @@ class _FeedbackDialogState extends State<FeedbackDialog> {
 
   void _submitFeedback() async {
     String feedbackText = _feedbackController.text;
-    String apiUrl = 'http://54.180.70.169/api/suggestions/1/'; // API 엔드포인트를 여기에 입력하세요.
+    String apiUrl =
+        'http://54.180.70.169/api/suggestions/1/'; // API 엔드포인트를 여기에 입력하세요.
 
     try {
       final response = await http.post(

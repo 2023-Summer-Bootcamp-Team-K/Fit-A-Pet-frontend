@@ -107,6 +107,10 @@ class _PetInfoPageState extends State<PetInfoPage> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
+        // 체크된 컨테이너 보라색 테두리 추가
+        border: pet.isChecked
+            ? Border.all(color: Color.fromARGB(255, 135, 153, 239), width: 2)
+            : null,
       ),
       child: Row(
         children: [
@@ -137,42 +141,59 @@ class _PetInfoPageState extends State<PetInfoPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: EdgeInsets.only(bottom: 4), // Add bottom padding of 8 units
+                  padding: EdgeInsets.only(
+                      bottom: 4), // Add bottom padding of 8 units
                   child: Text(
                     '${pet.name}',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, fontFamily: 'Fit-A-Pet'),
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'Fit-A-Pet'),
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(bottom: 4), // Add bottom padding of 4 units
-                  child: Text('나이: ${pet.age}살', style: TextStyle(fontFamily: 'Fit-A-Pet')),
+                  padding: EdgeInsets.only(
+                      bottom: 4), // Add bottom padding of 4 units
+                  child: Text('나이: ${pet.age}살',
+                      style: TextStyle(fontFamily: 'Fit-A-Pet')),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(bottom: 4), // Add bottom padding of 4 units
-                  child: Text('종: ${pet.species ?? 'Unknown'}', style: TextStyle(fontFamily: 'Fit-A-Pet')),
+                  padding: EdgeInsets.only(
+                      bottom: 4), // Add bottom padding of 4 units
+                  child: Text('종: ${pet.species ?? 'Unknown'}',
+                      style: TextStyle(fontFamily: 'Fit-A-Pet')),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(bottom: 4), // Add bottom padding of 4 units
-                  child: Text('성별: ${pet.gender ?? 'Unknown'}', style: TextStyle(fontFamily: 'Fit-A-Pet')),
+                  padding: EdgeInsets.only(
+                      bottom: 4), // Add bottom padding of 4 units
+                  child: Text('성별: ${pet.gender ?? 'Unknown'}',
+                      style: TextStyle(fontFamily: 'Fit-A-Pet')),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(bottom: 4), // Add bottom padding of 4 units
-                  child: Text('몸무게: ${pet.weight}kg', style: TextStyle(fontFamily: 'Fit-A-Pet')),
+                  padding: EdgeInsets.only(
+                      bottom: 4), // Add bottom padding of 4 units
+                  child: Text('몸무게: ${pet.weight}kg',
+                      style: TextStyle(fontFamily: 'Fit-A-Pet')),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(bottom: 4), // Add bottom padding of 4 units
+                  padding: EdgeInsets.only(
+                      bottom: 4), // Add bottom padding of 4 units
                   child: Text(
                     '센서착용날짜: ${pet.startedDate.toLocal().year}-${pet.startedDate.toLocal().month.toString().padLeft(2, '0')}-${pet.startedDate.toLocal().day.toString().padLeft(2, '0')}',
                     style: TextStyle(fontFamily: 'Fit-A-Pet'),
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(bottom: 4), // Add bottom padding of 4 units
-                  child: Text('사료: ${pet.feed ?? 'Unknown'}', style: TextStyle(fontFamily: 'Fit-A-Pet')),
+                  padding: EdgeInsets.only(
+                      bottom: 4), // Add bottom padding of 4 units
+                  child: Text('사료: ${pet.feed ?? 'Unknown'}',
+                      style: TextStyle(fontFamily: 'Fit-A-Pet')),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(bottom: 4), // Add bottom padding of 4 units
-                  child: Text('필요영양제: ${pet.soreSpot ?? 'Unknown'}', style: TextStyle(fontFamily: 'Fit-A-Pet')),
+                  padding: EdgeInsets.only(
+                      bottom: 4), // Add bottom padding of 4 units
+                  child: Text('필요영양제: ${pet.soreSpot ?? 'Unknown'}',
+                      style: TextStyle(fontFamily: 'Fit-A-Pet')),
                 ),
               ],
             ),
@@ -280,7 +301,7 @@ class _PetInfoPageState extends State<PetInfoPage> {
                                         borderRadius: BorderRadius.circular(10),
                                       ),
                                       checkColor: Colors.white,
-                                      activeColor: Color(0xFFC1CCFF),
+                                      activeColor: kPrimaryColor,
                                       materialTapTargetSize:
                                           MaterialTapTargetSize.padded,
                                     ),
