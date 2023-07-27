@@ -48,11 +48,11 @@ dependencies:
   date_format: ^2.0.7
   intl: ^0.18.0
   http: ^1.1.0
+  page_transition: ^2.0.4
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-    
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -93,7 +93,7 @@ flutter:
     - images/bloodchart.png
     - images/feed.png
     - images/spoid.png
-    - images/blood.png 
+    - images/blood.png
     - assets/icons/paw.png
     - assets/icons/chart.png
     - assets/icons/feed_rcmd.png
