@@ -15,11 +15,8 @@ class InfoCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       leading: CircleAvatar(
-        backgroundColor: Colors.black12,
-        child: Icon(
-          CupertinoIcons.person,
-          color: Colors.white12,
-        ),
+        backgroundImage: 
+        AssetImage('images/user.jpeg')
       ),
       title: Text(
         name,

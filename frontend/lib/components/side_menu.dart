@@ -155,9 +155,9 @@ class _SideMenuState extends State<SideMenu> {
                         width: 30,
                       ),
                       Text(
-                        'Logout',
+                        '로그아웃',
                         style: TextStyle(
-                            color: Colors.black.withOpacity(0.5)),
+                            color: Colors.black.withOpacity(0.6)),
                       ),
                     ],
                   ),

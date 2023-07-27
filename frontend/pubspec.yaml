@@ -99,6 +99,8 @@ flutter:
     - assets/icons/feed_rcmd.png
     - assets/icons/log_out.png
     - assets/icons/kakao_icon.png
+    - assets/icons/chat.png
+    - assets/icons/home.png
     - images/oil.png
     - images/meat.png
     - images/supplement.png
@@ -109,7 +111,7 @@ flutter:
     - assets/icons/ic_camera.svg
     - images/feedpage.png
     - images/doctor.png
-    - images/doctor2.jpg
+    - images/user.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
