@@ -4,6 +4,7 @@ import 'package:frontend/components/notification.dart';
 import 'package:frontend/components/side_menu.dart';
 import 'package:frontend/constant.dart';
 import 'package:frontend/screens/chart_screen.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:frontend/screens/feed.dart';
 import 'package:http/http.dart' as http;
@@ -456,15 +457,10 @@ class _HomeScreenState extends State<HomeScreen> {
                           onTap: () {
                             Navigator.push(
                               context,
-                              PageRouteBuilder(
-                                transitionDuration: Duration(milliseconds: 500),
-                                pageBuilder: (_, __, ___) => ChartScreen(),
-                                transitionsBuilder: (_, animation, __, child) {
-                                  return FadeTransition(
-                                    opacity: animation,
-                                    child: child,
-                                  );
-                                },
+                              PageTransition(
+                                type: PageTransitionType.bottomToTop,
+                                duration: Duration(milliseconds: 250),
+                                child: ChartScreen(),
                               ),
                             );
                           },
@@ -598,16 +594,10 @@ class _HomeScreenState extends State<HomeScreen> {
   void _onRecommendationButtonPressed(BuildContext context) {
     Navigator.push(
       context,
-      PageRouteBuilder(
-        transitionDuration: Duration(milliseconds: 500),
-        pageBuilder: (_, __, ___) =>
-            Feed_Page(petID: petID), // Feed_Page로 petID를 넘겨줍니다.
-        transitionsBuilder: (_, animation, __, child) {
-          return FadeTransition(
-            opacity: animation,
-            child: child,
-          );
-        },
+      PageTransition(
+        type: PageTransitionType.bottomToTop, // 애니메이션을 bottomToTop으로 설정합니다.
+        duration: Duration(milliseconds: 250),
+        child: Feed_Page(petID: petID), // Feed_Page로 petID를 넘겨줍니다.
       ),
     );
   }
