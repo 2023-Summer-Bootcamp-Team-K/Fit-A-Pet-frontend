@@ -23,12 +23,14 @@ class _HomeScreenState extends State<HomeScreen> {
   int? hba1c;
   String? recentTimestamp;
   int? recentBloodSugar;
+  String petName = '';
 
   @override
   void initState() {
     super.initState();
     fetchHba1cData();
     fetchRecentBloodSugarData(petID);
+    fetchPetData();
   }
 
   String extractTimeFromTimestamp(String? timestamp) {
@@ -90,6 +92,32 @@ class _HomeScreenState extends State<HomeScreen> {
       throw Exception('에러: $error');
     }
   }
+
+  void fetchPetData() async { // petID 파라미터를 제거
+  String apiUrlForPet = 'http://54.180.70.169/api/pets/detail/$petID/';
+
+  try {
+    final response = await http.get(
+      Uri.parse(apiUrlForPet),
+      headers: {
+        'Accept-Charset': 'utf-8',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final responseData = json.decode(utf8.decode(response.bodyBytes));
+
+      setState(() {
+        petName = responseData['name'] ?? '';
+      });
+    } else {
+      print('서버 오류: ${response.statusCode}');
+    }
+  } catch (e) {
+    print('반려동물 데이터 전송 중 오류 발생: $e');
+  }
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -180,7 +208,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               Transform.translate(
                                 offset: Offset(0, -screenWidth * 0.02),
                                 child: Text(
-                                  '반가워요!',
+                                  '$petName, 반가워요!',
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontSize: screenWidth * 0.09,
@@ -222,7 +250,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      'Fit-A-Pet Will Help you to Improve your Pet Health',
+                                      '반려동물의 건강을\n우선시하는 \nFit-A-Pet 입니다.',
                                       style: TextStyle(
                                         color: Color(0xff5551ff),
                                         fontSize: screenWidth * 0.05,
@@ -545,8 +573,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                       Positioned(
-                        bottom: screenWidth * 0.29,
-                        right: 35,
+                        bottom: screenWidth * 0.28,
+                        right: screenWidth * 0.06,
                         child: FloatingActionButton(
                           backgroundColor: Colors.white,
                           onPressed: _launchURL,
