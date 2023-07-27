@@ -6,6 +6,8 @@ import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:frontend/model/user.dart';
+import 'package:date_format/date_format.dart'; //flutter pub get //추가
+import 'package:syncfusion_flutter_datepicker/datepicker.dart'; //추가
 
 class PetInfo {
   final String name;
@@ -94,31 +96,90 @@ class _PetRegistrationPageState extends State<PetRegistrationPage> {
   String? _selectedFeed;
   String? _selectedSoreSpot;
 
+//DatePicker //여기까지
   Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2000),
-      lastDate: DateTime.now(),
-      builder: (BuildContext context, Widget? child) {
-        return Theme(
-          data: ThemeData.light().copyWith(
-            primaryColor: Color(0xFFC1CCFF),
-            hintColor: Color(0xFFC1CCFF),
-            colorScheme: ColorScheme.light(
-              primary: Color(0xFFC1CCFF),
-            ),
-            buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
-          ),
-          child: child!,
-        );
-      },
-    );
-    if (picked != null && picked != DateTime.now()) {
-      setState(() {
-        _startedDateController.text = picked.toString().split(' ')[0];
-      });
+    DateTime initialDate = DateTime.now().toLocal();
+
+    if (_startedDateController.text.isNotEmpty) {
+      List<String> dateParts = _startedDateController.text.split('-');
+      if (dateParts.length == 3) {
+        int year = int.parse(dateParts[0]);
+        int month = int.parse(dateParts[1]);
+        int day = int.parse(dateParts[2]);
+        initialDate = DateTime(year, month, day).toLocal();
+      }
     }
+
+    DateTime? selectedDate;
+    final SfDateRangePicker picker = SfDateRangePicker(
+      initialSelectedDate: initialDate,
+      onSelectionChanged: (DateRangePickerSelectionChangedArgs args) {
+        if (args.value is DateTime) {
+          selectedDate = args.value;
+        }
+      },
+      startRangeSelectionColor: Color(0xFFC1CCFF),
+      endRangeSelectionColor: Color(0xFFC1CCFF),
+      rangeSelectionColor: Color.fromARGB(100, 135, 153, 239),
+      selectionTextStyle: const TextStyle(
+        color: Colors.black,
+        fontWeight: FontWeight.bold,
+        fontSize: 14,
+      ),
+      todayHighlightColor: Color(0xFFC1CCFF),
+      selectionColor: Color(0xFFC1CCFF),
+      minDate: DateTime(2022),
+      maxDate: DateTime.now(),
+      selectionMode: DateRangePickerSelectionMode.single,
+      headerStyle: const DateRangePickerHeaderStyle(
+        textStyle: TextStyle(
+          fontWeight: FontWeight.bold,
+          color: Color(0xFF878CEF), // 헤더 폰트
+          fontSize: 24,
+        ),
+      ),
+      monthCellStyle: DateRangePickerMonthCellStyle(
+        todayTextStyle: TextStyle(
+          color: Color(0xFF878CEF), // 오늘 날짜의 폰트 색상
+          fontWeight: FontWeight.bold,
+          fontSize: 13,
+        ),
+      ),
+    );
+
+    await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        content: SizedBox(
+          width: MediaQuery.of(context).size.width * 0.7,
+          height: MediaQuery.of(context).size.height * 0.45,
+          child: picker,
+        ),
+        actions: [
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Color(0xFF878CEF),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              elevation: 3,
+            ),
+            onPressed: () {
+              if (selectedDate != null) {
+                setState(() {
+                  _startedDateController.text = formatDate(
+                    selectedDate!,
+                    [yyyy, '-', mm, '-', dd],
+                  );
+                });
+              }
+              Navigator.pop(context);
+            },
+            child: Text("확인"),
+          ),
+        ],
+      ),
+    );
   }
 
   @override

@@ -201,7 +201,7 @@ class _PetInfoPageState extends State<PetInfoPage> {
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
+      debugShowCheckedModeBanner: false, //debug banner 제거
       home: Scaffold(
         backgroundColor: Color(0xFFC1CCFF),
         appBar: AppBar(
