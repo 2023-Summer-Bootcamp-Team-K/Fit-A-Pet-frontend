@@ -17,7 +17,7 @@ class Pet {
   final String? feed;
   final String? soreSpot;
   final String? profileImageUrl;
-  bool isChecked; // 체크박스 상태를 저장하는 변수
+  bool isChecked;
 
   Pet({
     required this.id,
@@ -30,7 +30,7 @@ class Pet {
     this.feed,
     this.soreSpot,
     this.profileImageUrl,
-    this.isChecked = false, // 체크박스 상태를 기본적으로 선택되지 않은 상태로 초기화
+    this.isChecked = false,
   });
 
   factory Pet.fromJson(Map<String, dynamic> json) {
@@ -45,7 +45,7 @@ class Pet {
       feed: json['feed'],
       soreSpot: json['sore_spot'],
       profileImageUrl: json['profile_url'],
-      isChecked: false, // 체크박스 상태를 기본적으로 선택되지 않은 상태로 초기화
+      isChecked: false,
     );
   }
 }
@@ -56,7 +56,7 @@ class PetInfoPage extends StatefulWidget {
 }
 
 class _PetInfoPageState extends State<PetInfoPage> {
-  bool isChecked = false; // 체크 상태를 관리하는 변수
+  bool isChecked = false;
   List<Pet> pets = [];
   @override
   void initState() {
@@ -83,13 +83,13 @@ class _PetInfoPageState extends State<PetInfoPage> {
 
   void onPetCheckboxChanged(Pet selectedPet) {
     setState(() {
-      // 선택된 펫 이외의 모든 펫의 체크박스를 해제합니다.
+      // 선택된 펫 이외의 모든 펫의 체크박스를 해제
       pets.forEach((pet) {
         if (pet != selectedPet) {
           pet.isChecked = false;
         }
       });
-      // 선택된 펫의 체크박스를 토글합니다.
+
       selectedPet.isChecked = !selectedPet.isChecked;
     });
   }
@@ -101,14 +101,13 @@ class _PetInfoPageState extends State<PetInfoPage> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        // Apply purple border if the pet is checked
+        // 체크된 컨테이너 보라색 테두리 추가
         border: pet.isChecked
             ? Border.all(color: Color.fromARGB(255, 135, 153, 239), width: 2)
             : null,
       ),
       child: Row(
         children: [
-          // Left side - Pet Profile Image
           SizedBox(
             width: 102,
             height: 102,
@@ -131,23 +130,65 @@ class _PetInfoPageState extends State<PetInfoPage> {
             ),
           ),
           SizedBox(width: 16),
-          // Right side - Pet Information
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  '${pet.name}',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                Padding(
+                  padding: EdgeInsets.only(
+                      bottom: 4), // Add bottom padding of 8 units
+                  child: Text(
+                    '${pet.name}',
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'Fit-A-Pet'),
+                  ),
                 ),
-                Text('나이: ${pet.age}살'),
-                Text('종: ${pet.species ?? 'Unknown'}'),
-                Text('성별: ${pet.gender ?? 'Unknown'}'),
-                Text('몸무게: ${pet.weight}kg'),
-                Text(
-                    '센서착용날짜: ${pet.startedDate.toLocal().year}-${pet.startedDate.toLocal().month.toString().padLeft(2, '0')}-${pet.startedDate.toLocal().day.toString().padLeft(2, '0')}'),
-                Text('사료: ${pet.feed ?? 'Unknown'}'),
-                Text('필요영양제: ${pet.soreSpot ?? 'Unknown'}'),
+                Padding(
+                  padding: EdgeInsets.only(
+                      bottom: 4), // Add bottom padding of 4 units
+                  child: Text('나이: ${pet.age}살',
+                      style: TextStyle(fontFamily: 'Fit-A-Pet')),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(
+                      bottom: 4), // Add bottom padding of 4 units
+                  child: Text('종: ${pet.species ?? 'Unknown'}',
+                      style: TextStyle(fontFamily: 'Fit-A-Pet')),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(
+                      bottom: 4), // Add bottom padding of 4 units
+                  child: Text('성별: ${pet.gender ?? 'Unknown'}',
+                      style: TextStyle(fontFamily: 'Fit-A-Pet')),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(
+                      bottom: 4), // Add bottom padding of 4 units
+                  child: Text('몸무게: ${pet.weight}kg',
+                      style: TextStyle(fontFamily: 'Fit-A-Pet')),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(
+                      bottom: 4), // Add bottom padding of 4 units
+                  child: Text(
+                    '센서착용날짜: ${pet.startedDate.toLocal().year}-${pet.startedDate.toLocal().month.toString().padLeft(2, '0')}-${pet.startedDate.toLocal().day.toString().padLeft(2, '0')}',
+                    style: TextStyle(fontFamily: 'Fit-A-Pet'),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(
+                      bottom: 4), // Add bottom padding of 4 units
+                  child: Text('사료: ${pet.feed ?? 'Unknown'}',
+                      style: TextStyle(fontFamily: 'Fit-A-Pet')),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(
+                      bottom: 4), // Add bottom padding of 4 units
+                  child: Text('필요영양제: ${pet.soreSpot ?? 'Unknown'}',
+                      style: TextStyle(fontFamily: 'Fit-A-Pet')),
+                ),
               ],
             ),
           ),
@@ -166,7 +207,9 @@ class _PetInfoPageState extends State<PetInfoPage> {
         appBar: AppBar(
           elevation: 0,
           centerTitle: true,
-          title: Text("반려동물 정보", style: TextStyle(fontWeight: FontWeight.bold)),
+          title: Text("반려동물 정보",
+              style: TextStyle(
+                  fontWeight: FontWeight.bold, fontFamily: 'Fit-A-Pet')),
           backgroundColor: Color(0xFFC1CCFF),
           actions: [
             IconButton(
@@ -192,13 +235,10 @@ class _PetInfoPageState extends State<PetInfoPage> {
                           child: Center(
                             child: Stack(
                               children: [
-                                // Pet Container
                                 createPetContainer(pet, user),
-                                // White Checkbox Container
                                 Positioned(
                                   top: 10,
-                                  left:
-                                      10, // Adjust the left value to move it to the left
+                                  left: 10,
                                   child: Container(
                                     width: 34,
                                     height: 34,
@@ -206,10 +246,8 @@ class _PetInfoPageState extends State<PetInfoPage> {
                                       value: pet.isChecked,
                                       onChanged: (bool? value) {
                                         if (value == true && !pet.isChecked) {
-                                          // 새로 선택된 경우에만 동작하도록 변경
                                           setState(() {
-                                            onPetCheckboxChanged(
-                                                pet); // 라디오 버튼처럼 선택 동작 처리
+                                            onPetCheckboxChanged(pet);
                                           });
                                         }
                                       },
@@ -263,17 +301,13 @@ class _PetInfoPageState extends State<PetInfoPage> {
     );
   }
 
-  int checkedCount = 0; // 선택된 체크박스 개수를 저장하는 변수
+  int checkedCount = 0;
 
   void navigateToEditPage(BuildContext context, Pet pet) async {
-    // 이전 코드: await Navigator.push(context, MaterialPageRoute(builder: (context) => EditPage(petId: pet.id)));
-
-    // 서버에서 pet 정보를 가져오기 위한 API 호출
     final apiUrl = 'http://54.180.70.169/api/pets/detail/${pet.id}';
     final response = await http.get(Uri.parse(apiUrl));
 
     if (response.statusCode == 200) {
-      // API 호출이 성공하면 가져온 데이터를 사용하여 EditPage로 이동
       final Map<String, dynamic> petData =
           json.decode(utf8.decode(response.bodyBytes));
 
@@ -299,8 +333,6 @@ class _PetInfoPageState extends State<PetInfoPage> {
     if (result != null) {
       setState(() {
         final container = result as Container;
-        // TODO: 새로운 컨테이너를 pets 리스트에 추가하는 코드를 작성하세요.
-        // (container를 사용하여 Pet 모델 객체를 만들어서 pets 리스트에 추가해야 합니다.)
       });
     }
   }
