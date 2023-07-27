@@ -21,7 +21,7 @@ class _HomeScreenState extends State<HomeScreen> {
   double yOffset = 0;
   bool isDrawerOpen = false;
   String petID = '10';
-  int? hba1c;
+  double? hba1c;
   String? recentTimestamp;
   int? recentBloodSugar;
   String petName = '';
@@ -53,7 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
       if (response.statusCode == 200) {
         final responseData = json.decode(response.body);
-        int? newHba1c =
+        double? newHba1c =
             responseData['hba1c'];
 
         if (newHba1c != null) {
@@ -251,7 +251,25 @@ class _HomeScreenState extends State<HomeScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      '반려동물의 건강을\n우선시하는 \nFit-A-Pet 입니다.',
+                                      '반려동물의 건강을',
+                                      style: TextStyle(
+                                        color: Color(0xff5551ff),
+                                        fontSize: screenWidth * 0.05,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    SizedBox(height:5),
+                                    Text(
+                                      '우선시하는',
+                                      style: TextStyle(
+                                        color: Color(0xff5551ff),
+                                        fontSize: screenWidth * 0.05,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    SizedBox(height:5),
+                                    Text(
+                                      'Fit-A-Pet 입니다.',
                                       style: TextStyle(
                                         color: Color(0xff5551ff),
                                         fontSize: screenWidth * 0.05,
