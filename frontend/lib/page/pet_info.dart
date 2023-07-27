@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:frontend/constant.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -210,7 +211,7 @@ class _PetInfoPageState extends State<PetInfoPage> {
           title: Text("반려동물 정보",
               style: TextStyle(
                   fontWeight: FontWeight.bold, fontFamily: 'Fit-A-Pet')),
-          backgroundColor: Color(0xFFC1CCFF),
+          backgroundColor: kPrimaryColor,
           actions: [
             IconButton(
               icon: Icon(Icons.refresh),
@@ -255,7 +256,7 @@ class _PetInfoPageState extends State<PetInfoPage> {
                                         borderRadius: BorderRadius.circular(10),
                                       ),
                                       checkColor: Colors.white,
-                                      activeColor: Color(0xFFC1CCFF),
+                                      activeColor: kPrimaryColor,
                                       materialTapTargetSize:
                                           MaterialTapTargetSize.padded,
                                     ),

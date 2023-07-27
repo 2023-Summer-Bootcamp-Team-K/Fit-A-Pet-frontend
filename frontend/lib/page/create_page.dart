@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:frontend/constant.dart';
 import 'package:frontend/page/pet_info.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
@@ -118,16 +119,16 @@ class _PetRegistrationPageState extends State<PetRegistrationPage> {
           selectedDate = args.value;
         }
       },
-      startRangeSelectionColor: Color(0xFFC1CCFF),
-      endRangeSelectionColor: Color(0xFFC1CCFF),
+      startRangeSelectionColor: kPrimaryColor,
+      endRangeSelectionColor: kPrimaryColor,
       rangeSelectionColor: Color.fromARGB(100, 135, 153, 239),
       selectionTextStyle: const TextStyle(
         color: Colors.black,
         fontWeight: FontWeight.bold,
         fontSize: 14,
       ),
-      todayHighlightColor: Color(0xFFC1CCFF),
-      selectionColor: Color(0xFFC1CCFF),
+      todayHighlightColor: kPrimaryColor,
+      selectionColor: kPrimaryColor,
       minDate: DateTime(2022),
       maxDate: DateTime.now(),
       selectionMode: DateRangePickerSelectionMode.single,
@@ -309,10 +310,10 @@ class _PetRegistrationPageState extends State<PetRegistrationPage> {
         centerTitle: true,
         elevation: 0,
         title: Text('반려동물 추가', style: TextStyle(fontWeight: FontWeight.bold)),
-        backgroundColor: Color(0xFFC1CCFF),
+        backgroundColor: kPrimaryColor,
       ),
       body: Container(
-        color: Color(0xFFC1CCFF),
+        color: kPrimaryColor,
         child: SingleChildScrollView(
           padding: EdgeInsets.all(16.0),
           child: Column(

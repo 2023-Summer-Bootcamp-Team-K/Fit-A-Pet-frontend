@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:frontend/constant.dart';
 import 'package:frontend/page/pet_info.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
@@ -9,8 +10,6 @@ import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
-//여기서부터//지우지마
-//제발
 class PetInfo {
   final String name;
   final int age;
@@ -236,16 +235,16 @@ class _EditPageState extends State<EditPage> {
           selectedDate = args.value;
         }
       },
-      startRangeSelectionColor: Color(0xFFC1CCFF),
-      endRangeSelectionColor: Color(0xFFC1CCFF),
+      startRangeSelectionColor: kPrimaryColor,
+      endRangeSelectionColor: kPrimaryColor,
       rangeSelectionColor: Color.fromARGB(100, 135, 153, 239),
       selectionTextStyle: const TextStyle(
         color: Colors.black,
         fontWeight: FontWeight.bold,
         fontSize: 14,
       ),
-      todayHighlightColor: Color(0xFFC1CCFF),
-      selectionColor: Color(0xFFC1CCFF),
+      todayHighlightColor: kPrimaryColor,
+      selectionColor: kPrimaryColor,
       minDate: DateTime(2022),
       maxDate: DateTime.now(),
       selectionMode: DateRangePickerSelectionMode.single,
@@ -423,7 +422,7 @@ class _EditPageState extends State<EditPage> {
           '반려동물 정보 수정',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
-        backgroundColor: Color(0xFFC1CCFF),
+        backgroundColor: kPrimaryColor,
         actions: [
           IconButton(
             icon: Icon(
@@ -435,7 +434,7 @@ class _EditPageState extends State<EditPage> {
         ],
       ),
       body: Container(
-        color: Color(0xFFC1CCFF),
+        color: kPrimaryColor,
         child: SingleChildScrollView(
           padding: EdgeInsets.all(16.0),
           child: Column(
