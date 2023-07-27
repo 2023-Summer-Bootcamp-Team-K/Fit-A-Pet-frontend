@@ -3,6 +3,7 @@ import 'package:frontend/components/info_card.dart';
 import 'package:frontend/page/pet_info.dart';
 import 'package:frontend/screens/chart_screen.dart';
 import 'package:frontend/screens/feed.dart';
+import 'package:frontend/screens/home_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 void main() {
@@ -35,8 +36,8 @@ class _SideMenuState extends State<SideMenu> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const InfoCard(
-                name: "Duck UI",
-                email: "DuckUI@demo.com",
+                name: "김주인",
+                email: "OurPetIsAwesome@demo.com",
               ),
               Padding(
                 padding: EdgeInsets.only(top: 40, left: 30, bottom: 70),
@@ -52,7 +53,7 @@ class _SideMenuState extends State<SideMenu> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => PetInfoPage()),
+                                builder: (context) => HomeScreen()),
                           );
                         }
                       },
@@ -121,7 +122,12 @@ class _SideMenuState extends State<SideMenu> {
                     SizedBox(height: 40),
                     InkWell(
                       onTap: () {
-                        _launchURL;
+                        setState(() {
+                          isActive = !isActive;
+                        });
+                        if (isActive) {
+                          _launchURL;
+                        }
                       },
                       child: NewRow(
                         text: '수의사와 상담',
@@ -163,6 +169,14 @@ class _SideMenuState extends State<SideMenu> {
       ),
     );
   }
+    _launchURL() async {
+    const url = 'https://open.kakao.com/o/sOmd7Zuf';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
 }
 
 class NewRow extends StatelessWidget {
@@ -197,11 +211,4 @@ class NewRow extends StatelessWidget {
 }
 
 
-  _launchURL() async {
-    const url = 'https://open.kakao.com/o/sOmd7Zuf';
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
-    }
-  }
+  
