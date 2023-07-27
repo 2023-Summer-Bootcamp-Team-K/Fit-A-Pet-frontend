@@ -158,6 +158,7 @@ class _EditPageState extends State<EditPage> {
                           ),
                         ),
                         onPressed: () {
+                          _deletePet();
                           Navigator.of(context).pop();
                           Navigator.push(
                             context,
