@@ -175,9 +175,9 @@ class _Feed_PageState extends State<Feed_Page> {
             ),
           ),
           Positioned(
-            top: 0.4,
-            left: 0,
-            right: 0,
+            top: screenHeight*0.005,
+            left: screenWidth*0,
+            right: screenWidth*0,
             child: Container(
               width: double.infinity,
               height: screenHeight * 0.38,
@@ -519,12 +519,12 @@ class _Feed_PageState extends State<Feed_Page> {
             ),
           ),
           Positioned(
-            bottom: 50,
-            right: 23,
+            bottom: screenHeight*0.055,
+            right: screenWidth*0.05,
             child: InkWell(
               onTap: _launchURL, // 버튼을 눌렀을 때 호출될 함수를 여기에 지정합니다.
               child: Container(
-                width: screenWidth * 0.41,
+                width: screenWidth * 0.43,
                 height: screenWidth * 0.14,
                 decoration: BoxDecoration(
                   color: Color(0xFFF86A1FF),
@@ -561,14 +561,14 @@ class _Feed_PageState extends State<Feed_Page> {
             ),
           ),
           Positioned(
-            bottom: 50,
-            left: 23,
+            bottom: screenHeight*0.055,
+            left: screenWidth * 0.054,
             child: InkWell(
               onTap: () {
                 _showFeedbackDialog(context); // 클릭 시 피드백 다이얼로그를 띄웁니다.
               },
               child: Container(
-                width: screenWidth * 0.41,
+                width: screenWidth * 0.43,
                 height: screenWidth * 0.14,
                 decoration: BoxDecoration(
                   color: Color(0xFFF86A1FF),
@@ -673,27 +673,37 @@ class _FeedbackDialogState extends State<FeedbackDialog> {
             SizedBox(height: 12.0),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 5.0),
-              child: TextField(
-                controller: _feedbackController,
-                maxLines: 5,
-                decoration: InputDecoration(
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide.none,
-                    borderRadius: _textFieldBorderRadius,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: _textFieldBorderRadius,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      blurRadius: 3,
+                      spreadRadius: 1,
+                      offset: Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: TextField(
+                  controller: _feedbackController,
+                  maxLines: 5,
+                  decoration: InputDecoration(
+                    hintText: '사료 추천에 대한 피드백을 작성해주세요.',
+                    hintStyle: TextStyle(color: Color.fromARGB(255, 119, 131, 143)),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide.none,
+                      borderRadius: _textFieldBorderRadius,
+                    ),
+                    filled: true,
+                    fillColor: Colors.white,
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.white, width: 1),
+                      borderRadius: _textFieldBorderRadius,
+                    ),
                   ),
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide.none,
-                    borderRadius: _textFieldBorderRadius,
-                  ),
-                  hintText: '사료 추천에 대한 피드백을 작성해주세요.',
-                  hintStyle:
-                      TextStyle(color: Color.fromARGB(255, 119, 131, 143)),
-                  filled: true,
-                  fillColor: Colors.white,
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.white, width: 2),
-                    borderRadius: _textFieldBorderRadius,
-                  ),
+                  style: TextStyle(color: Colors.black),
                 ),
               ),
             ),
