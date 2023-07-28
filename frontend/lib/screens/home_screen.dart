@@ -586,18 +586,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                       ),
-                      Positioned(
-                        bottom: screenWidth * 0.28,
-                        right: screenWidth * 0.06,
-                        child: FloatingActionButton(
-                          backgroundColor: Colors.white,
-                          onPressed: _launchURL,
-                          child: Image.asset(
-                            'assets/icons/kakao_icon.png',
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                      ),
                     ],
                   ),
                 ],
@@ -606,6 +594,13 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _launchURL,
+        child: Image.asset(
+          'assets/icons/kakao_icon.png',
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
     );
   }
 
