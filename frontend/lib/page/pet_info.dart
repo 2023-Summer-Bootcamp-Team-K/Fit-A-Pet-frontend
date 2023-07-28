@@ -174,7 +174,7 @@ class _PetInfoPageState extends State<PetInfoPage> {
                   padding: EdgeInsets.only(
                       bottom: 4), // Add bottom padding of 4 units
                   child: Text(
-                    '센서착용날짜: ${pet.startedDate.toLocal().year}-${pet.startedDate.toLocal().month.toString().padLeft(2, '0')}-${pet.startedDate.toLocal().day.toString().padLeft(2, '0')}',
+                    '센서 착용 날짜: ${pet.startedDate.toLocal().year}-${pet.startedDate.toLocal().month.toString().padLeft(2, '0')}-${pet.startedDate.toLocal().day.toString().padLeft(2, '0')}',
                     style: TextStyle(fontFamily: 'Fit-A-Pet'),
                   ),
                 ),
@@ -187,7 +187,7 @@ class _PetInfoPageState extends State<PetInfoPage> {
                 Padding(
                   padding: EdgeInsets.only(
                       bottom: 4), // Add bottom padding of 4 units
-                  child: Text('필요영양제: ${pet.soreSpot ?? 'Unknown'}',
+                  child: Text('불편한 부위: ${pet.soreSpot ?? 'Unknown'}',
                       style: TextStyle(fontFamily: 'Fit-A-Pet')),
                 ),
               ],
