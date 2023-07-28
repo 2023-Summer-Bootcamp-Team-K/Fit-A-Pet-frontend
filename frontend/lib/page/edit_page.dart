@@ -593,7 +593,7 @@ class _EditPageState extends State<EditPage> {
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(16),
                       ),
-                      hintText: '센서착용날짜',
+                      hintText: '센서 착용 날짜',
                       fillColor: Colors.white,
                       filled: true,
                       contentPadding: const EdgeInsets.all(10),
