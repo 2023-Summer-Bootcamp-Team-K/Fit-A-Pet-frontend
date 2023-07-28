@@ -309,7 +309,10 @@ class _PetRegistrationPageState extends State<PetRegistrationPage> {
       appBar: AppBar(
         centerTitle: true,
         elevation: 0,
-        title: Text('반려동물 추가', style: TextStyle(fontWeight: FontWeight.bold)),
+        title: Text(
+          '반려동물 추가',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
+        ),
         backgroundColor: kPrimaryColor,
       ),
       body: Container(
@@ -553,7 +556,7 @@ class _PetRegistrationPageState extends State<PetRegistrationPage> {
                   padding: EdgeInsets.all(10),
                 ),
                 child: Text(
-                  "입력완료",
+                  "입력 완료",
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 20,

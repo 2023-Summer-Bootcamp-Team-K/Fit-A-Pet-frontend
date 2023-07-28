@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:frontend/components/side_menu.dart';
 import 'package:frontend/constant.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
@@ -6,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:frontend/model/user.dart';
 import 'package:frontend/page/create_page.dart';
 import 'package:frontend/page/edit_page.dart';
+import 'package:frontend/model/user.dart';
 
 class Pet {
   final int id;
@@ -57,6 +59,9 @@ class PetInfoPage extends StatefulWidget {
 }
 
 class _PetInfoPageState extends State<PetInfoPage> {
+  double xOffset = 0;
+  double yOffset = 0;
+  bool isDrawerOpen = false;
   bool isChecked = false;
   List<Pet> pets = [];
   @override
@@ -84,7 +89,6 @@ class _PetInfoPageState extends State<PetInfoPage> {
 
   void onPetCheckboxChanged(Pet selectedPet) {
     setState(() {
-      // 선택된 펫 이외의 모든 펫의 체크박스를 해제
       pets.forEach((pet) {
         if (pet != selectedPet) {
           pet.isChecked = false;
@@ -198,107 +202,149 @@ class _PetInfoPageState extends State<PetInfoPage> {
     );
   }
 
+  void toggleSideMenu() {
+    setState(() {
+      isDrawerOpen = !isDrawerOpen;
+      xOffset = isDrawerOpen ? 300 : 0;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
     final user = Provider.of<User>(context);
-    return MaterialApp(
-      debugShowCheckedModeBanner: false, //debug banner 제거
-      home: Scaffold(
-        backgroundColor: Color(0xFFC1CCFF),
-        appBar: AppBar(
-          elevation: 0,
-          centerTitle: true,
-          title: Text("반려동물 정보",
-              style: TextStyle(
-                  fontWeight: FontWeight.bold, fontFamily: 'Fit-A-Pet')),
-          backgroundColor: kPrimaryColor,
-          actions: [
-            IconButton(
-              icon: Icon(Icons.refresh),
-              onPressed: () {
-                fetchPets();
-              },
+
+    return Scaffold(
+      body: Stack(
+        children: [
+          SideMenu(),
+          AnimatedContainer(
+            height: screenHeight,
+            transform: Matrix4.translationValues(xOffset, yOffset, 0),
+            duration: Duration(milliseconds: 200),
+            decoration: BoxDecoration(
+              color: kPrimaryColor,
+              borderRadius: isDrawerOpen
+                  ? BorderRadius.circular(40)
+                  : BorderRadius.circular(0),
             ),
-          ],
-        ),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              SizedBox(height: 0),
-              Center(
-                child: Column(
-                  children: pets.map((pet) {
-                    return Column(
-                      children: [
-                        SizedBox(height: 20),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.9,
-                          child: Center(
-                            child: Stack(
-                              children: [
-                                createPetContainer(pet, user),
-                                Positioned(
-                                  top: 10,
-                                  left: 10,
-                                  child: Container(
-                                    width: 34,
-                                    height: 34,
-                                    child: Checkbox(
-                                      value: pet.isChecked,
-                                      onChanged: (bool? value) {
-                                        if (value == true && !pet.isChecked) {
-                                          setState(() {
-                                            onPetCheckboxChanged(pet);
-                                          });
-                                        }
-                                      },
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      checkColor: Colors.white,
-                                      activeColor: kPrimaryColor,
-                                      materialTapTargetSize:
-                                          MaterialTapTargetSize.padded,
-                                    ),
-                                  ),
-                                ),
-                                Positioned(
-                                  top: 10,
-                                  right: 15,
-                                  child: CircleAvatar(
-                                    backgroundColor: Colors.white,
-                                    radius: 20,
-                                    child: IconButton(
-                                      icon:
-                                          Icon(Icons.edit, color: Colors.black),
-                                      onPressed: () {
-                                        navigateToEditPage(context, pet);
-                                      },
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
+            child: SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  SizedBox(height: 60),
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        GestureDetector(
+                          child: Icon(
+                            isDrawerOpen ? Icons.arrow_back_ios : Icons.menu,
+                            color: Colors.white,
+                          ),
+                          onTap: toggleSideMenu,
+                        ),
+                        Text(
+                          "     반려동물 정보",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 22,
+                            fontFamily: 'Fit-A-Pet',
+                            color: Colors.white,
                           ),
                         ),
+                        IconButton(
+                          icon: Icon(
+                            Icons.refresh,
+                            color: Colors.white,
+                          ),
+                          onPressed: () {
+                            fetchPets();
+                          },
+                        ),
                       ],
-                    );
-                  }).toList(),
-                ),
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Center(
+                    child: Column(
+                      children: pets.map((pet) {
+                        return Column(
+                          children: [
+                            SizedBox(height: 20),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.9,
+                              child: Center(
+                                child: Stack(
+                                  children: [
+                                    createPetContainer(pet, user),
+                                    Positioned(
+                                      top: 10,
+                                      left: 10,
+                                      child: Container(
+                                        width: 34,
+                                        height: 34,
+                                        child: Checkbox(
+                                          value: pet.isChecked,
+                                          onChanged: (bool? value) {
+                                            if (value == true &&
+                                                !pet.isChecked) {
+                                              setState(() {
+                                                onPetCheckboxChanged(pet);
+                                              });
+                                            }
+                                          },
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                          checkColor: Colors.white,
+                                          activeColor: kPrimaryColor,
+                                          materialTapTargetSize:
+                                              MaterialTapTargetSize.padded,
+                                        ),
+                                      ),
+                                    ),
+                                    Positioned(
+                                      top: 10,
+                                      right: 15,
+                                      child: CircleAvatar(
+                                        backgroundColor: Colors.white,
+                                        radius: 20,
+                                        child: IconButton(
+                                          icon: Icon(Icons.edit,
+                                              color: Colors.black),
+                                          onPressed: () {
+                                            navigateToEditPage(context, pet);
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                  SizedBox(height: 35),
+                ],
               ),
-              SizedBox(height: 35),
-            ],
+            ),
           ),
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            navigateToCreatePage(context);
-          },
-          child: Icon(Icons.add),
-          backgroundColor: Color.fromARGB(255, 135, 153, 239),
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+        ],
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          navigateToCreatePage(context);
+        },
+        child: Icon(Icons.add),
+        backgroundColor: Color.fromARGB(255, 135, 153, 239),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 

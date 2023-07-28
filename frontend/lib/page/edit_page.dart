@@ -421,7 +421,10 @@ class _EditPageState extends State<EditPage> {
         elevation: 0,
         title: Text(
           '반려동물 정보 수정',
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 22,
+          ),
         ),
         backgroundColor: kPrimaryColor,
         actions: [
