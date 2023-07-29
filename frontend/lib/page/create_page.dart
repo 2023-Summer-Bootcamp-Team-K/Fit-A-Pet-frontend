@@ -353,6 +353,12 @@ class _PetRegistrationPageState extends State<PetRegistrationPage> {
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
                   ),
+                  focusedBorder: OutlineInputBorder(
+                    // 클릭했을 때의 테두리 색상 설정
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: BorderSide(
+                        color: Color(0xFF878CEF), width: 2.0), // 보라색 테두리
+                  ),
                   hintText: '이름',
                   fillColor: Colors.white,
                   filled: true,
@@ -366,6 +372,12 @@ class _PetRegistrationPageState extends State<PetRegistrationPage> {
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
                   ),
+                  focusedBorder: OutlineInputBorder(
+                    // 클릭했을 때의 테두리 색상 설정
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: BorderSide(
+                        color: Color(0xFF878CEF), width: 2.0), // 보라색 테두리
+                  ),
                   hintText: '나이',
                   fillColor: Colors.white,
                   filled: true,
@@ -378,6 +390,12 @@ class _PetRegistrationPageState extends State<PetRegistrationPage> {
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    // 클릭했을 때의 테두리 색상 설정
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: BorderSide(
+                        color: Color(0xFF878CEF), width: 2.0), // 보라색 테두리
                   ),
                   filled: true,
                   fillColor: Colors.white,
@@ -413,6 +431,12 @@ class _PetRegistrationPageState extends State<PetRegistrationPage> {
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    // 클릭했을 때의 테두리 색상 설정
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: BorderSide(
+                        color: Color(0xFF878CEF), width: 2.0), // 보라색 테두리
                   ),
                   filled: true,
                   fillColor: Colors.white,
@@ -450,6 +474,12 @@ class _PetRegistrationPageState extends State<PetRegistrationPage> {
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
                   ),
+                  focusedBorder: OutlineInputBorder(
+                    // 클릭했을 때의 테두리 색상 설정
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: BorderSide(
+                        color: Color(0xFF878CEF), width: 2.0), // 보라색 테두리
+                  ),
                   hintText: '몸무게',
                   fillColor: Colors.white,
                   filled: true,
@@ -480,6 +510,12 @@ class _PetRegistrationPageState extends State<PetRegistrationPage> {
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    // 클릭했을 때의 테두리 색상 설정
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: BorderSide(
+                        color: Color(0xFF878CEF), width: 2.0), // 보라색 테두리
                   ),
                   filled: true,
                   fillColor: Colors.white,
@@ -515,6 +551,12 @@ class _PetRegistrationPageState extends State<PetRegistrationPage> {
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    // 클릭했을 때의 테두리 색상 설정
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: BorderSide(
+                        color: Color(0xFF878CEF), width: 2.0), // 보라색 테두리
                   ),
                   filled: true,
                   fillColor: Colors.white,
