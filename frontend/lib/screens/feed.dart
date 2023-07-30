@@ -42,6 +42,14 @@ class _Feed_PageState extends State<Feed_Page> {
     fetchFeedData();
     fetchPetData(widget.petID);
   }
+  _launchURL() async {
+    const url = 'https://open.kakao.com/o/sOmd7Zuf';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
 
   void fetchFeedData() async {
     String apiUrl = 'http://54.180.70.169/api/feeds/10/';
@@ -120,7 +128,7 @@ class _Feed_PageState extends State<Feed_Page> {
     }
   }
 
-  @override
+   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
@@ -160,8 +168,13 @@ class _Feed_PageState extends State<Feed_Page> {
           ),
         ),
       ),
-      body: Stack(
-        children: [
+      body: LayoutBuilder(
+      builder: (context, constraints) {
+        final screenWidth = constraints.maxWidth;
+        final screenHeight = constraints.maxHeight;
+
+        return Stack(
+          children: [
           Positioned(
             top: 0,
             left: 0,
@@ -175,14 +188,14 @@ class _Feed_PageState extends State<Feed_Page> {
             ),
           ),
           Positioned(
-            top: screenHeight*0.005,
-            left: screenWidth*0,
-            right: screenWidth*0,
+            top: screenHeight * 0.005,
+            left: screenWidth * 0,
+            right: screenWidth * 0,
             child: Container(
-              width: double.infinity,
+              width: screenWidth*0.38,
               height: screenHeight * 0.38,
               child: CustomPaint(
-                painter: MyOvalPainter(), // MyOvalPainter는 아래에서 정의할 커스텀 페인터입니다.
+                painter: MyOvalPainter(),
               ),
             ),
           ),
@@ -194,7 +207,7 @@ class _Feed_PageState extends State<Feed_Page> {
                 '# $petName\n# 키워드',
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 30,
+                  fontSize: screenHeight * 0.035,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -203,8 +216,8 @@ class _Feed_PageState extends State<Feed_Page> {
           Positioned(
             top: screenHeight * 0,
             left: screenWidth * 0,
-            width: screenWidth * 0.5,
-            height: screenWidth * 0.5,
+            width: screenWidth * 0.45,
+            height: screenWidth * 0.45,
             child: Image.asset(
               'images/feedpage.png',
             ),
@@ -224,7 +237,7 @@ class _Feed_PageState extends State<Feed_Page> {
                           ' # $petAge세',
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: 19,
+                            fontSize: screenHeight * 0.022,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -233,7 +246,7 @@ class _Feed_PageState extends State<Feed_Page> {
                           ' # ${petWeight.toStringAsFixed(1)} kg',
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: 19,
+                            fontSize: screenHeight * 0.022,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -242,7 +255,7 @@ class _Feed_PageState extends State<Feed_Page> {
                           ' # $feed',
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: 19,
+                            fontSize: screenHeight * 0.022,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -251,7 +264,7 @@ class _Feed_PageState extends State<Feed_Page> {
                           ' # 민감한 $soreSpot',
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: 19,
+                            fontSize: screenHeight * 0.022,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -284,7 +297,7 @@ class _Feed_PageState extends State<Feed_Page> {
                 child: Text(
                   'meat',
                   style: TextStyle(
-                    fontSize: 13,
+                    fontSize: screenHeight * 0.015,
                     fontWeight: FontWeight.bold,
                     color: Color.fromRGBO(119, 131, 143, 1.0),
                   ),
@@ -314,7 +327,7 @@ class _Feed_PageState extends State<Feed_Page> {
                 child: Text(
                   'oil',
                   style: TextStyle(
-                    fontSize: 13,
+                    fontSize: screenHeight * 0.015,
                     fontWeight: FontWeight.bold,
                     color: Color.fromRGBO(119, 131, 143, 1.0),
                   ),
@@ -344,7 +357,7 @@ class _Feed_PageState extends State<Feed_Page> {
                 child: Text(
                   'supplement',
                   style: TextStyle(
-                    fontSize: 13,
+                    fontSize: screenHeight * 0.015,
                     fontWeight: FontWeight.bold,
                     color: Color.fromRGBO(119, 131, 143, 1.0),
                   ),
@@ -353,7 +366,7 @@ class _Feed_PageState extends State<Feed_Page> {
             ),
           ),
           Positioned(
-            top: screenHeight * 0.35,
+            top: screenHeight * 0.36,
             left: screenWidth * 0.06,
             child: Container(
               width: screenWidth * 0.27,
@@ -391,7 +404,7 @@ class _Feed_PageState extends State<Feed_Page> {
             ),
           ),
           Positioned(
-            top: screenHeight * 0.35,
+            top: screenHeight * 0.36,
             left: screenWidth * 0.37,
             child: Container(
               width: screenWidth * 0.27,
@@ -426,7 +439,7 @@ class _Feed_PageState extends State<Feed_Page> {
             ),
           ),
           Positioned(
-            top: screenHeight * 0.35,
+            top: screenHeight * 0.36,
             left: screenWidth * 0.68,
             child: Container(
               width: screenWidth * 0.27,
@@ -448,11 +461,9 @@ class _Feed_PageState extends State<Feed_Page> {
                       borderRadius: BorderRadius.circular(30),
                       child: Image.network(
                         supplementImageUrl,
-                        width: screenWidth *
-                            0.27, // 이미지를 Container의 가로 크기와 일치시킵니다.
-                        height: screenWidth *
-                            0.27, // 이미지를 Container의 세로 크기와 일치시킵니다.
-                        fit: BoxFit.cover, // 이미지가 Container에 맞게 크기 조정됩니다.
+                        width: screenWidth *0.27, 
+                        height: screenWidth *0.27, 
+                        fit: BoxFit.cover,
                       ),
                     )
                   : Center(
@@ -467,7 +478,7 @@ class _Feed_PageState extends State<Feed_Page> {
             ),
           ),
           Positioned(
-            top: screenHeight * 0.5,
+            top: screenHeight * 0.535,
             left: screenWidth * 0.05,
             child: Container(
               decoration: BoxDecoration(
@@ -483,7 +494,7 @@ class _Feed_PageState extends State<Feed_Page> {
                 ],
               ),
               width: screenWidth * 0.9,
-              height: screenHeight * 0.235,
+              height: screenHeight * 0.314,
               child: Padding(
                 padding: EdgeInsets.symmetric(
                     horizontal: 20.0, vertical: 20.0), // 행간을 넓혀줍니다.
@@ -491,26 +502,26 @@ class _Feed_PageState extends State<Feed_Page> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '• meat - $meatDescription',
+                      '$meatDescription',
                       style: TextStyle(
                         color: Color.fromRGBO(119, 131, 143, 1.0),
-                        fontSize: 17,
+                        fontSize: screenHeight * 0.02,
                       ),
                     ),
                     SizedBox(height: 10), // 행간을 넓혀줍니다.
                     Text(
-                      '• oil - $oilDescription',
+                      '$oilDescription',
                       style: TextStyle(
                         color: Color.fromRGBO(119, 131, 143, 1.0),
-                        fontSize: 17,
+                        fontSize: screenHeight * 0.02,
                       ),
                     ),
                     SizedBox(height: 10), // 행간을 넓혀줍니다.
                     Text(
-                      '• supplement - $supplementDescription',
+                      '$supplementDescription',
                       style: TextStyle(
                         color: Color.fromRGBO(119, 131, 143, 1.0),
-                        fontSize: 17,
+                        fontSize: screenHeight * 0.02,
                       ),
                     ),
                   ],
@@ -519,7 +530,7 @@ class _Feed_PageState extends State<Feed_Page> {
             ),
           ),
           Positioned(
-            bottom: screenHeight*0.055,
+            bottom: screenHeight*0.05,
             right: screenWidth*0.05,
             child: InkWell(
               onTap: _launchURL, // 버튼을 눌렀을 때 호출될 함수를 여기에 지정합니다.
@@ -551,7 +562,7 @@ class _Feed_PageState extends State<Feed_Page> {
                         '수의사님과 상담하기',
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 14,
+                          fontSize: screenHeight * 0.019,
                         ),
                       ),
                     ],
@@ -561,7 +572,7 @@ class _Feed_PageState extends State<Feed_Page> {
             ),
           ),
           Positioned(
-            bottom: screenHeight*0.055,
+            bottom: screenHeight*0.05,
             left: screenWidth * 0.054,
             child: InkWell(
               onTap: () {
@@ -603,7 +614,7 @@ class _Feed_PageState extends State<Feed_Page> {
                               '피드백 보내기',
                               style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 14,
+                                fontSize: screenHeight * 0.019,
                               ),
                             ),
                           ),
@@ -616,17 +627,10 @@ class _Feed_PageState extends State<Feed_Page> {
             ),
           ),
         ],
+        );
+      }
       ),
     );
-  }
-
-  _launchURL() async {
-    const url = 'https://open.kakao.com/o/sOmd7Zuf';
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
-    }
   }
 }
 
