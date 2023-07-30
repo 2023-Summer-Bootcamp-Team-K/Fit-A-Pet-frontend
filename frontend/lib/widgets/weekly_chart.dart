@@ -25,6 +25,7 @@ class WeeklyChart extends StatefulWidget {
   class _WeeklyChartPageState extends State<WeeklyChart> {
   List<Map<String, dynamic>> chartData = [];
   bool isDataFetched = false;
+  int lastDay = 0;
 
   @override
   void initState() {
@@ -85,31 +86,36 @@ class WeeklyChart extends StatefulWidget {
     final timestamp = DateTime.fromMillisecondsSinceEpoch(value.toInt());
     final String formattedTime =
         '${timestamp.day.toString().padLeft(2)}';
-    if (timestamp.day == 0) {
-      return Text(
-      "0",
-      style: TextStyle(
-        fontSize: 10,
-        color: const Color.fromARGB(255, 21, 20, 20),
-      ),
-    );
-    }
-    if (timestamp.day == 5) {
-      return Text(
-      "(일)",
-      style: TextStyle(
-        fontSize: 10,
-        color: const Color.fromARGB(255, 21, 20, 20),
-      ),
-    );
-    }
-    return Text(
+    if(timestamp.day == widget.endDay){
+      if(lastDay == widget.endDay){
+        lastDay = timestamp.day;
+        return Text(
+          "(일)",
+          style: TextStyle(
+            fontSize: 10,
+            color: const Color.fromARGB(255, 21, 20, 20),
+          ),
+        );
+      } else {
+        lastDay = timestamp.day;
+        return Text(
       formattedTime,
       style: TextStyle(
         fontSize: 9,
         color: const Color.fromARGB(255, 21, 20, 20),
       ),
     );
+      }
+    } else {
+      lastDay = timestamp.day;
+        return Text(
+      formattedTime,
+      style: TextStyle(
+        fontSize: 9,
+        color: const Color.fromARGB(255, 21, 20, 20),
+      ),
+    );
+    }
   }
 
   Widget leftTitleWidgets(double value, TitleMeta meta) {
@@ -159,7 +165,7 @@ class WeeklyChart extends StatefulWidget {
         drawVerticalLine: true,
         checkToShowHorizontalLine : showAllGrids,
         horizontalInterval: 40,
-        verticalInterval: 1 * 60 * 60 * 24000,
+        verticalInterval: 1 * 60 * 60 * 24000 - 32500,
         ),
         borderData: FlBorderData(
           show: false
@@ -170,7 +176,7 @@ class WeeklyChart extends StatefulWidget {
           sideTitles: SideTitles(
             showTitles: true,
             reservedSize: 15,
-            interval: 1 * 60 * 60 * 24000, 
+            interval: 1 * 60 * 60 * 24000 - 32500, 
             getTitlesWidget: bottomTitleWidgets, 
           ),
         ),
@@ -205,12 +211,13 @@ class WeeklyChart extends StatefulWidget {
               dotData: FlDotData(show: false),
               belowBarData: BarAreaData(show: false),
               color: Color.fromARGB(255, 135, 153, 239),
-              barWidth: 3,
+              barWidth: 1.7,
             ),
           ],
           lineTouchData: LineTouchData(
             touchTooltipData: LineTouchTooltipData(
               tooltipBgColor: Color.fromARGB(150, 135, 153, 239),
+              maxContentWidth: 150,
               getTooltipItems: (List<LineBarSpot> touchedSpots) {
                 return touchedSpots.map((spot) {
                   final DateTime timestamp = DateTime.fromMillisecondsSinceEpoch(spot.x.toInt());
