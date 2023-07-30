@@ -105,7 +105,7 @@ class _PetInfoPageState extends State<PetInfoPage> {
       padding: EdgeInsets.all(16.0),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(26), //16 -> 26
         // 체크된 컨테이너 보라색 테두리 추가
         border: pet.isChecked
             ? Border.all(color: Color.fromARGB(255, 135, 153, 239), width: 2)
