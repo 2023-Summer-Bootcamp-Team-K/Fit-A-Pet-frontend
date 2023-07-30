@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:frontend/constant.dart';
@@ -6,6 +7,7 @@ import 'package:page_transition/page_transition.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:time_picker_spinner/time_picker_spinner.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class NotificationPage extends StatefulWidget {
   const NotificationPage({Key? key}) : super(key: key);
@@ -17,6 +19,8 @@ class NotificationPage extends StatefulWidget {
 class _NotificationPageState extends State<NotificationPage> {
   int _selectedButtonIndex = -1;
   TimeOfDay? _selectedTime;
+  bool _isNoButtonPressed = false;
+  bool _isYesButtonPressed = false;
 
   @override
   void initState() {
@@ -63,7 +67,7 @@ class _NotificationPageState extends State<NotificationPage> {
               SizedBox(height: 70),
               Container(
                 child: Text(
-                  '알림 받고 싶은 시간을 설정해주세요',
+                  '알림 받고 싶은 시간을 설정해 주세요.',
                   style: TextStyle(
                     fontSize: 19,
                     fontWeight: FontWeight.bold,
@@ -126,7 +130,11 @@ class _NotificationPageState extends State<NotificationPage> {
                             fontSize: 20,
                           ),
                           highlightedTextStyle:
-                              const TextStyle(fontSize: 23, color: Colors.redAccent),
+                              const TextStyle(
+                                fontSize: 23, 
+                                color: kPrimaryColor,
+                                fontWeight: FontWeight.bold
+                                ),
                           onTimeChange: (time) {
                             setState(() {
                               _selectedTime = TimeOfDay.fromDateTime(time);
@@ -139,34 +147,40 @@ class _NotificationPageState extends State<NotificationPage> {
                 ),
               ),
               SizedBox(height: 20),
-              SizedBox(
-                height: 50,
-                width: 80,
-                child: ElevatedButton(
-                  onPressed: () {
-                    if (_selectedButtonIndex != -1) {
-                      AndroidNotificationDetails androidDetails =
-                          AndroidNotificationDetails('channelId', 'channelName',
-                              importance: Importance.max, priority: Priority.high);
-                      DarwinNotificationDetails iosDetails = DarwinNotificationDetails();
-                      _scheduleNotification(androidDetails, iosDetails);
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    primary: kPrimaryColor,
-                    onPrimary: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    height: 50,
+                    width: 330,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        if (_selectedButtonIndex != -1) {
+                          AndroidNotificationDetails androidDetails =
+                              AndroidNotificationDetails('channelId', 'channelName',
+                                  importance: Importance.max, priority: Priority.high);
+                          DarwinNotificationDetails iosDetails = DarwinNotificationDetails();
+                          _scheduleNotification(androidDetails, iosDetails);
+                          _TimeConfirmation(context);
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        primary: kPrimaryColor,
+                        onPrimary: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                      ),
+                      child: Text(
+                        '설정 완료',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
                   ),
-                  child: Text(
-                    '설정 완료',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
+                ],
               ),
               SizedBox(height: 40),
             ],
@@ -209,6 +223,114 @@ class _NotificationPageState extends State<NotificationPage> {
         ),
       ),
     );
+  }
+
+  Future<void> _TimeConfirmation(BuildContext context) async {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          title: Row(
+            children: [
+              Icon(
+                CupertinoIcons.check_mark_circled_solid,
+                color: Color(0xFF878CEF),
+              ),
+              SizedBox(width: 8),
+              Text('알림 확인'),
+            ],
+          ),
+          content: Text('설정한 시간에 알림을 받으시겠습니까?'),
+          actions: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 0),
+                  child: SizedBox(
+                    width: 100,
+                    height: 40,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: _isYesButtonPressed
+                            ? Color(0xFFC1CCFF).withAlpha(128)
+                            : Colors.white, 
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: TextButton(
+                        child: Text(
+                          '예',
+                          style: TextStyle(
+                            color: Color(0xFF878CEF),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        onPressed: () {
+                          setState(() {
+                          _isYesButtonPressed = true; 
+                          _isNoButtonPressed = false; 
+                          });
+                          Navigator.of(context).pop();
+                          Fluttertoast.showToast(
+                              msg: "   알림 설정이 완료되었습니다.   ",
+                              toastLength: Toast.LENGTH_LONG,
+                              gravity: ToastGravity.BOTTOM,
+                              timeInSecForIosWeb: 7,
+                              backgroundColor: kPrimaryColor,
+                              textColor: Colors.white,
+                              webShowClose: true,
+                              fontSize: 16.0
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(width: 20),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 2),
+                  child: SizedBox(
+                    width: 100,
+                    height: 40,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: _isNoButtonPressed
+                            ? Color(0xFFC1CCFF).withAlpha(128) //'아니오'버튼 눌렀을때
+                            : Colors.white, //'아니오'버튼 안눌렀을때
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: TextButton(
+                        child: Text(
+                          '아니요',
+                          style: TextStyle(
+                            color: Color(0xFF878CEF),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _isNoButtonPressed = !_isNoButtonPressed;
+                          });
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        );
+      },
+    ).then((value) {
+      setState(() {
+        _isYesButtonPressed = false;
+        _isNoButtonPressed = false;
+      });
+    });
   }
 
   void _scheduleNotification(
