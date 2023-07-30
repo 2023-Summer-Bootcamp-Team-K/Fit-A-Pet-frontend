@@ -131,8 +131,8 @@ class _NotificationPageState extends State<NotificationPage> {
                           ),
                           highlightedTextStyle:
                               const TextStyle(
-                                fontSize: 23, 
-                                color: kPrimaryColor,
+                                fontSize: 24, 
+                                color: Color.fromARGB(255, 135, 153, 239),
                                 fontWeight: FontWeight.bold
                                 ),
                           onTimeChange: (time) {
@@ -298,8 +298,8 @@ class _NotificationPageState extends State<NotificationPage> {
                     child: Container(
                       decoration: BoxDecoration(
                         color: _isNoButtonPressed
-                            ? Color(0xFFC1CCFF).withAlpha(128) //'아니오'버튼 눌렀을때
-                            : Colors.white, //'아니오'버튼 안눌렀을때
+                            ? Color(0xFFC1CCFF).withAlpha(128) 
+                            : Colors.white, 
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: TextButton(
