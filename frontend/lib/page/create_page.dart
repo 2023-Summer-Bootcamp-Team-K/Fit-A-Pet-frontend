@@ -364,6 +364,7 @@ class _PetRegistrationPageState extends State<PetRegistrationPage> {
                   filled: true,
                   contentPadding: const EdgeInsets.all(10),
                 ),
+                cursorColor: Color(0xFF878CEF), // 보라색 커서
               ),
               SizedBox(height: 16),
               TextField(
@@ -383,6 +384,7 @@ class _PetRegistrationPageState extends State<PetRegistrationPage> {
                   filled: true,
                   contentPadding: const EdgeInsets.all(10),
                 ),
+                cursorColor: Color(0xFF878CEF), // 보라색 커서
                 keyboardType: TextInputType.number,
               ),
               SizedBox(height: 16),
@@ -485,6 +487,7 @@ class _PetRegistrationPageState extends State<PetRegistrationPage> {
                   filled: true,
                   contentPadding: const EdgeInsets.all(10),
                 ),
+                cursorColor: Color(0xFF878CEF), // 보라색 커서
                 keyboardType: TextInputType.number,
               ),
               SizedBox(height: 16),
