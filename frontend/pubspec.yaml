@@ -50,6 +50,7 @@ dependencies:
   http: ^1.1.0
   page_transition: ^2.0.9
   fluttertoast: ^8.2.2
+  shared_preferences: ^2.2.0
 
 
 dev_dependencies:

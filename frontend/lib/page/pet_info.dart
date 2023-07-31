@@ -9,6 +9,7 @@ import 'package:frontend/model/user.dart';
 import 'package:frontend/page/create_page.dart';
 import 'package:frontend/page/edit_page.dart';
 import 'package:frontend/model/user.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Pet {
   final int id;
@@ -65,9 +66,11 @@ class _PetInfoPageState extends State<PetInfoPage> {
   bool isDrawerOpen = false;
   bool isChecked = false;
   List<Pet> pets = [];
+  List<int> _checkedPetIds = [];
   @override
   void initState() {
     super.initState();
+    loadCheckedPets();
     fetchPets();
   }
 
@@ -88,6 +91,28 @@ class _PetInfoPageState extends State<PetInfoPage> {
     }
   }
 
+  void saveCheckedPets() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<int> checkedPetIds = pets
+        .where((pet) => pet.isChecked)
+        .map((checkedPet) => checkedPet.id)
+        .toList();
+    prefs.setStringList('checkedPets', checkedPetIds.map((id) => id.toString()).toList());
+  }
+
+  void loadCheckedPets() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String>? checkedPetIds = prefs.getStringList('checkedPets');
+    if (checkedPetIds != null) {
+      setState(() {
+        _checkedPetIds = checkedPetIds.map(int.parse).toList();
+        pets.forEach((pet) {
+          pet.isChecked = checkedPetIds.contains(pet.id.toString());
+         });
+      });
+    }
+  }
+
   void onPetCheckboxChanged(Pet selectedPet) {
     setState(() {
       pets.forEach((pet) {
@@ -95,9 +120,38 @@ class _PetInfoPageState extends State<PetInfoPage> {
           pet.isChecked = false;
         }
       });
-
       selectedPet.isChecked = !selectedPet.isChecked;
+
+      _checkedPetIds = pets
+          .where((pet) => pet.isChecked)
+          .map((checkedPet) => checkedPet.id)
+          .toList();
+      print('Checked Pet IDs: $_checkedPetIds');
     });
+    saveCheckedPets();
+    showPetSelectedDialog(selectedPet);
+}
+
+  void showPetSelectedDialog(Pet selectedPet) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("알림"),
+          content: Text("반려 동물이 선택되었습니다."),
+          actions: <Widget>[
+            TextButton(
+              child: Text("확인"),
+              onPressed: () {
+                Navigator.pop(context); // Close the dialog
+                navigateToHomeScreen(selectedPet);
+                saveCheckedPets();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   Widget createPetContainer(Pet pet, User user) {
@@ -190,6 +244,7 @@ class _PetInfoPageState extends State<PetInfoPage> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
+    loadCheckedPets();
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
@@ -205,7 +260,7 @@ class _PetInfoPageState extends State<PetInfoPage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => HomeScreen(),
+                  builder: (context) => _checkedPetIds.isNotEmpty ? HomeScreen(petID: _checkedPetIds[0].toString()) : HomeScreen(petID: "0"),
                 ),
               );
             },
@@ -328,5 +383,14 @@ class _PetInfoPageState extends State<PetInfoPage> {
         final container = result as Container;
       });
     }
+  }
+
+  void navigateToHomeScreen(Pet selectedPet) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => HomeScreen(petID: selectedPet.id.toString()),
+      ),
+    );
   }
 }

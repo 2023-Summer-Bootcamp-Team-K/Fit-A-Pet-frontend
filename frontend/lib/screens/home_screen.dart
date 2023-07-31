@@ -12,6 +12,12 @@ import 'dart:convert';
 import 'package:intl/intl.dart';
 
 class HomeScreen extends StatefulWidget {
+  final String petID;
+
+  HomeScreen(
+    {required this.petID}
+  );
+
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -20,7 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
   double xOffset = 0;
   double yOffset = 0;
   bool isDrawerOpen = false;
-  String petID = '10';
+  String petID = '';
   double? hba1c;
   String? recentTimestamp;
   int? recentBloodSugar;
@@ -29,6 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    petID = widget.petID;
     fetchHba1cData();
     fetchRecentBloodSugarData(petID);
     fetchPetData();
@@ -95,7 +102,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void fetchPetData() async { // petID 파라미터를 제거
-  String apiUrlForPet = 'http://54.180.70.169/api/pets/detail/$petID/';
+  String apiUrlForPet = 'http://54.180.70.169/api/pets/detail/10/';
 
   try {
     final response = await http.get(
@@ -128,7 +135,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       body: Stack(
         children: [
-          SideMenu(),
+          SideMenu(petID: widget.petID),
           AnimatedContainer(
             transform: Matrix4.translationValues(xOffset, yOffset, 0)
               ..scale(isDrawerOpen ? 1.00 : 1.00),
@@ -174,7 +181,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => NotificationPage()),
+                                  builder: (context) => NotificationPage(petID: petID)),
                             );
                           },
                           child: Icon(CupertinoIcons.bell_fill),
@@ -478,7 +485,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               PageTransition(
                                 type: PageTransitionType.bottomToTop,
                                 duration: Duration(milliseconds: 250),
-                                child: ChartScreen(),
+                                child: ChartScreen(petID: petID),
                               ),
                             );
                           },

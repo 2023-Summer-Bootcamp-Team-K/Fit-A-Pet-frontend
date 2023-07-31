@@ -18,7 +18,7 @@ class _SplashScreenState extends State<SplashScreen>
 
     Future.delayed(Duration(seconds: 6), () {
       Navigator.of(context).pushReplacement(MaterialPageRoute(
-        builder: (_) => HomeScreen(),
+        builder: (_) => HomeScreen(petID: "0",),
       ));
     });
   }

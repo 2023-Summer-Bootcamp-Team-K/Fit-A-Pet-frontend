@@ -7,11 +7,13 @@ import 'package:frontend/screens/home_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 void main() {
-  runApp(const SideMenu());
+  runApp(const SideMenu(petID: ""));
 }
 
 class SideMenu extends StatefulWidget {
-  const SideMenu({Key? key}) : super(key: key);
+  final String petID;
+  
+  const SideMenu({Key? key, required this.petID}) : super(key: key);
 
   @override
   State<SideMenu> createState() => _SideMenuState();
@@ -73,7 +75,7 @@ class _SideMenuState extends State<SideMenu> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => ChartScreen()),
+                                builder: (context) => ChartScreen(petID: widget.petID)),
                           );
                         }
                       },

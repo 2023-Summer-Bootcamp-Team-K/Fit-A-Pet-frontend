@@ -7,6 +7,10 @@ import 'package:frontend/widgets/monthly_chart.dart';
 import 'package:frontend/widgets/weekly_chart.dart';
 
 class ChartScreen extends StatefulWidget {
+  final String petID;
+
+  ChartScreen({required this.petID});
+  
   @override
   _ChartScreenState createState() => _ChartScreenState();
 }
@@ -14,7 +18,7 @@ class ChartScreen extends StatefulWidget {
 class _ChartScreenState extends State<ChartScreen> {
 
   DateTime selectedDate = DateTime.now();
-  int petId = 10;
+  int petID = 0;
   List<Widget> _chartWidgets = [];
   DateTime startDate = DateTime.now().subtract(Duration(days: 7));
   DateTime endDate = DateTime.now();
@@ -25,6 +29,8 @@ class _ChartScreenState extends State<ChartScreen> {
   @override
   void initState() {
     super.initState();
+    int petId = int.parse(widget.petID);
+    petID = petId;
     _chartWidgets = [
       DailyChart(petId, selectedDate.month, selectedDate.day, onDateSelected),
       WeeklyChart(
@@ -91,7 +97,7 @@ class _ChartScreenState extends State<ChartScreen> {
   void onDateSelected(DateTime newDate) {
     setState(() {
       selectedDate = newDate;
-      _chartWidgets[0] = DailyChart(petId, selectedDate.month, selectedDate.day, onDateSelected);
+      _chartWidgets[0] = DailyChart(petID, selectedDate.month, selectedDate.day, onDateSelected);
     });
   }
 
@@ -184,7 +190,7 @@ class _ChartScreenState extends State<ChartScreen> {
               setState(() {
                 if (startDate != null && endDate != null) {
                   _chartWidgets[1] = WeeklyChart(
-                    petId: petId,
+                    petId: petID,
                     startMonth: startDate.month,
                     startDay: startDate.day,
                     endMonth: endDate.month,
@@ -192,10 +198,10 @@ class _ChartScreenState extends State<ChartScreen> {
                   );
                 }
                 if (selectedDate != null) {
-                  _chartWidgets[0] = DailyChart(petId, selectedDate.month, selectedDate.day, onDateSelected);
+                  _chartWidgets[0] = DailyChart(petID, selectedDate.month, selectedDate.day, onDateSelected);
                 }
                 if (selectedMonth != null) {
-                  _chartWidgets[2] = MonthlyChart(petId, selectedYear, selectedMonth);
+                  _chartWidgets[2] = MonthlyChart(petID, selectedYear, selectedMonth);
                 }
               });
               Navigator.pop(context);
@@ -216,7 +222,7 @@ class _ChartScreenState extends State<ChartScreen> {
           setState(() {
             selectedMonth = args.value.startDate!.month;
             selectedYear = args.value.startDate!.year;
-            _chartWidgets[2] = MonthlyChart(petId, selectedYear, selectedMonth);
+            _chartWidgets[2] = MonthlyChart(petID, selectedYear, selectedMonth);
           });
         }
       },
@@ -272,7 +278,7 @@ class _ChartScreenState extends State<ChartScreen> {
             ),
             onPressed: () {
               setState(() {
-                _chartWidgets[2] = MonthlyChart(petId, selectedYear, selectedMonth);
+                _chartWidgets[2] = MonthlyChart(petID, selectedYear, selectedMonth);
               });
               Navigator.pop(context);
             },

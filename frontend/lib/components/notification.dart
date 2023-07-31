@@ -10,7 +10,9 @@ import 'package:time_picker_spinner/time_picker_spinner.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class NotificationPage extends StatefulWidget {
-  const NotificationPage({Key? key}) : super(key: key);
+  final String petID;
+
+  const NotificationPage({Key? key, required this.petID}) : super(key: key);
 
   @override
   _NotificationPageState createState() => _NotificationPageState();
@@ -53,7 +55,7 @@ class _NotificationPageState extends State<NotificationPage> {
               PageTransition(
                 type: PageTransitionType.leftToRight,
                 duration: Duration(milliseconds: 250),
-                child: HomeScreen(),
+                child: HomeScreen(petID: widget.petID),
               ),
             );
           },
