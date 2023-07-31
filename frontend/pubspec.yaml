@@ -48,7 +48,9 @@ dependencies:
   date_format: ^2.0.7
   intl: ^0.18.0
   http: ^1.1.0
-  page_transition: ^2.0.4
+  page_transition: ^2.0.9
+  fluttertoast: ^8.2.2
+
 
 dev_dependencies:
   flutter_test:
@@ -112,6 +114,7 @@ flutter:
     - images/feedpage.png
     - images/doctor.png
     - images/user.jpeg
+    - assets/logo.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

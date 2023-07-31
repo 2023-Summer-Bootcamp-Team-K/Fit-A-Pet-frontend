@@ -10,7 +10,6 @@ import 'package:frontend/page/create_page.dart';
 import 'package:frontend/page/edit_page.dart';
 import 'package:frontend/model/user.dart';
 
-
 class Pet {
   final int id;
   final String name;
@@ -107,7 +106,10 @@ class _PetInfoPageState extends State<PetInfoPage> {
       padding: EdgeInsets.all(16.0),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(26), //16 -> 26
+        border: pet.isChecked
+            ? Border.all(color: Color.fromARGB(255, 135, 153, 239), width: 2)
+            : null,
       ),
       child: Row(
         children: [
@@ -163,7 +165,7 @@ class _PetInfoPageState extends State<PetInfoPage> {
                 Padding(
                   padding: EdgeInsets.only(bottom: 4), 
                   child: Text(
-                    '센서착용날짜: ${pet.startedDate.toLocal().year}-${pet.startedDate.toLocal().month.toString().padLeft(2, '0')}-${pet.startedDate.toLocal().day.toString().padLeft(2, '0')}',
+                    '센서 착용 날짜: ${pet.startedDate.toLocal().year}-${pet.startedDate.toLocal().month.toString().padLeft(2, '0')}-${pet.startedDate.toLocal().day.toString().padLeft(2, '0')}',
                     style: TextStyle(fontFamily: 'Fit-A-Pet'),
                   ),
                 ),
@@ -172,8 +174,10 @@ class _PetInfoPageState extends State<PetInfoPage> {
                   child: Text('사료: ${pet.feed ?? 'Unknown'}', style: TextStyle(fontFamily: 'Fit-A-Pet')),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(bottom: 4), 
-                  child: Text('필요영양제: ${pet.soreSpot ?? 'Unknown'}', style: TextStyle(fontFamily: 'Fit-A-Pet')),
+                  padding: EdgeInsets.only(
+                      bottom: 4), // Add bottom padding of 4 units
+                  child: Text('불편한 부위: ${pet.soreSpot ?? 'Unknown'}',
+                      style: TextStyle(fontFamily: 'Fit-A-Pet')),
                 ),
               ],
             ),
@@ -186,7 +190,6 @@ class _PetInfoPageState extends State<PetInfoPage> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
-
     return MaterialApp(
        home: Scaffold(
          backgroundColor: Color(0xFFC1CCFF), 
@@ -254,24 +257,24 @@ class _PetInfoPageState extends State<PetInfoPage> {
                                       materialTapTargetSize:
                                           MaterialTapTargetSize.padded,
                                     ),
-                                  ),
-                                ),
-                                Positioned(
-                                  top: 10,
-                                  right: 15,
-                                  child: CircleAvatar(
-                                    backgroundColor: Colors.white,
-                                    radius: 20,
-                                    child: IconButton(
-                                      icon:
-                                          Icon(Icons.edit, color: Colors.black),
-                                      onPressed: () {
-                                        navigateToEditPage(context, pet);
-                                      },
+                                    Positioned(
+                                      top: 10,
+                                      right: 15,
+                                      child: CircleAvatar(
+                                        backgroundColor: Colors.white,
+                                        radius: 20,
+                                        child: IconButton(
+                                          icon: Icon(Icons.edit,
+                                              color: Colors.black),
+                                          onPressed: () {
+                                            navigateToEditPage(context, pet);
+                                          },
+                                        ),
+                                      ),
                                     ),
-                                  ),
+                                  ],
                                 ),
-                              ],
+                              ),
                             ),
                           ),
                          ),

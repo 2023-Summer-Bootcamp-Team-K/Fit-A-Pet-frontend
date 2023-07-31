@@ -114,19 +114,19 @@ class _ChartScreenState extends State<ChartScreen> {
             endDate = args.value.endDate!;
           });
           String formattedDate = getFormattedDateRange(args.value);
-          print('Formatted Date: $formattedDate');
+          
+          
+          ('Formatted Date: $formattedDate');
         } else if (_selectedIndex == 0 && args.value is DateTime) {
           setState(() {
             selectedDate = args.value;
           });
           String formattedDate = "${selectedDate.month}월 ${selectedDate.day}일";
-          print('Formatted Date: $formattedDate');
         } else if (_selectedIndex == 2 && args.value is DateTime) {
           setState(() {
             selectedMonth = args.value.month;
           });
           String formattedMonth = "${selectedMonth}월";
-          print('Selected Month: $formattedMonth');
         }
       },
       startRangeSelectionColor: kPrimaryColor,
@@ -138,6 +138,13 @@ class _ChartScreenState extends State<ChartScreen> {
         fontSize: 14,
       ),
       todayHighlightColor: kPrimaryColor,
+      monthCellStyle: DateRangePickerMonthCellStyle(
+        todayTextStyle: TextStyle(
+          color: Color.fromARGB(255, 135, 153, 239), 
+          fontWeight: FontWeight.bold,
+          fontSize: 13,
+        ),
+      ),
       selectionColor: kPrimaryColor,
       minDate: DateTime(2022),
       maxDate: DateTime.now(),
@@ -260,10 +267,10 @@ class _ChartScreenState extends State<ChartScreen> {
        backgroundColor: kPrimaryColor,
        elevation: 0,
        centerTitle: true,
-       title: Text("차트 분석"),
+       title: Text("혈당 차트 분석"),
        titleTextStyle: TextStyle(
          fontWeight: FontWeight.bold,
-         fontSize: 23,
+         fontSize: 22,
        ),
        leading: GestureDetector(
          onTap: () {
@@ -321,7 +328,7 @@ class _ChartScreenState extends State<ChartScreen> {
                      ),
                    ),
                  ),
-                 SizedBox(width: 10),
+                SizedBox(width: 10),
                  GestureDetector(
                    onTap: () {
                      _onTogglePressed(1);
@@ -475,9 +482,9 @@ class _ChartScreenState extends State<ChartScreen> {
                                fontWeight: FontWeight.bold,
                              ),
                            ),
-                           SizedBox(height: 5),
+                           SizedBox(height: 10),
                            Text(
-                             '정상 범위 - 70~140mg/dl(개, 고양이)',
+                             '   정상 범위 - 70~140mg/dL(개, 고양이)',
                              style: TextStyle(
                                color: Colors.black,
                                fontSize: 14,
@@ -485,7 +492,7 @@ class _ChartScreenState extends State<ChartScreen> {
                            ),
                            SizedBox(height: 5),
                            Text(
-                             '당뇨 시 - 개 : 200mg/dl, 고양이: 250mg/dl',
+                             '   당뇨 시 - 개 : 200mg/dL, 고양이: 250mg/dL',
                              style: TextStyle(
                                color: Colors.black,
                                fontSize: 14,
@@ -519,7 +526,7 @@ class _ChartScreenState extends State<ChartScreen> {
                                fontWeight: FontWeight.bold,
                              ),
                            ),
-                           SizedBox(height: 5),
+                           SizedBox(height: 10),
                            Text(
                              '1. 인슐린 투여 후 최저점',
                              style: TextStyle(
@@ -529,7 +536,7 @@ class _ChartScreenState extends State<ChartScreen> {
                            ),
                            SizedBox(height: 5),
                            Text(
-                             '    (1) 150mg/dl 이하 - 경계',
+                             '     (1) 150mg/dL 이하 - 경계',
                              style: TextStyle(
                                color: Colors.black,
                                fontSize: 14,
@@ -537,7 +544,7 @@ class _ChartScreenState extends State<ChartScreen> {
                            ),
                            SizedBox(height: 5),
                            Text(
-                             '    (2) 120mg/dl 이하 - 주의',
+                             '     (2) 120mg/dL 이하 - 주의',
                              style: TextStyle(
                                color: Colors.black,
                                fontSize: 14,
@@ -545,7 +552,7 @@ class _ChartScreenState extends State<ChartScreen> {
                            ),
                            SizedBox(height: 5),
                            Text(
-                             '    (3) 100mg/dl 이하 - 병원 내원 및 당 섭취 권고',
+                             '     (3) 100mg/dL 이하 - 병원 내원 및 당 섭취 권고',
                              style: TextStyle(
                                color: Colors.black,
                                fontSize: 14,
@@ -561,7 +568,7 @@ class _ChartScreenState extends State<ChartScreen> {
                            ),
                            SizedBox(height: 5),
                            Text(
-                             '    (1) 고혈당 사료/간식 : 100mg/dl 이상 상승',
+                             '     (1) 고혈당 사료/간식 : 100mg/dL 이상 상승',
                              style: TextStyle(
                                color: Colors.black,
                                fontSize: 14,
@@ -569,7 +576,7 @@ class _ChartScreenState extends State<ChartScreen> {
                            ),
                            SizedBox(height: 5),
                            Text(
-                             '    (2) 저혈당 사료/간식 : 30mg/dl 이상 상승',
+                             '     (2) 저혈당 사료/간식 : 30mg/dL 이상 상승',
                              style: TextStyle(
                                color: Colors.black,
                                fontSize: 14,

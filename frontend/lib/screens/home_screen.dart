@@ -209,7 +209,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               Transform.translate(
                                 offset: Offset(0, -screenWidth * 0.02),
                                 child: Text(
-                                  '$petName, 반가워요!',
+                                  ' $petName, 반가워요!',
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontSize: screenWidth * 0.09,
@@ -421,7 +421,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 top: screenWidth * 0.045,
                                 left: screenWidth * 0.135,
                                 child: Text(
-                                  '당화혈 색소',
+                                  '당화혈색소',
                                   style: TextStyle(
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold,
@@ -508,7 +508,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        '혈당차트',
+                                        '혈당 차트 분석',
                                         style: TextStyle(
                                           color: Colors.white,
                                           fontSize: screenWidth * 0.06,
@@ -564,7 +564,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        '사료추천',
+                                        '사료 추천',
                                         style: TextStyle(
                                           color: Colors.white,
                                           fontSize: screenWidth * 0.06,
@@ -586,18 +586,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                       ),
-                      Positioned(
-                        bottom: screenWidth * 0.28,
-                        right: screenWidth * 0.06,
-                        child: FloatingActionButton(
-                          backgroundColor: Colors.white,
-                          onPressed: _launchURL,
-                          child: Image.asset(
-                            'assets/icons/kakao_icon.png',
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                      ),
                     ],
                   ),
                 ],
@@ -606,6 +594,13 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _launchURL,
+        child: Image.asset(
+          'assets/icons/kakao_icon.png',
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
     );
   }
 

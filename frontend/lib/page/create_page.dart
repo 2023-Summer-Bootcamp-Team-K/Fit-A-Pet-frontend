@@ -309,7 +309,10 @@ class _PetRegistrationPageState extends State<PetRegistrationPage> {
       appBar: AppBar(
         centerTitle: true,
         elevation: 0,
-        title: Text('반려동물 추가', style: TextStyle(fontWeight: FontWeight.bold)),
+        title: Text(
+          '반려동물 추가',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
+        ),
         backgroundColor: kPrimaryColor,
       ),
       body: Container(
@@ -350,11 +353,18 @@ class _PetRegistrationPageState extends State<PetRegistrationPage> {
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
                   ),
+                  focusedBorder: OutlineInputBorder(
+                    // 클릭했을 때의 테두리 색상 설정
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: BorderSide(
+                        color: Color(0xFF878CEF), width: 2.0), // 보라색 테두리
+                  ),
                   hintText: '이름',
                   fillColor: Colors.white,
                   filled: true,
                   contentPadding: const EdgeInsets.all(10),
                 ),
+                cursorColor: Color(0xFF878CEF), // 보라색 커서
               ),
               SizedBox(height: 16),
               TextField(
@@ -363,11 +373,18 @@ class _PetRegistrationPageState extends State<PetRegistrationPage> {
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
                   ),
+                  focusedBorder: OutlineInputBorder(
+                    // 클릭했을 때의 테두리 색상 설정
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: BorderSide(
+                        color: Color(0xFF878CEF), width: 2.0), // 보라색 테두리
+                  ),
                   hintText: '나이',
                   fillColor: Colors.white,
                   filled: true,
                   contentPadding: const EdgeInsets.all(10),
                 ),
+                cursorColor: Color(0xFF878CEF), // 보라색 커서
                 keyboardType: TextInputType.number,
               ),
               SizedBox(height: 16),
@@ -375,6 +392,12 @@ class _PetRegistrationPageState extends State<PetRegistrationPage> {
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    // 클릭했을 때의 테두리 색상 설정
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: BorderSide(
+                        color: Color(0xFF878CEF), width: 2.0), // 보라색 테두리
                   ),
                   filled: true,
                   fillColor: Colors.white,
@@ -410,6 +433,12 @@ class _PetRegistrationPageState extends State<PetRegistrationPage> {
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    // 클릭했을 때의 테두리 색상 설정
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: BorderSide(
+                        color: Color(0xFF878CEF), width: 2.0), // 보라색 테두리
                   ),
                   filled: true,
                   fillColor: Colors.white,
@@ -447,11 +476,18 @@ class _PetRegistrationPageState extends State<PetRegistrationPage> {
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
                   ),
+                  focusedBorder: OutlineInputBorder(
+                    // 클릭했을 때의 테두리 색상 설정
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: BorderSide(
+                        color: Color(0xFF878CEF), width: 2.0), // 보라색 테두리
+                  ),
                   hintText: '몸무게',
                   fillColor: Colors.white,
                   filled: true,
                   contentPadding: const EdgeInsets.all(10),
                 ),
+                cursorColor: Color(0xFF878CEF), // 보라색 커서
                 keyboardType: TextInputType.number,
               ),
               SizedBox(height: 16),
@@ -464,7 +500,7 @@ class _PetRegistrationPageState extends State<PetRegistrationPage> {
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(16),
                       ),
-                      hintText: '센서착용날짜',
+                      hintText: '센서 착용 날짜',
                       fillColor: Colors.white,
                       filled: true,
                       contentPadding: const EdgeInsets.all(10),
@@ -477,6 +513,12 @@ class _PetRegistrationPageState extends State<PetRegistrationPage> {
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    // 클릭했을 때의 테두리 색상 설정
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: BorderSide(
+                        color: Color(0xFF878CEF), width: 2.0), // 보라색 테두리
                   ),
                   filled: true,
                   fillColor: Colors.white,
@@ -512,6 +554,12 @@ class _PetRegistrationPageState extends State<PetRegistrationPage> {
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    // 클릭했을 때의 테두리 색상 설정
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: BorderSide(
+                        color: Color(0xFF878CEF), width: 2.0), // 보라색 테두리
                   ),
                   filled: true,
                   fillColor: Colors.white,
@@ -553,7 +601,7 @@ class _PetRegistrationPageState extends State<PetRegistrationPage> {
                   padding: EdgeInsets.all(10),
                 ),
                 child: Text(
-                  "입력완료",
+                  "입력 완료",
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 20,
