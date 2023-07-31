@@ -191,43 +191,44 @@ class _PetInfoPageState extends State<PetInfoPage> {
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
     return MaterialApp(
-       home: Scaffold(
-         backgroundColor: Color(0xFFC1CCFF), 
-         appBar: AppBar(
-           elevation: 0,
-           centerTitle: true,
-           title: Text("반려동물 정보", style: TextStyle(fontWeight: FontWeight.bold, fontFamily: 'Fit-A-Pet')),
-           backgroundColor: Color(0xFFC1CCFF),
-           leading: IconButton(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        backgroundColor: Color(0xFFC1CCFF), 
+        appBar: AppBar(
+          elevation: 0,
+          centerTitle: true,
+          title: Text("반려동물 정보", style: TextStyle(fontWeight: FontWeight.bold, fontFamily: 'Fit-A-Pet', fontSize: 22)),
+          backgroundColor: Color(0xFFC1CCFF),
+          leading: IconButton(
             icon: Icon(Icons.arrow_back_ios), 
             onPressed: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) => HomeScreen(),
-                  ),
-                );
+                ),
+              );
+            },
+          ),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.refresh),
+              onPressed: () {
+                fetchPets();
               },
             ),
-           actions: [
-             IconButton(
-               icon: Icon(Icons.refresh),
-               onPressed: () {
-                 fetchPets();
-               },
-             ),
-           ],
-         ),
-         body: SingleChildScrollView(
-           child: Column(
-             children: [
-               SizedBox(height: 0),
-               Center(
-                 child: Column(
-                   children: pets.map((pet) {
-                     return Column(
-                       children: [
-                         SizedBox(height: 20),
+          ],
+        ),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              SizedBox(height: 0),
+              Center(
+                child: Column(
+                  children: pets.map((pet) {
+                    return Column(
+                      children: [
+                        SizedBox(height: 20),
                         SizedBox(
                           width: MediaQuery.of(context).size.width * 0.9,
                           child: Center(
@@ -254,50 +255,48 @@ class _PetInfoPageState extends State<PetInfoPage> {
                                       ),
                                       checkColor: Colors.white,
                                       activeColor: Color(0xFFC1CCFF),
-                                      materialTapTargetSize:
-                                          MaterialTapTargetSize.padded,
+                                      materialTapTargetSize: MaterialTapTargetSize.padded,
                                     ),
-                                    Positioned(
-                                      top: 10,
-                                      right: 15,
-                                      child: CircleAvatar(
-                                        backgroundColor: Colors.white,
-                                        radius: 20,
-                                        child: IconButton(
-                                          icon: Icon(Icons.edit,
-                                              color: Colors.black),
-                                          onPressed: () {
-                                            navigateToEditPage(context, pet);
-                                          },
-                                        ),
-                                      ),
-                                    ),
-                                  ],
+                                  ),
                                 ),
-                              ),
+                                Positioned(
+                                  top: 10,
+                                  right: 15,
+                                  child: CircleAvatar(
+                                    backgroundColor: Colors.white,
+                                    radius: 20,
+                                    child: IconButton(
+                                      icon: Icon(Icons.edit, color: Colors.black),
+                                      onPressed: () {
+                                        navigateToEditPage(context, pet);
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ], // Add a closing square bracket here
                             ),
                           ),
-                         ),
-                       ],
-                     );
-                   }).toList(),
-                 ),
-               ),
-               SizedBox(height: 35),
-             ],
-           ),
-         ),
-         floatingActionButton: FloatingActionButton(
-           onPressed: () {
-             navigateToCreatePage(context);
-           },
-           child: Icon(Icons.add),
-           backgroundColor: Color.fromARGB(255, 135, 153, 239),
-         ),
-         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-       ),
-     );
-   }
+                        ),
+                      ],
+                    );
+                  }).toList(),
+                ),
+              ),
+              SizedBox(height: 35),
+            ],
+          ),
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            navigateToCreatePage(context);
+          },
+          child: Icon(Icons.add),
+          backgroundColor: Color.fromARGB(255, 135, 153, 239),
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      ),
+    );
+  }
 
   int checkedCount = 0;
   void navigateToEditPage(BuildContext context, Pet pet) async {
