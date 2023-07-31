@@ -27,7 +27,7 @@ class _Feed_PageState extends State<Feed_Page> {
   String oilImageUrl = '';
 
   String supplementName = '';
-  String supplementDescription = '';  
+  String supplementDescription = '';
   String supplementImageUrl = '';
 
   String petName = '';
@@ -41,6 +41,14 @@ class _Feed_PageState extends State<Feed_Page> {
     super.initState();
     fetchFeedData();
     fetchPetData(widget.petID);
+  }
+  _launchURL() async {
+    const url = 'https://open.kakao.com/o/sOmd7Zuf';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 
   void fetchFeedData() async {
@@ -120,7 +128,7 @@ class _Feed_PageState extends State<Feed_Page> {
     }
   }
 
-  @override
+   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
@@ -160,8 +168,13 @@ class _Feed_PageState extends State<Feed_Page> {
           ),
         ),
       ),
-      body: Stack(
-        children: [
+      body: LayoutBuilder(
+      builder: (context, constraints) {
+        final screenWidth = constraints.maxWidth;
+        final screenHeight = constraints.maxHeight;
+
+        return Stack(
+          children: [
           Positioned(
             top: 0,
             left: 0,
@@ -175,27 +188,27 @@ class _Feed_PageState extends State<Feed_Page> {
             ),
           ),
           Positioned(
-            top: 0.4,
-            left: 0,
-            right: 0,
+            top: screenHeight * 0.005,
+            left: screenWidth * 0,
+            right: screenWidth * 0,
             child: Container(
-              width: double.infinity,
+              width: screenWidth*0.38,
               height: screenHeight * 0.38,
               child: CustomPaint(
-                painter: MyOvalPainter(), // MyOvalPainter는 아래에서 정의할 커스텀 페인터입니다.
+                painter: MyOvalPainter(),
               ),
             ),
           ),
           Positioned(
             top: screenHeight * 0.004,
-            right: screenWidth * 0.09,
+            right: screenWidth * 0.06,
             child: Center(
               child: Text(
                 '# $petName\n# 키워드',
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 26,
-                  // fontWeight: FontWeight.bold,
+                  fontSize: screenHeight * 0.035,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
@@ -203,15 +216,15 @@ class _Feed_PageState extends State<Feed_Page> {
           Positioned(
             top: screenHeight * 0,
             left: screenWidth * 0,
-            width: screenWidth * 0.5,
-            height: screenWidth * 0.5,
+            width: screenWidth * 0.45,
+            height: screenWidth * 0.45,
             child: Image.asset(
               'images/feedpage.png',
             ),
           ),
           Positioned(
-            top: screenHeight * 0.099,
-            right: screenWidth * 0.14,
+            top: screenHeight * 0.11,
+            right: screenWidth * 0.17,
             child: Stack(
               children: [
                 Container(
@@ -224,7 +237,7 @@ class _Feed_PageState extends State<Feed_Page> {
                           ' # $petAge세',
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: 19,
+                            fontSize: screenHeight * 0.022,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -233,7 +246,7 @@ class _Feed_PageState extends State<Feed_Page> {
                           ' # ${petWeight.toStringAsFixed(1)} kg',
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: 19,
+                            fontSize: screenHeight * 0.022,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -242,7 +255,7 @@ class _Feed_PageState extends State<Feed_Page> {
                           ' # $feed',
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: 19,
+                            fontSize: screenHeight * 0.022,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -251,7 +264,7 @@ class _Feed_PageState extends State<Feed_Page> {
                           ' # 민감한 $soreSpot',
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: 19,
+                            fontSize: screenHeight * 0.022,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -284,7 +297,7 @@ class _Feed_PageState extends State<Feed_Page> {
                 child: Text(
                   'meat',
                   style: TextStyle(
-                    fontSize: 13,
+                    fontSize: screenHeight * 0.015,
                     fontWeight: FontWeight.bold,
                     color: Color.fromRGBO(119, 131, 143, 1.0),
                   ),
@@ -314,7 +327,7 @@ class _Feed_PageState extends State<Feed_Page> {
                 child: Text(
                   'oil',
                   style: TextStyle(
-                    fontSize: 13,
+                    fontSize: screenHeight * 0.015,
                     fontWeight: FontWeight.bold,
                     color: Color.fromRGBO(119, 131, 143, 1.0),
                   ),
@@ -344,7 +357,7 @@ class _Feed_PageState extends State<Feed_Page> {
                 child: Text(
                   'supplement',
                   style: TextStyle(
-                    fontSize: 13,
+                    fontSize: screenHeight * 0.015,
                     fontWeight: FontWeight.bold,
                     color: Color.fromRGBO(119, 131, 143, 1.0),
                   ),
@@ -353,7 +366,7 @@ class _Feed_PageState extends State<Feed_Page> {
             ),
           ),
           Positioned(
-            top: screenHeight * 0.35,
+            top: screenHeight * 0.36,
             left: screenWidth * 0.06,
             child: Container(
               width: screenWidth * 0.27,
@@ -391,7 +404,7 @@ class _Feed_PageState extends State<Feed_Page> {
             ),
           ),
           Positioned(
-            top: screenHeight * 0.35,
+            top: screenHeight * 0.36,
             left: screenWidth * 0.37,
             child: Container(
               width: screenWidth * 0.27,
@@ -426,7 +439,7 @@ class _Feed_PageState extends State<Feed_Page> {
             ),
           ),
           Positioned(
-            top: screenHeight * 0.35,
+            top: screenHeight * 0.36,
             left: screenWidth * 0.68,
             child: Container(
               width: screenWidth * 0.27,
@@ -448,11 +461,9 @@ class _Feed_PageState extends State<Feed_Page> {
                       borderRadius: BorderRadius.circular(30),
                       child: Image.network(
                         supplementImageUrl,
-                        width: screenWidth *
-                            0.27, // 이미지를 Container의 가로 크기와 일치시킵니다.
-                        height: screenWidth *
-                            0.27, // 이미지를 Container의 세로 크기와 일치시킵니다.
-                        fit: BoxFit.cover, // 이미지가 Container에 맞게 크기 조정됩니다.
+                        width: screenWidth *0.27, 
+                        height: screenWidth *0.27, 
+                        fit: BoxFit.cover,
                       ),
                     )
                   : Center(
@@ -467,7 +478,7 @@ class _Feed_PageState extends State<Feed_Page> {
             ),
           ),
           Positioned(
-            top: screenHeight * 0.5,
+            top: screenHeight * 0.535,
             left: screenWidth * 0.05,
             child: Container(
               decoration: BoxDecoration(
@@ -483,18 +494,34 @@ class _Feed_PageState extends State<Feed_Page> {
                 ],
               ),
               width: screenWidth * 0.9,
-              height: screenHeight * 0.235,
-              child: Center(
-                child: Wrap(
-                  alignment: WrapAlignment.center,
+              height: screenHeight * 0.314,
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: 20.0, vertical: 20.0), // 행간을 넓혀줍니다.
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      ' $meatDescription \n'
-                      ' $oilDescription \n'
-                      ' $supplementDescription',
+                      '$meatDescription',
                       style: TextStyle(
                         color: Color.fromRGBO(119, 131, 143, 1.0),
-                        fontSize: 17,
+                        fontSize: screenHeight * 0.02,
+                      ),
+                    ),
+                    SizedBox(height: 10), // 행간을 넓혀줍니다.
+                    Text(
+                      '$oilDescription',
+                      style: TextStyle(
+                        color: Color.fromRGBO(119, 131, 143, 1.0),
+                        fontSize: screenHeight * 0.02,
+                      ),
+                    ),
+                    SizedBox(height: 10), // 행간을 넓혀줍니다.
+                    Text(
+                      '$supplementDescription',
+                      style: TextStyle(
+                        color: Color.fromRGBO(119, 131, 143, 1.0),
+                        fontSize: screenHeight * 0.02,
                       ),
                     ),
                   ],
@@ -503,12 +530,12 @@ class _Feed_PageState extends State<Feed_Page> {
             ),
           ),
           Positioned(
-            bottom: 50,
-            right: 23,
+            bottom: screenHeight*0.05,
+            right: screenWidth*0.05,
             child: InkWell(
               onTap: _launchURL, // 버튼을 눌렀을 때 호출될 함수를 여기에 지정합니다.
               child: Container(
-                width: screenWidth * 0.41,
+                width: screenWidth * 0.43,
                 height: screenWidth * 0.14,
                 decoration: BoxDecoration(
                   color: Color(0xFFF86A1FF),
@@ -535,7 +562,7 @@ class _Feed_PageState extends State<Feed_Page> {
                         '수의사님과 상담하기',
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 14,
+                          fontSize: screenHeight * 0.019,
                         ),
                       ),
                     ],
@@ -545,14 +572,14 @@ class _Feed_PageState extends State<Feed_Page> {
             ),
           ),
           Positioned(
-            bottom: 50,
-            left: 23,
+            bottom: screenHeight*0.05,
+            left: screenWidth * 0.054,
             child: InkWell(
               onTap: () {
                 _showFeedbackDialog(context); // 클릭 시 피드백 다이얼로그를 띄웁니다.
               },
               child: Container(
-                width: screenWidth * 0.41,
+                width: screenWidth * 0.43,
                 height: screenWidth * 0.14,
                 decoration: BoxDecoration(
                   color: Color(0xFFF86A1FF),
@@ -580,11 +607,15 @@ class _Feed_PageState extends State<Feed_Page> {
                       SizedBox(width: 1),
                       Expanded(
                         child: Center(
-                          child: Text(
-                            '피드백 보내기',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 14,
+                          child: Padding(
+                            padding: EdgeInsets.only(
+                                right: 8), // 이 부분을 조절하여 텍스트를 왼쪽으로 옮깁니다.
+                            child: Text(
+                              '피드백 보내기',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: screenHeight * 0.019,
+                              ),
                             ),
                           ),
                         ),
@@ -596,17 +627,10 @@ class _Feed_PageState extends State<Feed_Page> {
             ),
           ),
         ],
+        );
+      }
       ),
     );
-  }
-
-  _launchURL() async {
-    const url = 'https://open.kakao.com/o/sOmd7Zuf';
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
-    }
   }
 }
 
@@ -653,26 +677,37 @@ class _FeedbackDialogState extends State<FeedbackDialog> {
             SizedBox(height: 12.0),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 5.0),
-              child: TextField(
-                controller: _feedbackController,
-                maxLines: 5,
-                decoration: InputDecoration(
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide.none,
-                    borderRadius: _textFieldBorderRadius,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: _textFieldBorderRadius,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      blurRadius: 3,
+                      spreadRadius: 1,
+                      offset: Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: TextField(
+                  controller: _feedbackController,
+                  maxLines: 5,
+                  decoration: InputDecoration(
+                    hintText: '사료 추천에 대한 피드백을 작성해주세요.',
+                    hintStyle: TextStyle(color: Color.fromARGB(255, 119, 131, 143)),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide.none,
+                      borderRadius: _textFieldBorderRadius,
+                    ),
+                    filled: true,
+                    fillColor: Colors.white,
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.white, width: 1),
+                      borderRadius: _textFieldBorderRadius,
+                    ),
                   ),
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide.none,
-                    borderRadius: _textFieldBorderRadius,
-                  ),
-                  hintText: '사료 추천에 대한 피드백을 작성해주세요.',
-                  hintStyle: TextStyle(color: Color.fromARGB(255, 119, 131, 143)),
-                  filled: true,
-                  fillColor: Colors.white,
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.white, width: 2),
-                    borderRadius: _textFieldBorderRadius,
-                  ),
+                  style: TextStyle(color: Colors.black),
                 ),
               ),
             ),
@@ -682,7 +717,8 @@ class _FeedbackDialogState extends State<FeedbackDialog> {
               children: [
                 TextButton(
                   style: TextButton.styleFrom(
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
                   ),
                   onPressed: () {
                     _submitFeedback();
@@ -699,7 +735,8 @@ class _FeedbackDialogState extends State<FeedbackDialog> {
                 SizedBox(width: 8.0),
                 TextButton(
                   style: TextButton.styleFrom(
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
                   ),
                   onPressed: () {
                     Navigator.of(context).pop();
@@ -723,7 +760,8 @@ class _FeedbackDialogState extends State<FeedbackDialog> {
 
   void _submitFeedback() async {
     String feedbackText = _feedbackController.text;
-    String apiUrl = 'http://54.180.70.169/api/suggestions/1/'; // API 엔드포인트를 여기에 입력하세요.
+    String apiUrl =
+        'http://54.180.70.169/api/suggestions/1/'; // API 엔드포인트를 여기에 입력하세요.
 
     try {
       final response = await http.post(

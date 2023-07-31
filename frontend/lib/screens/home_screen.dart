@@ -4,6 +4,7 @@ import 'package:frontend/components/notification.dart';
 import 'package:frontend/components/side_menu.dart';
 import 'package:frontend/constant.dart';
 import 'package:frontend/screens/chart_screen.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:frontend/screens/feed.dart';
 import 'package:http/http.dart' as http;
@@ -20,15 +21,17 @@ class _HomeScreenState extends State<HomeScreen> {
   double yOffset = 0;
   bool isDrawerOpen = false;
   String petID = '10';
-  int? hba1c;
+  double? hba1c;
   String? recentTimestamp;
   int? recentBloodSugar;
+  String petName = '';
 
   @override
   void initState() {
     super.initState();
     fetchHba1cData();
     fetchRecentBloodSugarData(petID);
+    fetchPetData();
   }
 
   String extractTimeFromTimestamp(String? timestamp) {
@@ -50,7 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
       if (response.statusCode == 200) {
         final responseData = json.decode(response.body);
-        int? newHba1c =
+        double? newHba1c =
             responseData['hba1c'];
 
         if (newHba1c != null) {
@@ -90,6 +93,32 @@ class _HomeScreenState extends State<HomeScreen> {
       throw Exception('에러: $error');
     }
   }
+
+  void fetchPetData() async { // petID 파라미터를 제거
+  String apiUrlForPet = 'http://54.180.70.169/api/pets/detail/$petID/';
+
+  try {
+    final response = await http.get(
+      Uri.parse(apiUrlForPet),
+      headers: {
+        'Accept-Charset': 'utf-8',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final responseData = json.decode(utf8.decode(response.bodyBytes));
+
+      setState(() {
+        petName = responseData['name'] ?? '';
+      });
+    } else {
+      print('서버 오류: ${response.statusCode}');
+    }
+  } catch (e) {
+    print('반려동물 데이터 전송 중 오류 발생: $e');
+  }
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -180,7 +209,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               Transform.translate(
                                 offset: Offset(0, -screenWidth * 0.02),
                                 child: Text(
-                                  '반가워요!',
+                                  ' $petName, 반가워요!',
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontSize: screenWidth * 0.09,
@@ -222,7 +251,25 @@ class _HomeScreenState extends State<HomeScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      'Fit-A-Pet Will Help you to Improve your Pet Health',
+                                      '반려동물의 건강을',
+                                      style: TextStyle(
+                                        color: Color(0xff5551ff),
+                                        fontSize: screenWidth * 0.05,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    SizedBox(height:5),
+                                    Text(
+                                      '우선시하는',
+                                      style: TextStyle(
+                                        color: Color(0xff5551ff),
+                                        fontSize: screenWidth * 0.05,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    SizedBox(height:5),
+                                    Text(
+                                      'Fit-A-Pet 입니다.',
                                       style: TextStyle(
                                         color: Color(0xff5551ff),
                                         fontSize: screenWidth * 0.05,
@@ -374,7 +421,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 top: screenWidth * 0.045,
                                 left: screenWidth * 0.135,
                                 child: Text(
-                                  '당화혈 색소',
+                                  '당화혈색소',
                                   style: TextStyle(
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold,
@@ -428,15 +475,10 @@ class _HomeScreenState extends State<HomeScreen> {
                           onTap: () {
                             Navigator.push(
                               context,
-                              PageRouteBuilder(
-                                transitionDuration: Duration(milliseconds: 500),
-                                pageBuilder: (_, __, ___) => ChartScreen(),
-                                transitionsBuilder: (_, animation, __, child) {
-                                  return FadeTransition(
-                                    opacity: animation,
-                                    child: child,
-                                  );
-                                },
+                              PageTransition(
+                                type: PageTransitionType.bottomToTop,
+                                duration: Duration(milliseconds: 250),
+                                child: ChartScreen(),
                               ),
                             );
                           },
@@ -466,7 +508,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        '혈당차트',
+                                        '혈당 차트 분석',
                                         style: TextStyle(
                                           color: Colors.white,
                                           fontSize: screenWidth * 0.06,
@@ -522,7 +564,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        '사료추천',
+                                        '사료 추천',
                                         style: TextStyle(
                                           color: Colors.white,
                                           fontSize: screenWidth * 0.06,
@@ -544,18 +586,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                       ),
-                      Positioned(
-                        bottom: screenWidth * 0.29,
-                        right: 35,
-                        child: FloatingActionButton(
-                          backgroundColor: Colors.white,
-                          onPressed: _launchURL,
-                          child: Image.asset(
-                            'assets/icons/kakao_icon.png',
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                      ),
                     ],
                   ),
                 ],
@@ -564,22 +594,23 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _launchURL,
+        child: Image.asset(
+          'assets/icons/kakao_icon.png',
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
     );
   }
 
   void _onRecommendationButtonPressed(BuildContext context) {
     Navigator.push(
       context,
-      PageRouteBuilder(
-        transitionDuration: Duration(milliseconds: 500),
-        pageBuilder: (_, __, ___) =>
-            Feed_Page(petID: petID), // Feed_Page로 petID를 넘겨줍니다.
-        transitionsBuilder: (_, animation, __, child) {
-          return FadeTransition(
-            opacity: animation,
-            child: child,
-          );
-        },
+      PageTransition(
+        type: PageTransitionType.bottomToTop, // 애니메이션을 bottomToTop으로 설정합니다.
+        duration: Duration(milliseconds: 250),
+        child: Feed_Page(petID: petID), // Feed_Page로 petID를 넘겨줍니다.
       ),
     );
   }

@@ -240,7 +240,9 @@ class _PetInfoPageState extends State<PetInfoPage> {
                       children: <Widget>[
                         GestureDetector(
                           child: Icon(
-                            isDrawerOpen ? Icons.arrow_back_ios : Icons.menu,
+                            isDrawerOpen
+                                ? Icons.arrow_back_ios
+                                : Icons.menu,
                             color: Colors.white,
                           ),
                           onTap: toggleSideMenu,
@@ -250,6 +252,7 @@ class _PetInfoPageState extends State<PetInfoPage> {
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 22,
+
                             fontFamily: 'Fit-A-Pet',
                             color: Colors.white,
                           ),
@@ -325,8 +328,10 @@ class _PetInfoPageState extends State<PetInfoPage> {
                                 ),
                               ),
                             ),
+
                           ],
                         );
+
                       }).toList(),
                     ),
                   ),
