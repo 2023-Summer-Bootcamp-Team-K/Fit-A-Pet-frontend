@@ -16,7 +16,6 @@ class MonthlyChart extends StatefulWidget {
   _MonthlyChartPageState createState() => _MonthlyChartPageState();
 }
 
-
 class _MonthlyChartPageState extends State<MonthlyChart> {
   List<Map<String, dynamic>> chartData = [];
   bool isDataFetched = false;
@@ -77,38 +76,34 @@ class _MonthlyChartPageState extends State<MonthlyChart> {
     }
 }
 
+int calculateWeekNumber(DateTime startDate, DateTime currentDate) {
+  DateTime firstDayOfMonth = DateTime(currentDate.year, currentDate.month, 1);
+  int weeksPassed = (currentDate.difference(firstDayOfMonth).inDays ~/ 7) + 1;
+  return weeksPassed;
+}
 
- Widget bottomTitleWidgets(double value, TitleMeta meta) {
+Widget bottomTitleWidgets(double value, TitleMeta meta) {
   final timestamp = DateTime.fromMillisecondsSinceEpoch(value.toInt());
-  final weekNumber = DateFormat('주').format(timestamp); 
-  print(weekNumber);
+  int weekNumber = calculateWeekNumber(DateTime(timestamp.year, timestamp.month, 1), timestamp);
 
-  if (weekNumber == 0) {
+  if (weekNumber >= 1 && weekNumber <= 4) {
     return Text(
-      "1",
+      "$weekNumber",
+      style: TextStyle(
+        fontSize: 10,
+        color: const Color.fromARGB(255, 21, 20, 20),
+      ),
+    );
+  } else {
+    return Text(
+      "(주)",
       style: TextStyle(
         fontSize: 10,
         color: const Color.fromARGB(255, 21, 20, 20),
       ),
     );
   }
-  if (weekNumber == 6) {
-    return Text(
-      "(주)", 
-      style: TextStyle(
-        fontSize: 10,
-        color: const Color.fromARGB(255, 21, 20, 20),
-      ),
-    );
-  }
-    return Text(
-      weekNumber,
-      style: TextStyle(
-        fontSize: 10,
-        color: const Color.fromARGB(255, 21, 20, 20),
-      ),
-    );
-  }
+}
 
   Widget leftTitleWidgets(double value, TitleMeta meta) {
     if (value.toInt() == 1) {
@@ -196,12 +191,13 @@ class _MonthlyChartPageState extends State<MonthlyChart> {
               dotData: FlDotData(show: false),
               belowBarData: BarAreaData(show: false),
               color: Color.fromARGB(255, 135, 153, 239),
-              barWidth: 3,
+              barWidth: 1.4,
             ),
           ],
           lineTouchData: LineTouchData(
             touchTooltipData: LineTouchTooltipData(
-              tooltipBgColor: Color.fromARGB(150, 135, 153, 239),
+              tooltipBgColor: Color.fromARGB(200, 135, 153, 239),
+              maxContentWidth: 150,
               getTooltipItems: (List<LineBarSpot> touchedSpots) {
                 return touchedSpots.map((spot) {
                   final DateTime timestamp = DateTime.fromMillisecondsSinceEpoch(spot.x.toInt());
@@ -223,6 +219,7 @@ class _MonthlyChartPageState extends State<MonthlyChart> {
     );
   }
 }
+
 class BelowLineToFill extends StatelessWidget {
   final double startY;
   final double endY;
