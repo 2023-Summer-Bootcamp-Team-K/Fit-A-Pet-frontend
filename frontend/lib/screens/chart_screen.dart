@@ -114,19 +114,19 @@ class _ChartScreenState extends State<ChartScreen> {
             endDate = args.value.endDate!;
           });
           String formattedDate = getFormattedDateRange(args.value);
-          print('Formatted Date: $formattedDate');
+          
+          
+          ('Formatted Date: $formattedDate');
         } else if (_selectedIndex == 0 && args.value is DateTime) {
           setState(() {
             selectedDate = args.value;
           });
           String formattedDate = "${selectedDate.month}월 ${selectedDate.day}일";
-          print('Formatted Date: $formattedDate');
         } else if (_selectedIndex == 2 && args.value is DateTime) {
           setState(() {
             selectedMonth = args.value.month;
           });
           String formattedMonth = "${selectedMonth}월";
-          print('Selected Month: $formattedMonth');
         }
       },
       startRangeSelectionColor: kPrimaryColor,
@@ -357,7 +357,7 @@ class _ChartScreenState extends State<ChartScreen> {
                      ),
                    ),
                  ),
-                  SizedBox(width: 10),
+                 SizedBox(width: 10),
                  GestureDetector(
                    onTap: () {
                      _onTogglePressed(2);

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:frontend/components/side_menu.dart';
 import 'package:frontend/constant.dart';
+import 'package:frontend/screens/home_screen.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -106,7 +107,6 @@ class _PetInfoPageState extends State<PetInfoPage> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(26), //16 -> 26
-        // 체크된 컨테이너 보라색 테두리 추가
         border: pet.isChecked
             ? Border.all(color: Color.fromARGB(255, 135, 153, 239), width: 2)
             : null,
@@ -140,53 +140,38 @@ class _PetInfoPageState extends State<PetInfoPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: EdgeInsets.only(
-                      bottom: 4), // Add bottom padding of 8 units
+                  padding: EdgeInsets.only(bottom: 4), 
                   child: Text(
                     '${pet.name}',
-                    style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Fit-A-Pet'),
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, fontFamily: 'Fit-A-Pet'),
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(
-                      bottom: 4), // Add bottom padding of 4 units
-                  child: Text('나이: ${pet.age}살',
-                      style: TextStyle(fontFamily: 'Fit-A-Pet')),
+                  padding: EdgeInsets.only(bottom: 4), 
+                  child: Text('나이: ${pet.age}살', style: TextStyle(fontFamily: 'Fit-A-Pet')),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(
-                      bottom: 4), // Add bottom padding of 4 units
-                  child: Text('종: ${pet.species ?? 'Unknown'}',
-                      style: TextStyle(fontFamily: 'Fit-A-Pet')),
+                  padding: EdgeInsets.only(bottom: 4), 
+                  child: Text('종: ${pet.species ?? 'Unknown'}', style: TextStyle(fontFamily: 'Fit-A-Pet')),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(
-                      bottom: 4), // Add bottom padding of 4 units
-                  child: Text('성별: ${pet.gender ?? 'Unknown'}',
-                      style: TextStyle(fontFamily: 'Fit-A-Pet')),
+                  padding: EdgeInsets.only(bottom: 4),  
+                  child: Text('성별: ${pet.gender ?? 'Unknown'}', style: TextStyle(fontFamily: 'Fit-A-Pet')),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(
-                      bottom: 4), // Add bottom padding of 4 units
-                  child: Text('몸무게: ${pet.weight}kg',
-                      style: TextStyle(fontFamily: 'Fit-A-Pet')),
+                  padding: EdgeInsets.only(bottom: 4), 
+                  child: Text('몸무게: ${pet.weight}kg', style: TextStyle(fontFamily: 'Fit-A-Pet')),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(
-                      bottom: 4), // Add bottom padding of 4 units
+                  padding: EdgeInsets.only(bottom: 4), 
                   child: Text(
                     '센서 착용 날짜: ${pet.startedDate.toLocal().year}-${pet.startedDate.toLocal().month.toString().padLeft(2, '0')}-${pet.startedDate.toLocal().day.toString().padLeft(2, '0')}',
                     style: TextStyle(fontFamily: 'Fit-A-Pet'),
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(
-                      bottom: 4), // Add bottom padding of 4 units
-                  child: Text('사료: ${pet.feed ?? 'Unknown'}',
-                      style: TextStyle(fontFamily: 'Fit-A-Pet')),
+                  padding: EdgeInsets.only(bottom: 4), 
+                  child: Text('사료: ${pet.feed ?? 'Unknown'}', style: TextStyle(fontFamily: 'Fit-A-Pet')),
                 ),
                 Padding(
                   padding: EdgeInsets.only(
@@ -202,112 +187,75 @@ class _PetInfoPageState extends State<PetInfoPage> {
     );
   }
 
-  void toggleSideMenu() {
-    setState(() {
-      isDrawerOpen = !isDrawerOpen;
-      xOffset = isDrawerOpen ? 300 : 0;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
     final user = Provider.of<User>(context);
-
-    return Scaffold(
-      body: Stack(
-        children: [
-          SideMenu(),
-          AnimatedContainer(
-            height: screenHeight,
-            transform: Matrix4.translationValues(xOffset, yOffset, 0),
-            duration: Duration(milliseconds: 200),
-            decoration: BoxDecoration(
-              color: kPrimaryColor,
-              borderRadius: isDrawerOpen
-                  ? BorderRadius.circular(40)
-                  : BorderRadius.circular(0),
-            ),
-            child: SingleChildScrollView(
-              child: Column(
-                children: <Widget>[
-                  SizedBox(height: 60),
-                  Container(
-                    margin: EdgeInsets.symmetric(horizontal: 20),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        GestureDetector(
-                          child: Icon(
-                            isDrawerOpen
-                                ? Icons.arrow_back_ios
-                                : Icons.menu,
-                            color: Colors.white,
-                          ),
-                          onTap: toggleSideMenu,
-                        ),
-                        Text(
-                          "     반려동물 정보",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 22,
-
-                            fontFamily: 'Fit-A-Pet',
-                            color: Colors.white,
-                          ),
-                        ),
-                        IconButton(
-                          icon: Icon(
-                            Icons.refresh,
-                            color: Colors.white,
-                          ),
-                          onPressed: () {
-                            fetchPets();
-                          },
-                        ),
-                      ],
-                    ),
+    return MaterialApp(
+       home: Scaffold(
+         backgroundColor: Color(0xFFC1CCFF), 
+         appBar: AppBar(
+           elevation: 0,
+           centerTitle: true,
+           title: Text("반려동물 정보", style: TextStyle(fontWeight: FontWeight.bold, fontFamily: 'Fit-A-Pet')),
+           backgroundColor: Color(0xFFC1CCFF),
+           leading: IconButton(
+            icon: Icon(Icons.arrow_back_ios), 
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => HomeScreen(),
                   ),
-                  SizedBox(height: 10),
-                  Center(
-                    child: Column(
-                      children: pets.map((pet) {
-                        return Column(
-                          children: [
-                            SizedBox(height: 20),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.9,
-                              child: Center(
-                                child: Stack(
-                                  children: [
-                                    createPetContainer(pet, user),
-                                    Positioned(
-                                      top: 10,
-                                      left: 10,
-                                      child: Container(
-                                        width: 34,
-                                        height: 34,
-                                        child: Checkbox(
-                                          value: pet.isChecked,
-                                          onChanged: (bool? value) {
-                                            if (value == true &&
-                                                !pet.isChecked) {
-                                              setState(() {
-                                                onPetCheckboxChanged(pet);
-                                              });
-                                            }
-                                          },
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                          ),
-                                          checkColor: Colors.white,
-                                          activeColor: kPrimaryColor,
-                                          materialTapTargetSize:
-                                              MaterialTapTargetSize.padded,
-                                        ),
+                );
+              },
+            ),
+           actions: [
+             IconButton(
+               icon: Icon(Icons.refresh),
+               onPressed: () {
+                 fetchPets();
+               },
+             ),
+           ],
+         ),
+         body: SingleChildScrollView(
+           child: Column(
+             children: [
+               SizedBox(height: 0),
+               Center(
+                 child: Column(
+                   children: pets.map((pet) {
+                     return Column(
+                       children: [
+                         SizedBox(height: 20),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.9,
+                          child: Center(
+                            child: Stack(
+                              children: [
+                                createPetContainer(pet, user),
+                                Positioned(
+                                  top: 10,
+                                  left: 10,
+                                  child: Container(
+                                    width: 34,
+                                    height: 34,
+                                    child: Checkbox(
+                                      value: pet.isChecked,
+                                      onChanged: (bool? value) {
+                                        if (value == true && !pet.isChecked) {
+                                          setState(() {
+                                            onPetCheckboxChanged(pet);
+                                          });
+                                        }
+                                      },
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10),
                                       ),
+                                      checkColor: Colors.white,
+                                      activeColor: Color(0xFFC1CCFF),
+                                      materialTapTargetSize:
+                                          MaterialTapTargetSize.padded,
                                     ),
                                     Positioned(
                                       top: 10,
@@ -328,41 +276,36 @@ class _PetInfoPageState extends State<PetInfoPage> {
                                 ),
                               ),
                             ),
-
-                          ],
-                        );
-
-                      }).toList(),
-                    ),
-                  ),
-                  SizedBox(height: 35),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          navigateToCreatePage(context);
-        },
-        child: Icon(Icons.add),
-        backgroundColor: Color.fromARGB(255, 135, 153, 239),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-    );
-  }
+                          ),
+                         ),
+                       ],
+                     );
+                   }).toList(),
+                 ),
+               ),
+               SizedBox(height: 35),
+             ],
+           ),
+         ),
+         floatingActionButton: FloatingActionButton(
+           onPressed: () {
+             navigateToCreatePage(context);
+           },
+           child: Icon(Icons.add),
+           backgroundColor: Color.fromARGB(255, 135, 153, 239),
+         ),
+         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+       ),
+     );
+   }
 
   int checkedCount = 0;
-
   void navigateToEditPage(BuildContext context, Pet pet) async {
     final apiUrl = 'http://54.180.70.169/api/pets/detail/${pet.id}';
     final response = await http.get(Uri.parse(apiUrl));
-
     if (response.statusCode == 200) {
       final Map<String, dynamic> petData =
           json.decode(utf8.decode(response.bodyBytes));
-
       await Navigator.push(
         context,
         MaterialPageRoute(
@@ -376,7 +319,6 @@ class _PetInfoPageState extends State<PetInfoPage> {
       print('Failed to fetch pet details. Status code: ${response.statusCode}');
     }
   }
-
   void navigateToCreatePage(BuildContext context) async {
     final result = await Navigator.push(
       context,
