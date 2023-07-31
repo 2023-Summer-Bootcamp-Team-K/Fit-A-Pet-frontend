@@ -421,7 +421,10 @@ class _EditPageState extends State<EditPage> {
         elevation: 0,
         title: Text(
           '반려동물 정보 수정',
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 22,
+          ),
         ),
         backgroundColor: kPrimaryColor,
         actions: [
@@ -479,11 +482,18 @@ class _EditPageState extends State<EditPage> {
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
                   ),
+                  focusedBorder: OutlineInputBorder(
+                    // 클릭했을 때의 테두리 색상 설정
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: BorderSide(
+                        color: Color(0xFF878CEF), width: 2.0), // 보라색 테두리
+                  ),
                   hintText: '이름',
                   fillColor: Colors.white,
                   filled: true,
                   contentPadding: const EdgeInsets.all(10),
                 ),
+                cursorColor: Color(0xFF878CEF), // 보라색 커서
               ),
               SizedBox(height: 16),
               TextField(
@@ -492,11 +502,18 @@ class _EditPageState extends State<EditPage> {
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
                   ),
+                  focusedBorder: OutlineInputBorder(
+                    // 클릭했을 때의 테두리 색상 설정
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: BorderSide(
+                        color: Color(0xFF878CEF), width: 2.0), // 보라색 테두리
+                  ),
                   hintText: '나이',
                   fillColor: Colors.white,
                   filled: true,
                   contentPadding: const EdgeInsets.all(10),
                 ),
+                cursorColor: Color(0xFF878CEF), // 보라색 커서
                 keyboardType: TextInputType.number,
               ),
               SizedBox(height: 16),
@@ -504,6 +521,12 @@ class _EditPageState extends State<EditPage> {
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    // 클릭했을 때의 테두리 색상 설정
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: BorderSide(
+                        color: Color(0xFF878CEF), width: 2.0), // 보라색 테두리
                   ),
                   filled: true,
                   fillColor: Colors.white,
@@ -539,6 +562,12 @@ class _EditPageState extends State<EditPage> {
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    // 클릭했을 때의 테두리 색상 설정
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: BorderSide(
+                        color: Color(0xFF878CEF), width: 2.0), // 보라색 테두리
                   ),
                   filled: true,
                   fillColor: Colors.white,
@@ -576,11 +605,18 @@ class _EditPageState extends State<EditPage> {
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
                   ),
+                  focusedBorder: OutlineInputBorder(
+                    // 클릭했을 때의 테두리 색상 설정
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: BorderSide(
+                        color: Color(0xFF878CEF), width: 2.0), // 보라색 테두리
+                  ),
                   hintText: '몸무게',
                   fillColor: Colors.white,
                   filled: true,
                   contentPadding: const EdgeInsets.all(10),
                 ),
+                cursorColor: Color(0xFF878CEF), // 보라색 커서
                 keyboardType: TextInputType.number,
               ),
               SizedBox(height: 16),
@@ -593,7 +629,13 @@ class _EditPageState extends State<EditPage> {
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(16),
                       ),
-                      hintText: '센서착용날짜',
+                      focusedBorder: OutlineInputBorder(
+                        // 클릭했을 때의 테두리 색상 설정
+                        borderRadius: BorderRadius.circular(16),
+                        borderSide: BorderSide(
+                            color: Color(0xFF878CEF), width: 2.0), // 보라색 테두리
+                      ),
+                      hintText: '센서 착용 날짜',
                       fillColor: Colors.white,
                       filled: true,
                       contentPadding: const EdgeInsets.all(10),
@@ -606,6 +648,12 @@ class _EditPageState extends State<EditPage> {
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    // 클릭했을 때의 테두리 색상 설정
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: BorderSide(
+                        color: Color(0xFF878CEF), width: 2.0), // 보라색 테두리
                   ),
                   filled: true,
                   fillColor: Colors.white,
@@ -640,6 +688,12 @@ class _EditPageState extends State<EditPage> {
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    // 클릭했을 때의 테두리 색상 설정
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: BorderSide(
+                        color: Color(0xFF878CEF), width: 2.0), // 보라색 테두리
                   ),
                   filled: true,
                   fillColor: Colors.white,

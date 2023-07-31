@@ -9,7 +9,6 @@ import 'package:frontend/page/create_page.dart';
 import 'package:frontend/page/edit_page.dart';
 import 'package:frontend/model/user.dart';
 
-
 class Pet {
   final int id;
   final String name;
@@ -106,7 +105,7 @@ class _PetInfoPageState extends State<PetInfoPage> {
       padding: EdgeInsets.all(16.0),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(26), //16 -> 26
         // 체크된 컨테이너 보라색 테두리 추가
         border: pet.isChecked
             ? Border.all(color: Color.fromARGB(255, 135, 153, 239), width: 2)
@@ -179,7 +178,7 @@ class _PetInfoPageState extends State<PetInfoPage> {
                   padding: EdgeInsets.only(
                       bottom: 4), // Add bottom padding of 4 units
                   child: Text(
-                    '센서착용날짜: ${pet.startedDate.toLocal().year}-${pet.startedDate.toLocal().month.toString().padLeft(2, '0')}-${pet.startedDate.toLocal().day.toString().padLeft(2, '0')}',
+                    '센서 착용 날짜: ${pet.startedDate.toLocal().year}-${pet.startedDate.toLocal().month.toString().padLeft(2, '0')}-${pet.startedDate.toLocal().day.toString().padLeft(2, '0')}',
                     style: TextStyle(fontFamily: 'Fit-A-Pet'),
                   ),
                 ),
@@ -192,7 +191,7 @@ class _PetInfoPageState extends State<PetInfoPage> {
                 Padding(
                   padding: EdgeInsets.only(
                       bottom: 4), // Add bottom padding of 4 units
-                  child: Text('필요영양제: ${pet.soreSpot ?? 'Unknown'}',
+                  child: Text('불편한 부위: ${pet.soreSpot ?? 'Unknown'}',
                       style: TextStyle(fontFamily: 'Fit-A-Pet')),
                 ),
               ],
@@ -249,10 +248,11 @@ class _PetInfoPageState extends State<PetInfoPage> {
                           onTap: toggleSideMenu,
                         ),
                         Text(
-                          "반려동물 정보",
+                          "     반려동물 정보",
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            fontSize: 24,
+                            fontSize: 22,
+
                             fontFamily: 'Fit-A-Pet',
                             color: Colors.white,
                           ),
@@ -273,61 +273,65 @@ class _PetInfoPageState extends State<PetInfoPage> {
                   Center(
                     child: Column(
                       children: pets.map((pet) {
-                    return Column(
-                      children: [
-                        SizedBox(height: 20),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.9,
-                          child: Center(
-                            child: Stack(
-                              children: [
-                                createPetContainer(pet, user),
-                                Positioned(
-                                  top: 10,
-                                  left: 10,
-                                  child: Container(
-                                    width: 34,
-                                    height: 34,
-                                    child: Checkbox(
-                                      value: pet.isChecked,
-                                      onChanged: (bool? value) {
-                                        if (value == true && !pet.isChecked) {
-                                          setState(() {
-                                            onPetCheckboxChanged(pet);
-                                          });
-                                        }
-                                      },
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(10),
+                        return Column(
+                          children: [
+                            SizedBox(height: 20),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.9,
+                              child: Center(
+                                child: Stack(
+                                  children: [
+                                    createPetContainer(pet, user),
+                                    Positioned(
+                                      top: 10,
+                                      left: 10,
+                                      child: Container(
+                                        width: 34,
+                                        height: 34,
+                                        child: Checkbox(
+                                          value: pet.isChecked,
+                                          onChanged: (bool? value) {
+                                            if (value == true &&
+                                                !pet.isChecked) {
+                                              setState(() {
+                                                onPetCheckboxChanged(pet);
+                                              });
+                                            }
+                                          },
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                          checkColor: Colors.white,
+                                          activeColor: kPrimaryColor,
+                                          materialTapTargetSize:
+                                              MaterialTapTargetSize.padded,
+                                        ),
                                       ),
-                                      checkColor: Colors.white,
-                                      activeColor: kPrimaryColor,
-                                      materialTapTargetSize:
-                                          MaterialTapTargetSize.padded,
                                     ),
-                                  ),
-                                ),
-                                Positioned(
-                                  top: 10,
-                                  right: 15,
-                                  child: CircleAvatar(
-                                    backgroundColor: Colors.white,
-                                    radius: 20,
-                                    child: IconButton(
-                                      icon:
-                                          Icon(Icons.edit, color: Colors.black),
-                                      onPressed: () {
-                                        navigateToEditPage(context, pet);
-                                      },
+                                    Positioned(
+                                      top: 10,
+                                      right: 15,
+                                      child: CircleAvatar(
+                                        backgroundColor: Colors.white,
+                                        radius: 20,
+                                        child: IconButton(
+                                          icon: Icon(Icons.edit,
+                                              color: Colors.black),
+                                          onPressed: () {
+                                            navigateToEditPage(context, pet);
+                                          },
+                                        ),
+                                      ),
                                     ),
-                                  ),
+                                  ],
                                 ),
-                              ],
+                              ),
                             ),
-                          ),
-                        ),
-                      ],
-                    );
+
+                          ],
+                        );
+
                       }).toList(),
                     ),
                   ),
