@@ -155,13 +155,15 @@ class _NotificationPageState extends State<NotificationPage> {
                     width: 330,
                     child: ElevatedButton(
                       onPressed: () {
-                        if (_selectedButtonIndex != -1) {
+                        if (_selectedButtonIndex != -1 || _selectedTime != null) {
                           AndroidNotificationDetails androidDetails =
                               AndroidNotificationDetails('channelId', 'channelName',
                                   importance: Importance.max, priority: Priority.high);
                           DarwinNotificationDetails iosDetails = DarwinNotificationDetails();
-                          _scheduleNotification(androidDetails, iosDetails);
-                          _TimeConfirmation(context);
+                          if (_selectedTime != null) {
+                            _scheduleNotification(androidDetails, iosDetails);
+                            _TimeConfirmation(context, _selectedTime!);
+                          } 
                         }
                       },
                       style: ElevatedButton.styleFrom(
@@ -225,7 +227,7 @@ class _NotificationPageState extends State<NotificationPage> {
     );
   }
 
-  Future<void> _TimeConfirmation(BuildContext context) async {
+  Future<void> _TimeConfirmation(BuildContext context, TimeOfDay selectedTime) async {
     return showDialog<void>(
       context: context,
       builder: (BuildContext context) {
@@ -243,7 +245,20 @@ class _NotificationPageState extends State<NotificationPage> {
               Text('알림 확인'),
             ],
           ),
-          content: Text('설정한 시간에 알림을 받으시겠습니까?'),
+          content: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text('설정한 시간에 알림을 받으시겠습니까?'),
+            SizedBox(height: 10),
+            Text(
+              '선택한 시간: ${selectedTime.format(context)}',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
           actions: <Widget>[
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -278,7 +293,7 @@ class _NotificationPageState extends State<NotificationPage> {
                               msg: "   알림 설정이 완료되었습니다.   ",
                               toastLength: Toast.LENGTH_LONG,
                               gravity: ToastGravity.BOTTOM,
-                              timeInSecForIosWeb: 7,
+                              timeInSecForIosWeb: 5,
                               backgroundColor: kPrimaryColor,
                               textColor: Colors.white,
                               webShowClose: true,
