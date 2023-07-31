@@ -258,7 +258,14 @@ class _EditPageState extends State<EditPage> {
       ),
       monthCellStyle: DateRangePickerMonthCellStyle(
         todayTextStyle: TextStyle(
-          color: Color(0xFF878CEF), // 오늘 날짜의 폰트 색상
+          color: Color.fromARGB(255, 135, 153, 239), 
+          fontWeight: FontWeight.bold,
+          fontSize: 13,
+        ),
+      ),
+      yearCellStyle: DateRangePickerYearCellStyle(
+        todayTextStyle: TextStyle(
+          color: Color.fromARGB(255, 135, 153, 239), 
           fontWeight: FontWeight.bold,
           fontSize: 13,
         ),

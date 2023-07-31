@@ -145,6 +145,13 @@ class _ChartScreenState extends State<ChartScreen> {
           fontSize: 13,
         ),
       ),
+      yearCellStyle: DateRangePickerYearCellStyle(
+        todayTextStyle: TextStyle(
+          color: Color.fromARGB(255, 135, 153, 239), 
+          fontWeight: FontWeight.bold,
+          fontSize: 13,
+        ),
+      ),
       selectionColor: kPrimaryColor,
       minDate: DateTime(2022),
       maxDate: DateTime.now(),
@@ -223,6 +230,20 @@ class _ChartScreenState extends State<ChartScreen> {
       ),
       todayHighlightColor: kPrimaryColor,
       selectionColor: kPrimaryColor,
+      monthCellStyle: DateRangePickerMonthCellStyle(
+        todayTextStyle: TextStyle(
+          color: Color.fromARGB(255, 135, 153, 239), 
+          fontWeight: FontWeight.bold,
+          fontSize: 13,
+        ),
+      ),
+      yearCellStyle: DateRangePickerYearCellStyle(
+        todayTextStyle: TextStyle(
+          color: Color.fromARGB(255, 135, 153, 239), 
+          fontWeight: FontWeight.bold,
+          fontSize: 13,
+        ),
+      ),
       minDate: DateTime(2022),
       maxDate: DateTime.now(),
       headerStyle: const DateRangePickerHeaderStyle(
