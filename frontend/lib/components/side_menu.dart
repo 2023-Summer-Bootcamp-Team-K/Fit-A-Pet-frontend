@@ -37,32 +37,14 @@ class _SideMenuState extends State<SideMenu> {
             children: [
               const InfoCard(
                 name: "김주인",
-                email: "OurPetIsAwesome@demo.com",
+                email: "OurPetIsTheBest@demo.com",
               ),
               Padding(
-                padding: EdgeInsets.only(top: 40, left: 30, bottom: 70),
+                padding: EdgeInsets.only(top: 30, left: 30, bottom: 70),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    InkWell(
-                      onTap: () {
-                        setState(() {
-                          isActive = !isActive;
-                        });
-                        if (isActive) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => HomeScreen()),
-                          );
-                        }
-                      },
-                      child: NewRow(
-                        text: '홈',
-                        image: AssetImage('assets/icons/home.png'),
-                      ),
-                    ),
-                    SizedBox(height: 40),
+                    SizedBox(height: 10),
                     InkWell(
                       onTap: () {
                         setState(() {
@@ -81,7 +63,7 @@ class _SideMenuState extends State<SideMenu> {
                         image: AssetImage('assets/icons/paw.png'),
                       ),
                     ),
-                    SizedBox(height: 40),
+                    SizedBox(height: 45),
                     InkWell(
                       onTap: () {
                         setState(() {
@@ -96,11 +78,11 @@ class _SideMenuState extends State<SideMenu> {
                         }
                       },
                       child: NewRow(
-                        text: '혈당 차트',
+                        text: '혈당 차트 분석',
                         image: AssetImage('assets/icons/chart.png'),
                       ),
                     ),
-                    SizedBox(height: 40),
+                    SizedBox(height: 45),
                     InkWell(
                       onTap: () {
                         setState(() {
@@ -119,7 +101,7 @@ class _SideMenuState extends State<SideMenu> {
                         image: AssetImage('assets/icons/feed_rcmd.png'),
                       ),
                     ),
-                    SizedBox(height: 40),
+                    SizedBox(height: 45),
                     InkWell(
                       onTap: () {
                         setState(() {
