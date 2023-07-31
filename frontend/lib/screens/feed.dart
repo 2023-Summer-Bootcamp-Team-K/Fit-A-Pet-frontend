@@ -148,18 +148,8 @@ class _Feed_PageState extends State<Feed_Page> {
         backgroundColor: Color(0xFFF86A1FF),
         leading: GestureDetector(
           onTap: () {
-            Navigator.push(
+            Navigator.pop(
               context,
-              PageRouteBuilder(
-                transitionDuration: Duration(milliseconds: 500),
-                pageBuilder: (_, __, ___) => HomeScreen(),
-                transitionsBuilder: (_, animation, __, child) {
-                  return FadeTransition(
-                    opacity: animation,
-                    child: child,
-                  );
-                },
-              ),
             );
           },
           child: Icon(

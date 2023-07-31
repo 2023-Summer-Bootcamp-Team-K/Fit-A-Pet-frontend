@@ -536,7 +536,14 @@ class _HomeScreenState extends State<HomeScreen> {
                         right: screenWidth * 0.05,
                         child: GestureDetector(
                           onTap: () {
-                            _onRecommendationButtonPressed(context);
+                            Navigator.push(
+                              context,
+                              PageTransition(
+                                type: PageTransitionType.bottomToTop, // 애니메이션을 bottomToTop으로 설정합니다.
+                                duration: Duration(milliseconds: 250),
+                                child: Feed_Page(petID: petID), // Feed_Page로 petID를 넘겨줍니다.
+                              ),
+                            );
                           },
                           child: Container(
                             width: screenWidth * 0.6,
@@ -603,18 +610,7 @@ class _HomeScreenState extends State<HomeScreen> {
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
     );
   }
-
-  void _onRecommendationButtonPressed(BuildContext context) {
-    Navigator.push(
-      context,
-      PageTransition(
-        type: PageTransitionType.bottomToTop, // 애니메이션을 bottomToTop으로 설정합니다.
-        duration: Duration(milliseconds: 250),
-        child: Feed_Page(petID: petID), // Feed_Page로 petID를 넘겨줍니다.
-      ),
-    );
-  }
-
+  
   _launchURL() async {
     const url = 'https://open.kakao.com/o/sOmd7Zuf';
     if (await canLaunch(url)) {
