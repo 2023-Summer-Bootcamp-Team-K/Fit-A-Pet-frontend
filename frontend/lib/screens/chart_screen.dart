@@ -416,208 +416,456 @@ class _ChartScreenState extends State<ChartScreen> {
                ],
              ),
            ),
-                 SizedBox(height: 15),
-                 Container(
-                   height: 350,
-                   margin:EdgeInsets.fromLTRB(20, 0, 22, 0),
-                 padding: EdgeInsets.fromLTRB(20, 20, 20, 10),
-                 decoration: BoxDecoration(
-                     color: Colors.white,
-                     borderRadius: BorderRadius.circular(30),
-                     boxShadow: [
-                       BoxShadow(
-                         offset: Offset(0, 21),
-                         blurRadius: 80,
-                         color: Colors.black.withOpacity(0.1),
-                       ),
-                     ],
-                   ),
-                   child: Column(
-                     crossAxisAlignment: CrossAxisAlignment.start,
-                     children: <Widget>[
-                       SizedBox(
-                         width: _selectedIndex == 0 ? 130 : _selectedIndex == 1 ? 200 : 100, 
-                         child: ElevatedButton(
-                           onPressed: () async {
-                             if (_selectedIndex == 2) {
-                               await _showMonthPicker(context);
-                             } else {
-                               await _showDatePicker(context);
-                             }
-                           },
-                           style: ElevatedButton.styleFrom(
-                             primary: kPrimaryColor,
-                             padding: EdgeInsets.symmetric(vertical: 10, horizontal: 14),
-                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                             elevation: 5,
-                           ),
-                           child: Row(
-                             mainAxisAlignment: MainAxisAlignment.center,
-                             children: [
-                               Icon(
-                                 Icons.calendar_today,
-                                 color: Colors.white,
-                               ),
-                               SizedBox(width: 8),
-                               Text(
-                                 _selectedIndex == 0
-                                     ? DateFormat("M월 d일").format(selectedDate)
-                                     : _selectedIndex == 1
-                                         ? getFormattedDateRange(PickerDateRange(startDate, endDate))
-                                         : "${selectedMonth}월", 
-                                 style: TextStyle(
-                                   fontSize: 15,
-                                   color: Colors.white,
-                                   fontWeight: FontWeight.bold,
-                                 ),
-                               ),
-                             ],
-                           ),
-                         ),
-                       ),
-                       SizedBox(height: 20),
-                       _chartWidgets[_selectedIndex],
-                     ],
-                   ),
-                 ),
-               SizedBox(height: 15),
-               Container(
-             padding: EdgeInsets.fromLTRB(20, 0, 20, 20),
-             alignment: Alignment.bottomCenter,
-             child: Column(
-               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-               children: [
-                 Column(
-                   children: [
-                     Container(
-                       alignment: Alignment.topLeft,
-                       height: 110,
-                       width: 390,
-                       padding: EdgeInsets.all(20),
-                       decoration: BoxDecoration(
-                         color: Color.fromARGB(255, 232, 244, 255),
-                         borderRadius: BorderRadius.circular(30),
-                       ),
-                       child: Column(
-                         crossAxisAlignment: CrossAxisAlignment.start,
-                         children: [
-                           Text(
-                             '혈당 범위',
-                             style: TextStyle(
-                               color: Colors.black,
-                               fontSize: 16,
-                               fontWeight: FontWeight.bold,
-                             ),
-                           ),
-                           SizedBox(height: 10),
-                           Text(
-                             '   정상 범위 - 70~140mg/dL(개, 고양이)',
-                             style: TextStyle(
-                               color: Colors.black,
-                               fontSize: 14,
-                             ),
-                           ),
-                           SizedBox(height: 5),
-                           Text(
-                             '   당뇨 시 - 개 : 200mg/dL, 고양이: 250mg/dL',
-                             style: TextStyle(
-                               color: Colors.black,
-                               fontSize: 14,
-                             ),
-                           ),
-                         ],
-                       ),
-                     ),
-                     SizedBox(height: 15),
-                   ],
-                 ),
-                 Column(
-                   children: [
-                     Container(
-                       alignment: Alignment.topLeft,
-                       height: 230,
-                       width: 390,
-                       padding: EdgeInsets.all(20),
-                       decoration: BoxDecoration(
-                         color: Color.fromARGB(255, 255, 253, 243),
-                         borderRadius: BorderRadius.circular(30),
-                       ),
-                       child: Column(
-                         crossAxisAlignment: CrossAxisAlignment.start,
-                         children: [
-                           Text(
-                             '주의 사항',
-                             style: TextStyle(
-                               color: Colors.black,
-                               fontSize: 16,
-                               fontWeight: FontWeight.bold,
-                             ),
-                           ),
-                           SizedBox(height: 10),
-                           Text(
-                             '1. 인슐린 투여 후 최저점',
-                             style: TextStyle(
-                               color: Colors.black,
-                               fontSize: 15,
-                             ),
-                           ),
-                           SizedBox(height: 5),
-                           Text(
-                             '     (1) 150mg/dL 이하 - 경계',
-                             style: TextStyle(
-                               color: Colors.black,
-                               fontSize: 14,
-                             ),
-                           ),
-                           SizedBox(height: 5),
-                           Text(
-                             '     (2) 120mg/dL 이하 - 주의',
-                             style: TextStyle(
-                               color: Colors.black,
-                               fontSize: 14,
-                             ),
-                           ),
-                           SizedBox(height: 5),
-                           Text(
-                             '     (3) 100mg/dL 이하 - 병원 내원 및 당 섭취 권고',
-                             style: TextStyle(
-                               color: Colors.black,
-                               fontSize: 14,
-                             ),
-                           ),
-                           SizedBox(height: 10),
-                           Text(
-                             '2. 사료 섭취 후 기울기 변화',
-                             style: TextStyle(
-                               color: Colors.black,
-                               fontSize: 15,
-                             ),
-                           ),
-                           SizedBox(height: 5),
-                           Text(
-                             '     (1) 고혈당 사료/간식 : 100mg/dL 이상 상승',
-                             style: TextStyle(
-                               color: Colors.black,
-                               fontSize: 14,
-                             ),
-                           ),
-                           SizedBox(height: 5),
-                           Text(
-                             '     (2) 저혈당 사료/간식 : 30mg/dL 이상 상승',
-                             style: TextStyle(
-                               color: Colors.black,
-                               fontSize: 14,
-                             ),
-                           ),
-                         ],
-                       ),
-                     ),
-                     SizedBox(height: 5),
-                   ],
-                 ),
-               ],
-             ),
-           ),
+            SizedBox(height: 15),
+              Container(
+                height: 350,
+                margin:EdgeInsets.fromLTRB(20, 0, 22, 0),
+              padding: EdgeInsets.fromLTRB(20, 20, 20, 10),
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(30),
+                  boxShadow: [
+                    BoxShadow(
+                      offset: Offset(0, 21),
+                      blurRadius: 80,
+                      color: Colors.black.withOpacity(0.1),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    SizedBox(
+                      width: _selectedIndex == 0 ? 130 : _selectedIndex == 1 ? 200 : 100, 
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          if (_selectedIndex == 2) {
+                            await _showMonthPicker(context);
+                          } else {
+                            await _showDatePicker(context);
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          primary: kPrimaryColor,
+                          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 14),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                          elevation: 5,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.calendar_today,
+                              color: Colors.white,
+                            ),
+                            SizedBox(width: 8),
+                            Text(
+                              _selectedIndex == 0
+                                  ? DateFormat("M월 d일").format(selectedDate)
+                                  : _selectedIndex == 1
+                                      ? getFormattedDateRange(PickerDateRange(startDate, endDate))
+                                      : "${selectedMonth}월", 
+                              style: TextStyle(
+                                fontSize: 15,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    _chartWidgets[_selectedIndex],
+                  ],
+                ),
+              ),
+            SizedBox(height: 20),
+            Padding(
+              padding: EdgeInsets.only(left: 20), // Adjust the padding value as needed
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "인슐린 투여 후 최저점",
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height: 20),
+            Column(
+              children: [
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Container(
+                        height: 119,
+                        width: 119,
+                        decoration: BoxDecoration(
+                          color: Color(0xFFFFFDF3),
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: [
+                            BoxShadow(
+                              offset: Offset(0, 21),
+                              blurRadius: 60,
+                              color: Colors.black.withOpacity(0.2),
+                            ),
+                          ],
+                        ),
+                        child: Stack( 
+                          children: [     
+                            Positioned( 
+                              top: 0,
+                              left: 0,
+                              child: Container(
+                                height: 60,
+                                width: 60,
+                                padding: EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                  color: Color(0xFFFEE504).withOpacity(0.39), // Set the desired color for the additional container
+                                  borderRadius: BorderRadius.circular(20), // Adjust the border radius as needed
+                                ),
+                                child: Center( 
+                                  child: Text(
+                                    "경계",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                      fontSize: 19,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Positioned( 
+                              bottom: 0,
+                              right: 0,
+                              child: Container(
+                                height: 50,
+                                width: 110,
+                                padding: EdgeInsets.all(10),
+                                child: RichText(
+                                text: TextSpan(
+                                  text: "150",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                    fontSize: 19, // Set the desired font size for "150"
+                                  ),
+                                  children: [
+                                    TextSpan(
+                                      text: "mg/dL",
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 16, // Set the desired font size for "mg/dL"
+                                      ),
+                                    ),
+                                  ],
+                              ),
+                            ),
+                          ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        height: 119,
+                        width: 119,
+                        decoration: BoxDecoration(
+                          color: Color.fromARGB(255, 252, 231, 209),
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: [
+                            BoxShadow(
+                              offset: Offset(0, 21),
+                              blurRadius: 60,
+                              color: Colors.black.withOpacity(0.2),
+                            ),
+                          ],
+                        ),
+                        child: Stack(
+                          children: [
+                            Positioned(
+                              top: 0,
+                              left: 0,
+                              child: Container(
+                                height: 60,
+                                width: 60,
+                                padding: EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                  color: Color(0xFFFCC68C),
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: Center( // Center the text within the container
+                                  child: Text(
+                                    "주의",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                      fontSize: 20,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Positioned( 
+                              bottom: 0,
+                              right: 0,
+                              child: Container(
+                                height: 50,
+                                width: 110,
+                                padding: EdgeInsets.all(10),
+                                child: RichText(
+                                text: TextSpan(
+                                  text: "120",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                    fontSize: 19, // Set the desired font size for "150"
+                                  ),
+                                  children: [
+                                    TextSpan(
+                                      text: "mg/dL",
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 16, // Set the desired font size for "mg/dL"
+                                      ),
+                                    ),
+                                  ],
+                              ),
+                            ),
+                            ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      // Container for "위험"
+                      Container(
+                        height: 119,
+                        width: 119,
+                        decoration: BoxDecoration(
+                          color: Color(0xFFFBDBDB),
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: [
+                            BoxShadow(
+                              offset: Offset(0, 21),
+                              blurRadius: 60,
+                              color: Colors.black.withOpacity(0.2),
+                            ),
+                          ],
+                        ),
+                        child: Stack(
+                          children: [
+                            Positioned(
+                              top: 0,
+                              left: 0,
+                              child: Container(
+                                height: 60,
+                                width: 60,
+                                padding: EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                  color: Color(0xFFFF9D9D),
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: Center( // Center the text within the container
+                                  child: Text(
+                                    "위험",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                      fontSize: 20,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Positioned( 
+                              bottom: 0,
+                              right: 0,
+                              child: Container(
+                                height: 50,
+                                width: 110,
+                                padding: EdgeInsets.all(10),
+                                child: RichText(
+                              text: TextSpan(
+                                text: "100",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                  fontSize: 19, // Set the desired font size for "150"
+                                ),
+                                children: [
+                                  TextSpan(
+                                    text: "mg/dL",
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 16, // Set the desired font size for "mg/dL"
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            ),
+                          ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 20),
+                Padding(
+                  padding: EdgeInsets.only(left: 20), // Adjust the padding value as needed
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      "사료 섭취 후 기울기 변화",
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Stack(
+                      children: [
+                        Container(
+                          height: 120,
+                          width: 185,
+                          decoration: BoxDecoration(
+                            color: Color(0xFFFBDBDB),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                        ),
+                        Positioned(
+                          top: 0,
+                          left: 0,
+                          right: 0,
+                          child: Container(
+                                height: 60,
+                                width: 60,
+                                padding: EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                  color: Color(0xFFFF9D9D),
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                          child: Center(
+                            child: Text("고혈당",
+                            style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                      fontSize: 17,
+                                    ),
+                                  ),
+                          ),
+                        ),
+                        ),
+                        Positioned( 
+                              bottom: 0,
+                              right: 0,
+                              child: Container(
+                                height: 55,
+                                width: 170,
+                                padding: EdgeInsets.all(10),
+                                child: RichText(
+                              text: TextSpan(
+                                text: "100",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                  fontSize: 19, // Set the desired font size for "150"
+                                ),
+                                children: [
+                                  TextSpan(
+                                    text: "mg/dL이상 상승",
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 16, // Set the desired font size for "mg/dL"
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            )
+                          )
+                      ],
+                    ),
+                    Stack(
+                      children: [
+                        Container(
+                          height: 120,
+                          width: 185,
+                          decoration: BoxDecoration(
+                            color: Color(0xFFE8F4FE),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                        ),
+                        Positioned(
+                          top: 0,
+                          left: 0,
+                          right: 0,
+                          child: Container(
+                                height: 60,
+                                width: 60,
+                                padding: EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                  color: Color(0xFFA6D6FD),
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                          child: Center(
+                            child: Text("저혈당 사료/간식 섭취 시",
+                            style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                      fontSize: 15,
+                                    ),
+                                  ),
+                          ),
+                        ),
+                        ),
+                        Positioned( 
+                              bottom: 0,
+                              right: 0,
+                              child: Container(
+                                height: 55,
+                                width: 170,
+                                padding: EdgeInsets.all(10),
+                                child: RichText(
+                              text: TextSpan(
+                                text: "30",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                  fontSize: 19, // Set the desired font size for "150"
+                                ),
+                                children: [
+                                  TextSpan(
+                                    text: "mg/dL이상 상승",
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 16, // Set the desired font size for "mg/dL"
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            )
          ],
        ),
      );
