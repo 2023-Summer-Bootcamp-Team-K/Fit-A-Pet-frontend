@@ -148,18 +148,8 @@ class _Feed_PageState extends State<Feed_Page> {
         backgroundColor: Color(0xFFF86A1FF),
         leading: GestureDetector(
           onTap: () {
-            Navigator.push(
+            Navigator.pop(
               context,
-              PageRouteBuilder(
-                transitionDuration: Duration(milliseconds: 500),
-                pageBuilder: (_, __, ___) => HomeScreen(),
-                transitionsBuilder: (_, animation, __, child) {
-                  return FadeTransition(
-                    opacity: animation,
-                    child: child,
-                  );
-                },
-              ),
             );
           },
           child: Icon(
@@ -295,11 +285,12 @@ class _Feed_PageState extends State<Feed_Page> {
               ),
               child: Center(
                 child: Text(
-                  'meat',
+                  '사료',
                   style: TextStyle(
-                    fontSize: screenHeight * 0.015,
+                    fontSize: screenHeight * 0.017,
                     fontWeight: FontWeight.bold,
                     color: Color.fromRGBO(119, 131, 143, 1.0),
+                    fontFamily: 'Fit-A-Pet',
                   ),
                 ),
               ),
@@ -325,9 +316,9 @@ class _Feed_PageState extends State<Feed_Page> {
               ),
               child: Center(
                 child: Text(
-                  'oil',
+                  '오일',
                   style: TextStyle(
-                    fontSize: screenHeight * 0.015,
+                    fontSize: screenHeight * 0.017,
                     fontWeight: FontWeight.bold,
                     color: Color.fromRGBO(119, 131, 143, 1.0),
                   ),
@@ -337,9 +328,9 @@ class _Feed_PageState extends State<Feed_Page> {
           ),
           Positioned(
             top: screenHeight * 0.31,
-            left: screenWidth * 0.69,
+            left: screenWidth * 0.74,
             child: Container(
-              width: screenWidth * 0.25,
+              width: screenWidth * 0.15,
               height: screenWidth * 0.06,
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -355,9 +346,9 @@ class _Feed_PageState extends State<Feed_Page> {
               ),
               child: Center(
                 child: Text(
-                  'supplement',
+                  '영양제',
                   style: TextStyle(
-                    fontSize: screenHeight * 0.015,
+                    fontSize: screenHeight * 0.017,
                     fontWeight: FontWeight.bold,
                     color: Color.fromRGBO(119, 131, 143, 1.0),
                   ),
@@ -478,7 +469,7 @@ class _Feed_PageState extends State<Feed_Page> {
             ),
           ),
           Positioned(
-            top: screenHeight * 0.535,
+            top: screenHeight * 0.525,
             left: screenWidth * 0.05,
             child: Container(
               decoration: BoxDecoration(
@@ -494,34 +485,90 @@ class _Feed_PageState extends State<Feed_Page> {
                 ],
               ),
               width: screenWidth * 0.9,
-              height: screenHeight * 0.314,
+              height: screenHeight * 0.33,
               child: Padding(
                 padding: EdgeInsets.symmetric(
                     horizontal: 20.0, vertical: 20.0), // 행간을 넓혀줍니다.
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      '$meatDescription',
-                      style: TextStyle(
-                        color: Color.fromRGBO(119, 131, 143, 1.0),
-                        fontSize: screenHeight * 0.02,
+                    SizedBox(height: 5), 
+                    RichText(
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text: '• 사료 : ',
+                            style: TextStyle(
+                              color: Color.fromRGBO(119, 131, 143, 1.0),
+                              fontSize: screenHeight * 0.02,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'Fit-A-Pet',
+                            ),
+                          ),
+                          TextSpan(
+                            text: '$meatDescription',
+                            style: TextStyle(
+                              color: Color.fromRGBO(119, 131, 143, 1.0),
+                              fontSize: screenHeight * 0.02,
+                              fontWeight: FontWeight.normal, // 굵게(Bold) 스타일 적용
+                              fontFamily: 'Fit-A-Pet',
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    SizedBox(height: 10), // 행간을 넓혀줍니다.
-                    Text(
-                      '$oilDescription',
-                      style: TextStyle(
-                        color: Color.fromRGBO(119, 131, 143, 1.0),
-                        fontSize: screenHeight * 0.02,
+                    SizedBox(height: 5), // Divider와 Text 사이에 10포인트 높이의 공간 추가
+                    Divider(color: Colors.black),
+                    SizedBox(height: 5), 
+                    RichText(
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text: '• 오일 : ',
+                            style: TextStyle(
+                              color: Color.fromRGBO(119, 131, 143, 1.0),
+                              fontSize: screenHeight * 0.02,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'Fit-A-Pet',
+                            ),
+                          ),
+                          TextSpan(
+                            text: '$meatDescription',
+                            style: TextStyle(
+                              color: Color.fromRGBO(119, 131, 143, 1.0),
+                              fontSize: screenHeight * 0.02,
+                              fontWeight: FontWeight.normal, // 굵게(Bold) 스타일 적용
+                              fontFamily: 'Fit-A-Pet',
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    SizedBox(height: 10), // 행간을 넓혀줍니다.
-                    Text(
-                      '$supplementDescription',
-                      style: TextStyle(
-                        color: Color.fromRGBO(119, 131, 143, 1.0),
-                        fontSize: screenHeight * 0.02,
+                    SizedBox(height: 5), 
+                    Divider(color: Colors.black,),
+                    SizedBox(height: 5), 
+                    RichText(
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text: '• 보조제 : ',
+                            style: TextStyle(
+                              color: Color.fromRGBO(119, 131, 143, 1.0),
+                              fontSize: screenHeight * 0.02,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'Fit-A-Pet',
+                            ),
+                          ),
+                          TextSpan(
+                            text: '$meatDescription',
+                            style: TextStyle(
+                              color: Color.fromRGBO(119, 131, 143, 1.0),
+                              fontSize: screenHeight * 0.02,
+                              fontWeight: FontWeight.normal, // 굵게(Bold) 스타일 적용
+                              fontFamily: 'Fit-A-Pet',
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],
