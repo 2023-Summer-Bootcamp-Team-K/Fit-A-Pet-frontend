@@ -138,8 +138,9 @@ class _Feed_PageState extends State<Feed_Page> {
       appBar: AppBar(
         elevation: 0,
         centerTitle: true,
+        titleSpacing: -15, // Adjust this value as needed
         title: Text(
-          "사료 추천",
+          "사료 추천 ",
           style: TextStyle(
             fontSize: 23,
             fontWeight: FontWeight.bold,
@@ -469,8 +470,8 @@ class _Feed_PageState extends State<Feed_Page> {
             ),
           ),
           Positioned(
-            top: screenHeight * 0.518,
-            left: screenWidth * 0.05,
+            top: screenHeight * 0.522,
+            left: screenWidth * 0.06,
             child: Container(
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -484,11 +485,11 @@ class _Feed_PageState extends State<Feed_Page> {
                   ),
                 ],
               ),
-              width: screenWidth * 0.9,
-              height: screenHeight * 0.34,
+              width: screenWidth * 0.89,
+              height: screenHeight * 0.32,
               child: Padding(
                 padding: EdgeInsets.symmetric(
-                    horizontal: 20.0, vertical: 20.0), // 행간을 넓혀줍니다.
+                    horizontal: 20.0, vertical: 12.0), // 행간을 넓혀줍니다.
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -577,7 +578,7 @@ class _Feed_PageState extends State<Feed_Page> {
             ),
           ),
           Positioned(
-            bottom: screenHeight*0.05,
+            bottom: screenHeight*0.064,
             right: screenWidth*0.05,
             child: InkWell(
               onTap: _launchURL, // 버튼을 눌렀을 때 호출될 함수를 여기에 지정합니다.
@@ -619,7 +620,7 @@ class _Feed_PageState extends State<Feed_Page> {
             ),
           ),
           Positioned(
-            bottom: screenHeight*0.05,
+            bottom: screenHeight*0.064,
             left: screenWidth * 0.054,
             child: InkWell(
               onTap: () {
