@@ -89,6 +89,9 @@ flutter:
     - family: Fit-A-Pet-Num
       fonts:
         - asset: fonts/Recipekorea 레코체 FONT.ttf
+    - family: Fit-A-Pet-Num2
+      fonts:
+        - asset: fonts/Giants-Bold.ttf
 
   # To add assets to your application, add an assets section, like this:
   assets:

@@ -329,7 +329,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                               ),
                               Positioned(
-                                top: screenWidth * 0.045,
+                                top: screenWidth * 0.05,
                                 left: screenWidth * 0.135,
                                 child: Text(
                                   '최근 혈당',
@@ -350,7 +350,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       style: TextStyle(
                                         fontSize: 40,
                                         fontWeight: FontWeight.normal,
-                                        fontFamily: 'Fit-A-Pet-Num',
+                                        fontFamily: 'Fit-A-Pet-Num2',
                                       ),
                                     ),
                                   ],
@@ -358,7 +358,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                               Positioned(
                                 top: screenWidth * 0.31,
-                                right: screenWidth * 0.05,
+                                right: screenWidth * 0.057,
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
@@ -416,16 +416,16 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: Stack(
                             children: [
                               Positioned(
-                                top: screenWidth * 0.03,
+                                top: screenWidth * 0.036,
                                 left: screenWidth * 0.025,
                                 child: Image.asset(
                                   'images/blood.png',
-                                  width: screenWidth * 0.08,
-                                  height: screenWidth * 0.08,
+                                  width: screenWidth * 0.085,
+                                  height: screenWidth * 0.085,
                                 ),
                               ),
                               Positioned(
-                                top: screenWidth * 0.045,
+                                top: screenWidth * 0.05,
                                 left: screenWidth * 0.135,
                                 child: Text(
                                   '당화혈색소',
@@ -464,7 +464,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       style: TextStyle(
                                         fontSize: 40,
                                         fontWeight: FontWeight.normal,
-                                        fontFamily: 'Fit-A-Pet-Num',
+                                        fontFamily: 'Fit-A-Pet-Num2',
                                       ),
                                     ),
                                   ],
