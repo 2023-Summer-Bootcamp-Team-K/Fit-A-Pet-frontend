@@ -138,7 +138,7 @@ class _Feed_PageState extends State<Feed_Page> {
       appBar: AppBar(
         elevation: 0,
         centerTitle: true,
-        titleSpacing: -15, // Adjust this value as needed
+        titleSpacing: -15,
         title: Text(
           "사료 추천 ",
           style: TextStyle(
@@ -381,7 +381,7 @@ class _Feed_PageState extends State<Feed_Page> {
                         meatImageUrl,
                         width: screenWidth * 0.22,
                         height: screenWidth * 0.22,
-                        fit: BoxFit.cover, // 이미지가 Container에 맞게 크기 조정됩니다.
+                        fit: BoxFit.cover, 
                       ),
                     )
                   : Center(
@@ -489,7 +489,7 @@ class _Feed_PageState extends State<Feed_Page> {
               height: screenHeight * 0.32,
               child: Padding(
                 padding: EdgeInsets.symmetric(
-                    horizontal: 20.0, vertical: 12.0), // 행간을 넓혀줍니다.
+                    horizontal: 20.0, vertical: 12.0), 
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -511,14 +511,14 @@ class _Feed_PageState extends State<Feed_Page> {
                             style: TextStyle(
                               color: Color.fromRGBO(119, 131, 143, 1.0),
                               fontSize: screenHeight * 0.02,
-                              fontWeight: FontWeight.normal, // 굵게(Bold) 스타일 적용
+                              fontWeight: FontWeight.normal, 
                               fontFamily: 'Fit-A-Pet',
                             ),
                           ),
                         ],
                       ),
                     ),
-                    SizedBox(height: 3), // Divider와 Text 사이에 10포인트 높이의 공간 추가
+                    SizedBox(height: 3),
                     Divider(color: Colors.black),
                     SizedBox(height: 3), 
                     RichText(
@@ -538,7 +538,7 @@ class _Feed_PageState extends State<Feed_Page> {
                             style: TextStyle(
                               color: Color.fromRGBO(119, 131, 143, 1.0),
                               fontSize: screenHeight * 0.02,
-                              fontWeight: FontWeight.normal, // 굵게(Bold) 스타일 적용
+                              fontWeight: FontWeight.normal, 
                               fontFamily: 'Fit-A-Pet',
                             ),
                           ),
@@ -565,7 +565,7 @@ class _Feed_PageState extends State<Feed_Page> {
                             style: TextStyle(
                               color: Color.fromRGBO(119, 131, 143, 1.0),
                               fontSize: screenHeight * 0.02,
-                              fontWeight: FontWeight.normal, // 굵게(Bold) 스타일 적용
+                              fontWeight: FontWeight.normal, 
                               fontFamily: 'Fit-A-Pet',
                             ),
                           ),
@@ -581,7 +581,7 @@ class _Feed_PageState extends State<Feed_Page> {
             bottom: screenHeight*0.064,
             right: screenWidth*0.05,
             child: InkWell(
-              onTap: _launchURL, // 버튼을 눌렀을 때 호출될 함수를 여기에 지정합니다.
+              onTap: _launchURL,
               child: Container(
                 width: screenWidth * 0.43,
                 height: screenWidth * 0.14,
@@ -605,7 +605,7 @@ class _Feed_PageState extends State<Feed_Page> {
                         CupertinoIcons.chat_bubble_2,
                         color: Colors.white,
                       ),
-                      SizedBox(width: 8), // Space between icon and text
+                      SizedBox(width: 8), 
                       Text(
                         '수의사님과 상담하기',
                         style: TextStyle(
@@ -624,7 +624,7 @@ class _Feed_PageState extends State<Feed_Page> {
             left: screenWidth * 0.054,
             child: InkWell(
               onTap: () {
-                _showFeedbackDialog(context); // 클릭 시 피드백 다이얼로그를 띄웁니다.
+                _showFeedbackDialog(context);
               },
               child: Container(
                 width: screenWidth * 0.43,
@@ -657,7 +657,7 @@ class _Feed_PageState extends State<Feed_Page> {
                         child: Center(
                           child: Padding(
                             padding: EdgeInsets.only(
-                                right: 8), // 이 부분을 조절하여 텍스트를 왼쪽으로 옮깁니다.
+                                right: 8), 
                             child: Text(
                               '피드백 보내기',
                               style: TextStyle(
@@ -809,7 +809,7 @@ class _FeedbackDialogState extends State<FeedbackDialog> {
   void _submitFeedback() async {
     String feedbackText = _feedbackController.text;
     String apiUrl =
-        'http://54.180.70.169/api/suggestions/1/'; // API 엔드포인트를 여기에 입력하세요.
+        'http://54.180.70.169/api/suggestions/1/'; 
 
     try {
       final response = await http.post(
@@ -824,7 +824,7 @@ class _FeedbackDialogState extends State<FeedbackDialog> {
 
       if (response.statusCode == 201) {
         print('피드백이 성공적으로 저장되었습니다: $feedbackText');
-        Navigator.of(context).pop(); // 다이얼로그를 닫습니다.
+        Navigator.of(context).pop(); 
       } else {
         print('피드백 저장 실패: ${response.statusCode}');
       }
@@ -847,13 +847,13 @@ class MyOvalPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     Paint paint = Paint()
-      ..color = Color(0xFFF86A1FF) // 타원의 색상을 여기서 지정
+      ..color = Color(0xFFF86A1FF) 
       ..style = PaintingStyle.fill;
 
     double centerX = size.width / 2;
     double centerY = size.height / 2;
-    double radiusX = size.width; // 타원의 가로 반지름
-    double radiusY = size.height * 0.5; // 타원의 세로 반지름
+    double radiusX = size.width; 
+    double radiusY = size.height * 0.5; 
 
     canvas.drawOval(
         Rect.fromCenter(
