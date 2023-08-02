@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
@@ -298,6 +299,7 @@ class _ChartScreenState extends State<ChartScreen> {
        titleTextStyle: TextStyle(
          fontWeight: FontWeight.bold,
          fontSize: 22,
+         fontFamily: 'Fit-A-Pet',
        ),
        leading: GestureDetector(
          onTap: () {
@@ -480,22 +482,48 @@ class _ChartScreenState extends State<ChartScreen> {
                   ],
                 ),
               ),
-            SizedBox(height: 20),
-            Padding(
-              padding: EdgeInsets.only(left: 20), // Adjust the padding value as needed
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  "인슐린 투여 후 최저점",
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
+            SizedBox(height: 12),
+                Divider(color: const Color.fromRGBO(255, 255, 255, 0.5),
+                thickness: 1,
+                indent: screenWidth * 0.05,
+                endIndent: screenWidth * 0.05,
+                ),
+                SizedBox(height: 12),
+            Row(
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(left: 20),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: GestureDetector(
+                      onTap: () {
+                        _showInsulinAlertDialog(context);
+                      },
+                      child: Text(
+                        "  인슐린 투여 후 최저점",
+                        style: TextStyle(
+                          fontSize: 21,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          fontFamily: 'Fit-A-Pet-Hi',
+                        ),
+                      ),
+                    ),
                   ),
                 ),
-              ),
+                SizedBox(width: 5),
+                GestureDetector(
+                  onTap: () {
+                    _showInsulinAlertDialog(context);
+                  },
+                  child: Icon(
+                    CupertinoIcons.question_circle,
+                    color: Colors.white,
+                  ),
+                ),
+              ],
             ),
-            SizedBox(height: 20),
+            SizedBox(height: 12),
             Column(
               children: [
                 Container(
@@ -527,8 +555,8 @@ class _ChartScreenState extends State<ChartScreen> {
                                 width: 60,
                                 padding: EdgeInsets.all(10),
                                 decoration: BoxDecoration(
-                                  color: Color(0xFFFEE504).withOpacity(0.39), // Set the desired color for the additional container
-                                  borderRadius: BorderRadius.circular(20), // Adjust the border radius as needed
+                                  color: Color(0xFFFEE504).withOpacity(0.39), 
+                                  borderRadius: BorderRadius.circular(20), 
                                 ),
                                 child: Center( 
                                   child: Text(
@@ -536,7 +564,7 @@ class _ChartScreenState extends State<ChartScreen> {
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       color: Colors.black,
-                                      fontSize: 19,
+                                      fontSize: 20,
                                     ),
                                   ),
                                 ),
@@ -555,14 +583,15 @@ class _ChartScreenState extends State<ChartScreen> {
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     color: Colors.black,
-                                    fontSize: 19, // Set the desired font size for "150"
+                                    fontSize: 19, 
                                   ),
                                   children: [
                                     TextSpan(
                                       text: "mg/dL",
                                       style: TextStyle(
                                         color: Colors.black,
-                                        fontSize: 16, // Set the desired font size for "mg/dL"
+                                        fontSize: 16,
+                                        fontFamily: 'Fit-A-Pet-MG',
                                       ),
                                     ),
                                   ],
@@ -600,7 +629,7 @@ class _ChartScreenState extends State<ChartScreen> {
                                   color: Color(0xFFFCC68C),
                                   borderRadius: BorderRadius.circular(20),
                                 ),
-                                child: Center( // Center the text within the container
+                                child: Center( 
                                   child: Text(
                                     "주의",
                                     style: TextStyle(
@@ -625,14 +654,15 @@ class _ChartScreenState extends State<ChartScreen> {
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     color: Colors.black,
-                                    fontSize: 19, // Set the desired font size for "150"
+                                    fontSize: 19, 
                                   ),
                                   children: [
                                     TextSpan(
                                       text: "mg/dL",
                                       style: TextStyle(
                                         color: Colors.black,
-                                        fontSize: 16, // Set the desired font size for "mg/dL"
+                                        fontSize: 16, 
+                                        fontFamily: 'Fit-A-Pet-MG',
                                       ),
                                     ),
                                   ],
@@ -643,7 +673,6 @@ class _ChartScreenState extends State<ChartScreen> {
                           ],
                         ),
                       ),
-                      // Container for "위험"
                       Container(
                         height: 119,
                         width: 119,
@@ -671,7 +700,7 @@ class _ChartScreenState extends State<ChartScreen> {
                                   color: Color(0xFFFF9D9D),
                                   borderRadius: BorderRadius.circular(20),
                                 ),
-                                child: Center( // Center the text within the container
+                                child: Center( 
                                   child: Text(
                                     "위험",
                                     style: TextStyle(
@@ -696,14 +725,15 @@ class _ChartScreenState extends State<ChartScreen> {
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black,
-                                  fontSize: 19, // Set the desired font size for "150"
+                                  fontSize: 19, 
                                 ),
                                 children: [
                                   TextSpan(
                                     text: "mg/dL",
                                     style: TextStyle(
                                       color: Colors.black,
-                                      fontSize: 16, // Set the desired font size for "mg/dL"
+                                      fontSize: 16,
+                                      fontFamily: 'Fit-A-Pet-MG',
                                     ),
                                   ),
                                 ],
@@ -717,29 +747,57 @@ class _ChartScreenState extends State<ChartScreen> {
                     ],
                   ),
                 ),
-                SizedBox(height: 20),
-                Padding(
-                  padding: EdgeInsets.only(left: 20), // Adjust the padding value as needed
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      "사료 섭취 후 기울기 변화",
-                      style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
+                SizedBox(height: 12),
+                Divider(color: const Color.fromRGBO(255, 255, 255, 0.5),
+                indent: screenWidth * 0.05,
+                endIndent: screenWidth * 0.05,
+                thickness: 1,
+                ),
+                SizedBox(height: 12),
+                Row(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(left: 20),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: GestureDetector(
+                          onTap: () {
+                            _showBloodSugarAlertDialog(context);
+                          },
+                          child: Text(
+                            "  섭취 후 기울기 변화",
+                            style: TextStyle(
+                              fontSize: 21,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                              fontFamily: 'Fit-A-Pet-Hi',
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 5),
+                    GestureDetector(
+                      onTap: () {
+                        _showBloodSugarAlertDialog(context);
+                      },
+                      child: Icon(
+                        CupertinoIcons.question_circle,
                         color: Colors.white,
                       ),
                     ),
-                  ),
-                ),
-                SizedBox(height: 20),
+                  ],
+                ),  
+               ],
+              ),
+                SizedBox(height: 12),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Stack(
                       children: [
                         Container(
-                          height: 120,
+                          height: 105,
                           width: 185,
                           decoration: BoxDecoration(
                             color: Color(0xFFFBDBDB),
@@ -751,7 +809,7 @@ class _ChartScreenState extends State<ChartScreen> {
                           left: 0,
                           right: 0,
                           child: Container(
-                                height: 60,
+                                height: 45,
                                 width: 60,
                                 padding: EdgeInsets.all(10),
                                 decoration: BoxDecoration(
@@ -759,11 +817,11 @@ class _ChartScreenState extends State<ChartScreen> {
                                   borderRadius: BorderRadius.circular(20),
                                 ),
                           child: Center(
-                            child: Text("고혈당",
+                            child: Text("고혈당 간식/사료",
                             style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       color: Colors.black,
-                                      fontSize: 17,
+                                      fontSize: 19,
                                     ),
                                   ),
                           ),
@@ -782,14 +840,22 @@ class _ChartScreenState extends State<ChartScreen> {
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black,
-                                  fontSize: 19, // Set the desired font size for "150"
+                                  fontSize: 19, 
                                 ),
                                 children: [
                                   TextSpan(
-                                    text: "mg/dL이상 상승",
+                                    text: "mg/dL",
                                     style: TextStyle(
                                       color: Colors.black,
-                                      fontSize: 16, // Set the desired font size for "mg/dL"
+                                      fontSize: 16, 
+                                      fontFamily: 'Fit-A-Pet-MG',
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: " 이상 ⬆︎",
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 16, 
                                     ),
                                   ),
                                 ],
@@ -802,7 +868,7 @@ class _ChartScreenState extends State<ChartScreen> {
                     Stack(
                       children: [
                         Container(
-                          height: 120,
+                          height: 105,
                           width: 185,
                           decoration: BoxDecoration(
                             color: Color(0xFFE8F4FE),
@@ -814,7 +880,7 @@ class _ChartScreenState extends State<ChartScreen> {
                           left: 0,
                           right: 0,
                           child: Container(
-                                height: 60,
+                                height: 45,
                                 width: 60,
                                 padding: EdgeInsets.all(10),
                                 decoration: BoxDecoration(
@@ -822,11 +888,11 @@ class _ChartScreenState extends State<ChartScreen> {
                                   borderRadius: BorderRadius.circular(20),
                                 ),
                           child: Center(
-                            child: Text("저혈당 사료/간식 섭취 시",
+                            child: Text("저혈당 사료/간식",
                             style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       color: Colors.black,
-                                      fontSize: 15,
+                                      fontSize: 19,
                                     ),
                                   ),
                           ),
@@ -841,18 +907,26 @@ class _ChartScreenState extends State<ChartScreen> {
                                 padding: EdgeInsets.all(10),
                                 child: RichText(
                               text: TextSpan(
-                                text: "30",
+                                text: " 30",
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black,
-                                  fontSize: 19, // Set the desired font size for "150"
+                                  fontSize: 19, 
                                 ),
                                 children: [
                                   TextSpan(
-                                    text: "mg/dL이상 상승",
+                                    text: "mg/dL",
                                     style: TextStyle(
                                       color: Colors.black,
-                                      fontSize: 16, // Set the desired font size for "mg/dL"
+                                      fontSize: 16, 
+                                      fontFamily: 'Fit-A-Pet-MG',
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: " 이상 ⬆︎",
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 16, 
                                     ),
                                   ),
                                 ],
@@ -866,8 +940,113 @@ class _ChartScreenState extends State<ChartScreen> {
                 ),
               ],
             )
-         ],
-       ),
-     );
+          );
    }
- }
+
+   void _showInsulinAlertDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+            shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.0),
+          ),
+          contentPadding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
+        content: Container(
+          width: 300, 
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+          Text('인슐린 투여 후 최저점',
+            style: TextStyle(
+              color: Color.fromARGB(255, 135, 153, 239),
+              fontWeight: FontWeight.bold,
+              fontSize: 19,
+            ),
+          ),
+          SizedBox(height: 20),
+          Text('반려동물에게 인슐린 주사를 투여한 후, 최저점이 100mg/dL 이하일 경우 병원 내원 및 당 섭취를 권고드립니다.',
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 17,
+            ),
+              ),
+            ],
+          ),
+        ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('닫기',
+                style: TextStyle(
+                  color: kPrimaryColor,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+   }
+
+   void _showBloodSugarAlertDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20.0),
+        ),
+        contentPadding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
+        content: Container(
+          width: 300, 
+          height: 160,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                '섭취 후 기울기 변화',
+                style: TextStyle(
+                  color: Color.fromARGB(255, 135, 153, 239),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 19,
+                ),
+              ),
+              SizedBox(height: 20),
+              Text(
+                '- 사료/간식을 섭취한 후 1시간 동안의 혈당 수치를 확인해 보세요.\n',
+                style: TextStyle(
+                  fontSize: 17,
+                ),
+              ),
+              Text(
+                '- 약 30mg/dL가 상승하면 혈당 반응이 낮은 사료/간식이고, 100mg/dL 이상이 상승하면 혈당 반응이 높은 사료/간식입니다.',
+                style: TextStyle(
+                  fontSize: 17,
+                ),
+              ),
+            ],
+          ),
+        ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text(
+              '닫기',
+              style: TextStyle(
+                color: kPrimaryColor,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ],
+      );
+    },
+  );
+}
+}
