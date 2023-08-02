@@ -469,7 +469,7 @@ class _Feed_PageState extends State<Feed_Page> {
             ),
           ),
           Positioned(
-            top: screenHeight * 0.525,
+            top: screenHeight * 0.518,
             left: screenWidth * 0.05,
             child: Container(
               decoration: BoxDecoration(
@@ -485,19 +485,19 @@ class _Feed_PageState extends State<Feed_Page> {
                 ],
               ),
               width: screenWidth * 0.9,
-              height: screenHeight * 0.33,
+              height: screenHeight * 0.34,
               child: Padding(
                 padding: EdgeInsets.symmetric(
                     horizontal: 20.0, vertical: 20.0), // 행간을 넓혀줍니다.
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(height: 5), 
+                    SizedBox(height: 3), 
                     RichText(
                       text: TextSpan(
                         children: [
                           TextSpan(
-                            text: '• 사료 : ',
+                            text: '• 사료\n',
                             style: TextStyle(
                               color: Color.fromRGBO(119, 131, 143, 1.0),
                               fontSize: screenHeight * 0.02,
@@ -506,7 +506,7 @@ class _Feed_PageState extends State<Feed_Page> {
                             ),
                           ),
                           TextSpan(
-                            text: '$meatDescription',
+                            text: '  $meatDescription',
                             style: TextStyle(
                               color: Color.fromRGBO(119, 131, 143, 1.0),
                               fontSize: screenHeight * 0.02,
@@ -517,14 +517,14 @@ class _Feed_PageState extends State<Feed_Page> {
                         ],
                       ),
                     ),
-                    SizedBox(height: 5), // Divider와 Text 사이에 10포인트 높이의 공간 추가
+                    SizedBox(height: 3), // Divider와 Text 사이에 10포인트 높이의 공간 추가
                     Divider(color: Colors.black),
-                    SizedBox(height: 5), 
+                    SizedBox(height: 3), 
                     RichText(
                       text: TextSpan(
                         children: [
                           TextSpan(
-                            text: '• 오일 : ',
+                            text: '• 오일\n',
                             style: TextStyle(
                               color: Color.fromRGBO(119, 131, 143, 1.0),
                               fontSize: screenHeight * 0.02,
@@ -533,7 +533,7 @@ class _Feed_PageState extends State<Feed_Page> {
                             ),
                           ),
                           TextSpan(
-                            text: '$meatDescription',
+                            text: '  $petName$oilDescription',
                             style: TextStyle(
                               color: Color.fromRGBO(119, 131, 143, 1.0),
                               fontSize: screenHeight * 0.02,
@@ -544,14 +544,14 @@ class _Feed_PageState extends State<Feed_Page> {
                         ],
                       ),
                     ),
-                    SizedBox(height: 5), 
+                    SizedBox(height: 3), 
                     Divider(color: Colors.black,),
-                    SizedBox(height: 5), 
+                    SizedBox(height: 3), 
                     RichText(
                       text: TextSpan(
                         children: [
                           TextSpan(
-                            text: '• 보조제 : ',
+                            text: '• 영양제\n',
                             style: TextStyle(
                               color: Color.fromRGBO(119, 131, 143, 1.0),
                               fontSize: screenHeight * 0.02,
@@ -560,7 +560,7 @@ class _Feed_PageState extends State<Feed_Page> {
                             ),
                           ),
                           TextSpan(
-                            text: '$meatDescription',
+                            text: '  $supplementDescription',
                             style: TextStyle(
                               color: Color.fromRGBO(119, 131, 143, 1.0),
                               fontSize: screenHeight * 0.02,
