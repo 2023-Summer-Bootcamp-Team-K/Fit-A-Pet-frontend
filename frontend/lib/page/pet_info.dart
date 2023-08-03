@@ -162,7 +162,6 @@ class _PetInfoPageState extends State<PetInfoPage> {
               ),
               onPressed: () {
                 Navigator.pop(context); // Close the dialog
-                navigateToHomeScreen(selectedPet);
                 saveCheckedPets();
               },
             ),
@@ -272,16 +271,14 @@ class _PetInfoPageState extends State<PetInfoPage> {
           centerTitle: true,
           title: Text("반려동물 정보", style: TextStyle(fontWeight: FontWeight.bold, fontFamily: 'Fit-A-Pet', fontSize: 22)),
           backgroundColor: Color(0xFFC1CCFF),
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back_ios), 
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => _checkedPetIds.isNotEmpty ? HomeScreen(petID: _checkedPetIds[0].toString()) : HomeScreen(petID: "0"),
-                ),
-              );
+          leading: GestureDetector(
+            onTap: () {
+              Navigator.pop(context);
             },
+            child: Icon(
+              Icons.arrow_back_ios,
+              color: Colors.white,
+            ),
           ),
           actions: [
             IconButton(
