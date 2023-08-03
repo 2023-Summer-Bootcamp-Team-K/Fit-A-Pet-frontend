@@ -137,11 +137,29 @@ class _PetInfoPageState extends State<PetInfoPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("알림"),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          title: Row(
+            children: [
+              Icon(
+                Icons.error,
+                color: Color(0xFF878CEF),
+              ),
+              SizedBox(width: 8),
+              Text("알림"),
+            ],
+          ),
           content: Text("반려 동물이 선택되었습니다."),
           actions: <Widget>[
             TextButton(
-              child: Text("확인"),
+              child: Text(
+                "확인",
+                style: TextStyle(
+                  color: Color(0xFF878CEF),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
               onPressed: () {
                 Navigator.pop(context); // Close the dialog
                 navigateToHomeScreen(selectedPet);
