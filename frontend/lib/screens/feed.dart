@@ -519,7 +519,7 @@ class _Feed_PageState extends State<Feed_Page> {
                       ),
                     ),
                     SizedBox(height: 3),
-                    Divider(color: Colors.black),
+                    Divider(color: Colors.black, thickness: 0.3),
                     SizedBox(height: 3), 
                     RichText(
                       text: TextSpan(
@@ -546,7 +546,7 @@ class _Feed_PageState extends State<Feed_Page> {
                       ),
                     ),
                     SizedBox(height: 3), 
-                    Divider(color: Colors.black,),
+                    Divider(color: Colors.black,thickness: 0.3),
                     SizedBox(height: 3), 
                     RichText(
                       text: TextSpan(
