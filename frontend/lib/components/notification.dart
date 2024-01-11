@@ -81,6 +81,7 @@ class _NotificationPageState extends State<NotificationPage> {
               child: Column(
                 children: [
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       buildButton(
                           0,
@@ -100,6 +101,7 @@ class _NotificationPageState extends State<NotificationPage> {
                     ],
                   ),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       buildButton(
                           3,
@@ -236,9 +238,8 @@ class _NotificationPageState extends State<NotificationPage> {
         style: ElevatedButton.styleFrom(
           primary: isSelected ? kPrimaryColor : Colors.white,
           onPrimary: isSelected ? Colors.white : kPrimaryColor,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(50),
-          ),
+          shape: CircleBorder(), // 여기를 수정하여 원 모양으로 만듭니다.
+          minimumSize: Size(100, 100), // 크기 조절을 통해 원의 크기를 조절합니다.
         ),
         child: Text(
           label,
